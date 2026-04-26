@@ -8,14 +8,16 @@ services:
       - '7777:7777/udp'
       - '8888:8888/tcp'
     volumes:
-      - './satisfactory-server:/config'
+      - ../../../storage/satisfactory:/config'
     environment:
       - MAXPLAYERS={SATISFACTORY_MAX_PLAYERS}
-      - SERVERGAMEPORT={SATISFACTORY_GAME_PORT}
+      - PGID=1000
+      - PUID=1000
+      - STEAMBETA=false
     restart: unless-stopped
     deploy:
       resources:
         limits:
-          memory: 8G
+          memory: 12G
         reservations:
-          memory: 4G
+          memory: 6G
