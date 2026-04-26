@@ -1,8 +1,8 @@
 services:
-  satisfactory-server:
-    container_name: 'satisfactory-server'
-    hostname: 'satisfactory-server'
+  satisfactory:
+    container_name: 'satisfactory'
     image: 'wolveix/satisfactory-server:latest'
+    restart: unless-stopped
     ports:
       - '${SATISFACTORY_GAME_PORT}:${SATISFACTORY_GAME_PORT}/tcp'
       - '${SATISFACTORY_GAME_PORT}:${SATISFACTORY_GAME_PORT}/udp'
@@ -15,7 +15,6 @@ services:
       - PGID=1000
       - PUID=1000
       - STEAMBETA=false
-    restart: unless-stopped
     deploy:
       resources:
         limits:

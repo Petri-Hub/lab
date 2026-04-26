@@ -2,9 +2,9 @@ services:
   portainer:
     container_name: portainer
     image: portainer/portainer-ce:latest
-    restart: always
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ../../../storage/portainer:/data
     ports:
-      - 9000:9000
+      - ${PORTAINER_PORT}:9000

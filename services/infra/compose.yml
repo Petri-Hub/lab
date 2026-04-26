@@ -1,2 +1,3 @@
 include:
   - ./portainer/compose.yml
+  - ./glances/compose.yml
