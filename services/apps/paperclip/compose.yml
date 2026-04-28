@@ -1,0 +1,24 @@
+services:
+  paperclip:
+    image: ghcr.io/paperclipai/paperclip:sha-b9a80dc
+    container_name: paperclip
+    restart: unless-stopped
+    ports:
+      - "${PAPERCLIP_PORT}:3100"
+    environment:
+      HOST: "0.0.0.0"
+      PAPERCLIP_HOME: "/paperclip"
+      BETTER_AUTH_SECRET: "${PAPERCLIP_BETTER_AUTH_TOKEN}"
+      PAPERCLIP_DEPLOYMENT_MODE: "${PAPERCLIP_DEPLOYMENT_MODE}"
+      PAPERCLIP_DEPLOYMENT_EXPOSURE: "${PAPERCLIP_DEPLOYMENT_EXPOSURE}"
+      PAPERCLIP_ALLOWED_HOSTNAMES: "${PAPERCLIP_ALLOWED_HOSTNAMES}"
+      PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL}"
+    volumes:
+      - ../../../storage/paperclip:/paperclip
+
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3100/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
