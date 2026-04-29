@@ -7,14 +7,6 @@ terraform {
       version = "0.28.0"
     }
   }
-
-  cloud {
-    organization = "Petri-Personal"
-
-    workspaces {
-      name = "lab"
-    }
-  }
 }
 
 provider "tailscale" {

@@ -1,16 +1,52 @@
-resource "tailscale_device_tags" "petri_lab" {
-  device_id = data.tailscale_device.petri_lab.node_id
-  tags = [
-    "tag:gameserver",
-    "tag:homelab"
-  ]
+data "tailscale_device" "lab" {
+  name     = var.devices.lab
+  wait_for = "60s"
+}
+
+data "tailscale_device" "monstrao" {
+  name     = var.devices.monstrao
+  wait_for = "60s"
+}
+
+data "tailscale_device" "phone" {
+  name     = var.devices.phone
+  wait_for = "60s"
+}
+
+data "tailscale_device" "globals" {
+  name     = var.devices.globals
+  wait_for = "60s"
+}
+
+resource "tailscale_device_tags" "lab" {
+  depends_on = [tailscale_acl.main]
+  device_id  = data.tailscale_device.lab.node_id
+  tags       = ["tag:lab"]
+}
+
+resource "tailscale_device_tags" "monstrao" {
+  depends_on = [tailscale_acl.main]
+  device_id  = data.tailscale_device.monstrao.node_id
+  tags       = ["tag:edge"]
+}
+
+resource "tailscale_device_tags" "phone" {
+  depends_on = [tailscale_acl.main]
+  device_id  = data.tailscale_device.phone.node_id
+  tags       = ["tag:edge"]
+}
+
+resource "tailscale_device_tags" "globals" {
+  depends_on = [tailscale_acl.main]
+  device_id  = data.tailscale_device.globals.node_id
+  tags       = ["tag:edge"]
 }
 
 resource "tailscale_acl" "main" {
   acl = jsonencode({
     tagOwners = {
-      "tag:gameserver" = ["autogroup:owner"]
-      "tag:homelab"    = ["autogroup:owner"]
+      "tag:lab"  = ["autogroup:owner"]
+      "tag:edge" = ["autogroup:owner"]
     }
 
     acls = [
@@ -21,42 +57,14 @@ resource "tailscale_acl" "main" {
       },
       {
         action = "accept"
-        src    = ["autogroup:member"]
-        dst    = [
-          "tag:homelab:${var.infra_portainer_port}",
-          "tag:homelab:${var.infra_glances_port}"
+        src    = ["tag:edge"]
+        dst = [
+          "tag:lab:${var.ports.portainer}",
+          "tag:lab:${var.ports.glances}",
+          "tag:lab:${var.ports.satisfactory}",
+          "tag:lab:${var.ports.ssh}"
         ]
       },
-      {
-        action = "accept"
-        src    = ["autogroup:shared"]
-        dst    = ["tag:gameserver:${var.infra_satisfactory_port}"]
-      }
-    ]
-
-    grants = [
-      {
-        src = ["autogroup:owner"]
-        dst = ["tag:homelab"]
-        ip  = ["*"]
-      },
-      {
-        src = ["autogroup:member"]
-        dst = ["svc:portainer", "svc:glances"]
-        ip  = ["tcp:443"]
-      }
     ]
   })
-}
-
-resource "tailscale_dns_configuration" "main" {
-  magic_dns = true
-
-  nameservers {
-    address = "1.1.1.1"
-  }
-
-  nameservers {
-    address = "8.8.8.8"
-  }
 }

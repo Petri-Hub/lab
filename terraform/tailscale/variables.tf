@@ -1,13 +1,21 @@
 variable "ports" {
-  description = "A map of service names to their respective ports"
+  description = "A map of service names to their respective ports."
+
   type = object({
     portainer    = number
     glances      = number
     satisfactory = number
+    ssh = string
   })
-  default = {
-    portainer    = 9000
-    glances      = 61208
-    satisfactory = 7777
-  }
+}
+
+variable "devices" {
+  description = "A map of device names and their full domains."
+
+  type = object({
+    lab = string
+    monstrao = string
+    phone = string
+    globals = string
+  })
 }
