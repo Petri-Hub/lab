@@ -1,0 +1,16 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    environment:
+      - NGINX_DOZZLE_DOMAIN=${NGINX_DOZZLE_DOMAIN}
+      - NGINX_DOZZLE_PORT=${NGINX_DOZZLE_PORT}
+    volumes:
+      - ./configuration/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
+    networks:
+      - backup
+networks:
+  backup:
+    name: backup
+    external: true

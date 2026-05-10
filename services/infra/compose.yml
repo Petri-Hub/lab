@@ -4,3 +4,5 @@ include:
   - ./restic/compose.yml
   - ./ofelia/compose.yml
   - ./dozzle/compose.yml
+  - ./nginx/compose.yml
+  - ./ngrok/compose.yml
