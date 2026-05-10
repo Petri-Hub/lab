@@ -6,12 +6,13 @@ services:
     ports:
       - '${SATISFACTORY_GAME_PORT}:${SATISFACTORY_GAME_PORT}/tcp'
       - '${SATISFACTORY_GAME_PORT}:${SATISFACTORY_GAME_PORT}/udp'
-      - '8888:8888/tcp'
+      - '${SATISFACTORY_MESSAGING_PORT}:${SATISFACTORY_MESSAGING_PORT}/tcp'
     volumes:
       - ../../../storage/satisfactory:/config
     environment:
       - MAXPLAYERS=${SATISFACTORY_MAX_PLAYERS}
       - SERVERGAMEPORT=${SATISFACTORY_GAME_PORT}
+      - SERVERMESSAGINGPORT=${SATISFACTORY_MESSAGING_PORT}
       - PGID=1000
       - PUID=1000
       - STEAMBETA=false

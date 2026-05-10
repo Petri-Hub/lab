@@ -45,8 +45,13 @@ variable "infra_glances_port" {
   type        = number
 }
 
-variable "infra_satisfactory_port" {
+variable "infra_satisfactory_game_port" {
   description = "Satisfactory game server port."
+  type        = number
+}
+
+variable "infra_satisfactory_messaging_port" {
+  description = "Satisfactory messaging server port."
   type        = number
 }
 

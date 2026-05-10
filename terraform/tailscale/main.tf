@@ -61,10 +61,20 @@ resource "tailscale_acl" "main" {
         dst = [
           "tag:lab:${var.ports.portainer}",
           "tag:lab:${var.ports.glances}",
-          "tag:lab:${var.ports.satisfactory}",
+          "tag:lab:${var.ports.satisfactory.game}",
+          "tag:lab:${var.ports.satisfactory.messaging}",
           "tag:lab:${var.ports.ssh}"
         ]
       },
+      {
+        action = "accept"
+        src    = ["autogroup:shared"]
+        dst    = [
+          "tag:lab:${var.ports.glances}",
+          "tag:lab:${var.ports.satisfactory.game}",
+          "tag:lab:${var.ports.satisfactory.messaging}"
+        ]
+      }
     ]
   })
 }

@@ -4,8 +4,12 @@ module "tailscale" {
   ports = {
     portainer    = var.infra_portainer_port
     glances      = var.infra_glances_port
-    satisfactory = var.infra_satisfactory_port
     ssh          = var.infra_ssh_port
+    
+    satisfactory = {
+      game = var.infra_satisfactory_game_port
+      messaging = var.infra_satisfactory_messaging_port
+    }
   }
 
   devices = {
