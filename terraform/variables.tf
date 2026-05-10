@@ -13,26 +13,55 @@ variable "tailscale_oauth_client_secret" {
 variable "tailscale_tailnet" {
   description = "The name of the Tailscale tailnet to manage."
   type        = string
+  sensitive   = true
+}
+
+variable "cloudflare_api_token" {
+  description = "Cloudflare API token for Terraform"
+  type        = string
+  sensitive = true
+}
+
+variable "cloudflare_zone_id" {
+  description = "Cloudflare zone ID"
+  type = string
+  sensitive = true
+}
+
+variable "cloudflare_account_id" {
+  description = "Cloudflare account ID"
+  type = string
+  sensitive = true
 }
 
 variable "tailscale_lab_device_name" {
   description = "The full domain address of Home Lab in Tailscale network."
-  type = string
+  type        = string
 }
 
 variable "tailscale_monstrao_device_name" {
   description = "The full domain address of Monstrao in Tailscale network."
-  type = string
+  type        = string
 }
 
 variable "tailscale_globals_device_name" {
   description = "The full domain address of Globals laptop in Tailscale network."
-  type = string
+  type        = string
 }
 
 variable "tailscale_phone_device_name" {
   description = "The full domain address of phone in Tailscale network."
-  type = string
+  type        = string
+}
+
+variable "infra_domain_url" {
+  description = "The home lab domain URL"
+  type        = string
+}
+
+variable "infra_dozzle_subdomain_url" {
+  description = "The Dozzle subdomain"
+  type        = string
 }
 
 variable "infra_glances_port" {
@@ -52,10 +81,15 @@ variable "infra_satisfactory_messaging_port" {
 
 variable "infra_dozzle_port" {
   description = "Dozzle UI port"
-  type = number
+  type        = number
 }
 
 variable "infra_ssh_port" {
   description = "The SSH server port."
   type        = number
+}
+
+variable "infra_ngrok_url" {
+  description = "The NGROK tunnel URL"
+  type        = string
 }
