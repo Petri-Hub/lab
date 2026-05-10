@@ -12,3 +12,12 @@ apps-up:
 
 apps-down:
 	docker compose -f services/apps/compose.yml down
+
+terraform-init:
+	terraform -chdir=terraform init
+
+terraform-plan:
+	terraform -chdir=terraform plan
+
+terraform-apply:
+	terraform -chdir=terraform apply
