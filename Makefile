@@ -1,3 +1,6 @@
+setup:
+	docker network create backup
+
 infra-up:
 	docker compose -f services/infra/compose.yml up -d
 

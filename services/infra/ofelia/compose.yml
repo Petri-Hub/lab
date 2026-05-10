@@ -1,0 +1,15 @@
+services:
+  ofelia:
+    image: mcuadros/ofelia:latest
+    container_name: ofelia
+    restart: unless-stopped
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - backup
+
+networks:
+  backup:
+    name: backup
+    external: true

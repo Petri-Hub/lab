@@ -1,0 +1,23 @@
+services:
+  restic-satisfactory:
+    image: restic/restic:latest
+    container_name: restic-satisfactory
+    restart: unless-stopped
+    entrypoint: /bin/sh
+    command: '-c "tail -f /dev/null"'
+    environment:
+      - RESTIC_REPOSITORY=rest:http://rclone:${RESTIC_RCLONE_SERVER_PORT}/repos/satisfactory
+      - RESTIC_PASSWORD=${RESTIC_SATISFACTORY_PASSWORD}
+    volumes:
+      - ../../../storage/satisfactory:/data:ro
+    networks:
+      - backup
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-exec.backup-satisfactory.schedule: "@every 20m"
+      ofelia.job-exec.backup-satisfactory.command: "restic backup /data"
+      
+networks:
+  backup:
+    name: backup
+    external: true
