@@ -59,8 +59,8 @@ resource "tailscale_acl" "main" {
         action = "accept"
         src    = ["tag:edge"]
         dst = [
-          "tag:lab:${var.ports.portainer}",
           "tag:lab:${var.ports.glances}",
+          "tag:lab:${var.ports.dozzle}",
           "tag:lab:${var.ports.satisfactory.game}",
           "tag:lab:${var.ports.satisfactory.messaging}",
           "tag:lab:${var.ports.ssh}"
@@ -69,8 +69,9 @@ resource "tailscale_acl" "main" {
       {
         action = "accept"
         src    = ["autogroup:shared"]
-        dst    = [
+        dst = [
           "tag:lab:${var.ports.glances}",
+          "tag:lab:${var.ports.dozzle}",
           "tag:lab:${var.ports.satisfactory.game}",
           "tag:lab:${var.ports.satisfactory.messaging}"
         ]

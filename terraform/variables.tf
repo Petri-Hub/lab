@@ -35,11 +35,6 @@ variable "tailscale_phone_device_name" {
   type = string
 }
 
-variable "infra_portainer_port" {
-  description = "The Portainer UI port."
-  type        = number
-}
-
 variable "infra_glances_port" {
   description = "Glances UI port."
   type        = number
@@ -53,6 +48,11 @@ variable "infra_satisfactory_game_port" {
 variable "infra_satisfactory_messaging_port" {
   description = "Satisfactory messaging server port."
   type        = number
+}
+
+variable "infra_dozzle_port" {
+  description = "Dozzle UI port"
+  type = number
 }
 
 variable "infra_ssh_port" {

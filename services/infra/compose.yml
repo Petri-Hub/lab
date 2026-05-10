@@ -1,6 +1,6 @@
 include:
-  - ./portainer/compose.yml
   - ./glances/compose.yml
   - ./rclone/compose.yml
   - ./restic/compose.yml
   - ./ofelia/compose.yml
+  - ./dozzle/compose.yml
