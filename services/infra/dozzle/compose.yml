@@ -1,0 +1,16 @@
+services:
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    restart: unless-stopped
+    ports:
+      - '${DOZZLE_PORT}:8080'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - backup
+
+networks:
+  backup:
+    name: backup
+    external: true
