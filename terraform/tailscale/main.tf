@@ -71,6 +71,7 @@ resource "tailscale_acl" "main" {
         src    = ["autogroup:shared"]
         dst = [
           "tag:lab:${var.ports.dozzle}",
+          "tag:lab:${var.ports.glances}",
           "tag:lab:${var.ports.satisfactory.game}",
           "tag:lab:${var.ports.satisfactory.messaging}"
         ]
