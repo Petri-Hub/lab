@@ -11,13 +11,13 @@ services:
     volumes:
       - ../../../storage/satisfactory:/data:ro
     networks:
-      - backup
+      - infra
     labels:
       ofelia.enabled: "true"
       ofelia.job-exec.backup-satisfactory.schedule: "@every 20m"
       ofelia.job-exec.backup-satisfactory.command: "restic backup /data"
       
 networks:
-  backup:
-    name: backup
+  infra:
+    name: infra
     external: true

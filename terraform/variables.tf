@@ -69,6 +69,11 @@ variable "infra_glances_port" {
   type        = number
 }
 
+variable "infra_filebrowser_port" {
+  description = "FileBrowser UI port"
+  type = number
+}
+
 variable "infra_satisfactory_game_port" {
   description = "Satisfactory game server port."
   type        = number

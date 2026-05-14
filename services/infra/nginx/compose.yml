@@ -9,8 +9,8 @@ services:
     volumes:
       - ./configuration/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
     networks:
-      - backup
+      - infra
 networks:
-  backup:
-    name: backup
+  infra:
+    name: infra
     external: true

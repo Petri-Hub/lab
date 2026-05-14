@@ -5,6 +5,7 @@ variable "ports" {
     glances   = number
     ssh       = number
     dozzle = number
+    filebrowser = number
     satisfactory = object({
       game      = number
       messaging = number

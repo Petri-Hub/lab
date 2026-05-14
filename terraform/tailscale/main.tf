@@ -61,6 +61,7 @@ resource "tailscale_acl" "main" {
         dst = [
           "tag:lab:${var.ports.glances}",
           "tag:lab:${var.ports.dozzle}",
+          "tag:lab:${var.ports.filebrowser}",
           "tag:lab:${var.ports.satisfactory.game}",
           "tag:lab:${var.ports.satisfactory.messaging}",
           "tag:lab:${var.ports.ssh}"

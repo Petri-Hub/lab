@@ -1,5 +1,5 @@
 setup:
-	docker network create backup
+	docker network create infra
 
 infra-up:
 	docker compose -f services/infra/compose.yml up -d

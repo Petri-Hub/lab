@@ -1,8 +1,9 @@
 include:
-  - ./glances/compose.yml
-  - ./rclone/compose.yml
-  - ./restic/compose.yml
-  - ./ofelia/compose.yml
-  - ./dozzle/compose.yml
-  - ./nginx/compose.yml
-  - ./cloudflared/compose.yml
+    - ./cloudflared/compose.yml
+    - ./dozzle/compose.yml
+    - ./filebrowser/compose.yml
+    - ./glances/compose.yml
+    - ./nginx/compose.yml
+    - ./ofelia/compose.yml
+    - ./rclone/compose.yml
+    - ./restic/compose.yml

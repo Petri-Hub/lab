@@ -8,9 +8,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
-      - backup
+      - infra
 
 networks:
-  backup:
-    name: backup
+  infra:
+    name: infra
     external: true
