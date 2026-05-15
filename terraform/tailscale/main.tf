@@ -27,7 +27,13 @@ resource "tailscale_device_tags" "lab" {
 resource "tailscale_device_tags" "monstrao" {
   depends_on = [tailscale_acl.main]
   device_id  = data.tailscale_device.monstrao.node_id
-  tags       = ["tag:edge"]
+  tags       = ["tag:workstation"]
+}
+
+resource "tailscale_device_tags" "globals" {
+  depends_on = [tailscale_acl.main]
+  device_id  = data.tailscale_device.globals.node_id
+  tags       = ["tag:workstation"]
 }
 
 resource "tailscale_device_tags" "phone" {
@@ -36,16 +42,11 @@ resource "tailscale_device_tags" "phone" {
   tags       = ["tag:edge"]
 }
 
-resource "tailscale_device_tags" "globals" {
-  depends_on = [tailscale_acl.main]
-  device_id  = data.tailscale_device.globals.node_id
-  tags       = ["tag:edge"]
-}
-
 resource "tailscale_acl" "main" {
   acl = jsonencode({
     tagOwners = {
       "tag:lab"  = ["autogroup:owner"]
+      "tag:workstation" = ["autogroup:owner"]
       "tag:edge" = ["autogroup:owner"]
     }
 
@@ -57,10 +58,10 @@ resource "tailscale_acl" "main" {
       },
       {
         action = "accept"
-        src    = ["tag:edge"]
+        src    = ["tag:edge", "tag:workstation"]
         dst = [
-          "tag:lab:${var.ports.glances}",
           "tag:lab:${var.ports.dozzle}",
+          "tag:lab:${var.ports.btop}",
           "tag:lab:${var.ports.filebrowser}",
           "tag:lab:${var.ports.satisfactory.game}",
           "tag:lab:${var.ports.satisfactory.messaging}",
@@ -69,10 +70,14 @@ resource "tailscale_acl" "main" {
       },
       {
         action = "accept"
+        src = ["tag:edge"]
+        dst = ["tag:workstation:*"]
+      },
+      {
+        action = "accept"
         src    = ["autogroup:shared"]
         dst = [
           "tag:lab:${var.ports.dozzle}",
-          "tag:lab:${var.ports.glances}",
           "tag:lab:${var.ports.satisfactory.game}",
           "tag:lab:${var.ports.satisfactory.messaging}"
         ]

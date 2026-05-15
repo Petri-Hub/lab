@@ -1,0 +1,16 @@
+services:
+  btop:
+    container_name: btop
+    restart: unless-stopped
+    build: ../../../docker/btop
+    tty: true
+    stdin_open: true
+    security_opt:
+      - apparmor:unconfined
+    pid: "host"
+    ports:
+      - "${BTOP_PORT}:7681"
+    volumes:
+      - /proc:/proc:ro
+      - /sys:/sys:ro
+      - /:/host:ro

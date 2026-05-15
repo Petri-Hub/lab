@@ -64,11 +64,6 @@ variable "infra_dozzle_subdomain_url" {
   type        = string
 }
 
-variable "infra_glances_port" {
-  description = "Glances UI port."
-  type        = number
-}
-
 variable "infra_filebrowser_port" {
   description = "FileBrowser UI port"
   type = number
@@ -86,6 +81,11 @@ variable "infra_satisfactory_messaging_port" {
 
 variable "infra_dozzle_port" {
   description = "Dozzle UI port"
+  type        = number
+}
+
+variable "infra_btop_port" {
+  description = "BTOP UI port"
   type        = number
 }
 

@@ -2,10 +2,10 @@ module "tailscale" {
   source = "./tailscale"
 
   ports = {
-    glances = var.infra_glances_port
     ssh     = var.infra_ssh_port
     dozzle  = var.infra_dozzle_port
     filebrowser = var.infra_filebrowser_port
+    btop = var.infra_btop_port
     satisfactory = {
       game      = var.infra_satisfactory_game_port
       messaging = var.infra_satisfactory_messaging_port

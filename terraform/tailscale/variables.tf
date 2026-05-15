@@ -2,10 +2,10 @@ variable "ports" {
   description = "A map of service names to their respective ports."
 
   type = object({
-    glances   = number
     ssh       = number
     dozzle = number
     filebrowser = number
+    btop = number
     satisfactory = object({
       game      = number
       messaging = number
