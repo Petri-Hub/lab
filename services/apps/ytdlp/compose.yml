@@ -1,0 +1,17 @@
+services:
+  ytdlp:
+    image: ghcr.io/marcopiovanello/yt-dlp-web-ui:latest
+    container_name: ytdlp
+    restart: unless-stopped
+    ports:
+      - ${YTDLP_PORT}:3033
+    networks:
+      - infra
+    volumes:
+      - ../../../storage/satisfactory/downloads:/downloads 
+      - ../../../storage/satisfactory/config:/config
+
+networks:
+  infra:
+    name: infra
+    external: true

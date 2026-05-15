@@ -60,6 +60,7 @@ resource "tailscale_acl" "main" {
         action = "accept"
         src    = ["tag:edge", "tag:workstation"]
         dst = [
+          "tag:lab:${var.ports.ytdlp}",
           "tag:lab:${var.ports.dozzle}",
           "tag:lab:${var.ports.btop}",
           "tag:lab:${var.ports.filebrowser}",

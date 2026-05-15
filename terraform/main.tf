@@ -2,6 +2,7 @@ module "tailscale" {
   source = "./tailscale"
 
   ports = {
+    ytdlp = var.infra_ytdlp_port
     ssh     = var.infra_ssh_port
     dozzle  = var.infra_dozzle_port
     filebrowser = var.infra_filebrowser_port

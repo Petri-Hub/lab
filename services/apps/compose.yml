@@ -1,2 +1,2 @@
 include:
-    - ./satisfactory/compose.yml
+    - ./ytdlp/compose.yml

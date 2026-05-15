@@ -69,6 +69,11 @@ variable "infra_filebrowser_port" {
   type = number
 }
 
+variable "infra_ytdlp_port" {
+  description = "YTDLP Web UI port"
+  type = number
+}
+
 variable "infra_satisfactory_game_port" {
   description = "Satisfactory game server port."
   type        = number
