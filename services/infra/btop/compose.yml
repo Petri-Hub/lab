@@ -5,8 +5,6 @@ services:
     build: ../../../docker/btop
     tty: true
     stdin_open: true
-    security_opt:
-      - apparmor:unconfined
     pid: "host"
     ports:
       - "${BTOP_PORT}:7681"
