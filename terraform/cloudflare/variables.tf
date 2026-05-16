@@ -29,7 +29,6 @@ variable "services" {
     domain       = string
     name         = string
     service      = string
-    bypass_paths = optional(list(string), [])
   }))
 }
 
