@@ -26,9 +26,10 @@ variable "services" {
   description = "The lab services running"
   default = []
   type = list(object({
-    domain = string
-    name    = string
-    service = string
+    domain       = string
+    name         = string
+    service      = string
+    bypass_paths = optional(list(string), [])
   }))
 }
 

@@ -29,27 +29,8 @@ resource "cloudflare_dns_record" "tunnel" {
   ttl     = 1
 }
 
-resource "cloudflare_zero_trust_access_application" "protected" {
-  for_each = { for svc in var.services : svc.name => svc }
-
-  account_id       = var.cloudflare_account_id
-  name             = each.value.name
-  domain           = each.value.name
-  type             = "self_hosted"
-  session_duration = "168h"
-
-  policies = [
-    {
-      name     = "Allow authorized users"
-      decision = "allow"
-      precedence = 1
-      include = [
-        for email in var.authorized_emails : {
-          email = {
-            email = email
-          }
-        }
-      ]
-    }
-  ]
+resource "cloudflare_zone_setting" "ssl" {
+  zone_id    = var.cloudflare_zone_id
+  setting_id = "ssl"
+  value      = "flexible"
 }

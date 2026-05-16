@@ -8,8 +8,8 @@ services:
     networks:
       - lab
     volumes:
-      - ../../../storage/satisfactory/downloads:/downloads 
-      - ../../../storage/satisfactory/config:/config
+      - ../../../storage/ytdlp/downloads:/downloads 
+      - ../../../storage/ytdlp/config:/config
 
 networks:
   lab:

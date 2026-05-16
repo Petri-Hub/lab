@@ -6,7 +6,7 @@ infra-up:
 
 infra-up-build:
 	docker compose -f services/infra/compose.yml up -d --build
-	
+
 infra-down:
 	docker compose -f services/infra/compose.yml down
 
@@ -15,7 +15,7 @@ apps-up:
 
 apps-up-build:
 	docker compose -f services/apps/compose.yml up -d 0-
-	
+
 apps-down:
 	docker compose -f services/apps/compose.yml down
 

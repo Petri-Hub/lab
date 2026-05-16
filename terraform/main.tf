@@ -2,11 +2,11 @@ module "tailscale" {
   source = "./tailscale"
 
   ports = {
-    ytdlp = var.infra_ytdlp_port
-    ssh     = var.infra_ssh_port
-    dozzle  = var.infra_dozzle_port
+    ytdlp       = var.infra_ytdlp_port
+    ssh         = var.infra_ssh_port
+    dozzle      = var.infra_dozzle_port
     filebrowser = var.infra_filebrowser_port
-    btop = var.infra_btop_port
+    btop        = var.infra_btop_port
     satisfactory = {
       game      = var.infra_satisfactory_game_port
       messaging = var.infra_satisfactory_messaging_port
@@ -29,21 +29,21 @@ module "cloudflare" {
   source = "./cloudflare"
 
   cloudflare_account_id = var.cloudflare_account_id
-  cloudflare_zone_id = var.cloudflare_zone_id
-  cloudflare_api_token = var.cloudflare_api_token
+  cloudflare_zone_id    = var.cloudflare_zone_id
+  cloudflare_api_token  = var.cloudflare_api_token
 
-  domain = var.infra_domain_url
+  domain            = var.infra_domain_url
   authorized_emails = var.infra_authorized_emails
 
   services = [
     {
-      domain = var.infra_domain_url
-      name = "${var.infra_dozzle_subdomain_url}.${var.infra_domain_url}"
+      domain  = var.infra_domain_url
+      name    = "${var.infra_dozzle_subdomain_url}.${var.infra_domain_url}"
       service = "http://nginx:80"
     },
     {
-      domain = var.infra_domain_url
-      name = "${var.infra_ytdlp_subdomain_url}.${var.infra_domain_url}"
+      domain  = var.infra_domain_url
+      name    = "${var.infra_ytdlp_subdomain_url}.${var.infra_domain_url}"
       service = "http://nginx:80"
     }
   ]
