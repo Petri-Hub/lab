@@ -1,7 +1,7 @@
 resource "cloudflare_zero_trust_tunnel_cloudflared" "lab" {
   account_id    = var.cloudflare_account_id
   name          = var.domain
-  tunnel_secret = local.tunnel_secret
+  tunnel_secret = random_bytes.tunnel_secret.result
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "lab" {
@@ -27,4 +27,29 @@ resource "cloudflare_dns_record" "tunnel" {
   content = "${cloudflare_zero_trust_tunnel_cloudflared.lab.id}.cfargotunnel.com"
   proxied = true
   ttl     = 1
+}
+
+resource "cloudflare_zero_trust_access_application" "protected" {
+  for_each = { for svc in var.services : svc.name => svc }
+
+  account_id       = var.cloudflare_account_id
+  name             = each.value.name
+  domain           = each.value.name
+  type             = "self_hosted"
+  session_duration = "168h"
+
+  policies = [
+    {
+      name     = "Allow authorized users"
+      decision = "allow"
+      precedence = 1
+      include = [
+        for email in var.authorized_emails : {
+          email = {
+            email = email
+          }
+        }
+      ]
+    }
+  ]
 }

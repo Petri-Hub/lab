@@ -1,3 +1,3 @@
-locals {
-  tunnel_secret = base64encode(var.cloudflare_account_id)
+resource "random_bytes" "tunnel_secret" {
+  length = 32
 }

@@ -33,11 +33,17 @@ module "cloudflare" {
   cloudflare_api_token = var.cloudflare_api_token
 
   domain = var.infra_domain_url
+  authorized_emails = var.infra_authorized_emails
 
   services = [
     {
       domain = var.infra_domain_url
       name = "${var.infra_dozzle_subdomain_url}.${var.infra_domain_url}"
+      service = "http://nginx:80"
+    },
+    {
+      domain = var.infra_domain_url
+      name = "${var.infra_ytdlp_subdomain_url}.${var.infra_domain_url}"
       service = "http://nginx:80"
     }
   ]

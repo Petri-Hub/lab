@@ -31,3 +31,9 @@ variable "services" {
     service = string
   }))
 }
+
+variable "authorized_emails" {
+  description = "List of authorized email addresses for Cloudflare Access"
+  type        = list(string)
+  sensitive   = true
+}

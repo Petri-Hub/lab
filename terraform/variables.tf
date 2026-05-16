@@ -64,6 +64,11 @@ variable "infra_dozzle_subdomain_url" {
   type        = string
 }
 
+variable "infra_ytdlp_subdomain_url" {
+  description = "The YTDLP subdomain"
+  type        = string
+}
+
 variable "infra_filebrowser_port" {
   description = "FileBrowser UI port"
   type = number
@@ -102,4 +107,10 @@ variable "infra_ssh_port" {
 variable "infra_ngrok_url" {
   description = "The NGROK tunnel URL"
   type        = string
+}
+
+variable "infra_authorized_emails" {
+  description = "List of authorized emails for lab access"
+  type        = list(string)
+  sensitive   = true
 }
