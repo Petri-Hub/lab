@@ -22,3 +22,10 @@ services:
           memory: 12G
         reservations:
           memory: 6G
+    networks:
+      - lab
+
+networks:
+  lab:
+    name: lab
+    external: true

@@ -8,9 +8,9 @@ services:
       - ./configuration/rclone.conf:/config/rclone/rclone.conf:ro
       - ../../../storage/restic:/repos
     networks:
-      - infra
+      - lab
 
 networks:
-  infra:
-    name: infra
+  lab:
+    name: lab
     external: true

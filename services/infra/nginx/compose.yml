@@ -11,8 +11,8 @@ services:
     volumes:
       - ./configuration/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
     networks:
-      - infra
+      - lab
 networks:
-  infra:
-    name: infra
+  lab:
+    name: lab
     external: true

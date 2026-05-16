@@ -8,6 +8,8 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
+    networks:
+      - lab
     volumes:
       - filebrowser_data:/database
       - ./configuration/settings.json:/config/settings.json
@@ -15,3 +17,8 @@ services:
 
 volumes:
   filebrowser_data:
+
+networks:
+  lab:
+    name: lab
+    external: true

@@ -6,12 +6,12 @@ services:
     ports:
       - ${YTDLP_PORT}:3033
     networks:
-      - infra
+      - lab
     volumes:
       - ../../../storage/satisfactory/downloads:/downloads 
       - ../../../storage/satisfactory/config:/config
 
 networks:
-  infra:
-    name: infra
+  lab:
+    name: lab
     external: true

@@ -1,7 +1,7 @@
 resource "cloudflare_zero_trust_tunnel_cloudflared" "lab" {
   account_id    = var.cloudflare_account_id
   name          = var.domain
-  tunnel_secret = random_bytes.tunnel_secret.result
+  tunnel_secret = random_bytes.tunnel_secret.base64
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "lab" {

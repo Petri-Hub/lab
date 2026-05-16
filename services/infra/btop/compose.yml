@@ -12,3 +12,10 @@ services:
       - /proc:/proc:ro
       - /sys:/sys:ro
       - /:/host:ro
+    networks:
+      - lab
+
+networks:
+  lab:
+    name: lab
+    external: true

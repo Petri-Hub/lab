@@ -1,5 +1,5 @@
 setup:
-	docker network create infra
+	docker network create lab
 
 infra-up:
 	docker compose -f services/infra/compose.yml up -d
@@ -21,6 +21,9 @@ apps-down:
 
 terraform-init:
 	terraform -chdir=terraform init
+
+terraform-init-upgrade:
+	terraform -chdir=terraform init -upgrade
 
 terraform-plan:
 	terraform -chdir=terraform plan

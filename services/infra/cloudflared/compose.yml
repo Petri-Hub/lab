@@ -5,9 +5,9 @@ services:
     restart: unless-stopped
     command: 'tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}'
     networks:
-      - infra
+      - lab
 
 networks:
-  infra:
-    name: infra
+  lab:
+    name: lab
     external: true
