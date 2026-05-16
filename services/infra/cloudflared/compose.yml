@@ -6,6 +6,11 @@ services:
     command: 'tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}'
     networks:
       - lab
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 64M
 
 networks:
   lab:

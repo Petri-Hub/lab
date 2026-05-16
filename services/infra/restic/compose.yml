@@ -16,7 +16,12 @@ services:
       ofelia.enabled: "true"
       ofelia.job-exec.backup-satisfactory.schedule: "@every 20m"
       ofelia.job-exec.backup-satisfactory.command: "restic backup /data"
-      
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 256M
+          
 networks:
   lab:
     name: lab

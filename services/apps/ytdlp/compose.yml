@@ -10,7 +10,12 @@ services:
     volumes:
       - ../../../storage/ytdlp/downloads:/downloads 
       - ../../../storage/ytdlp/config:/config
-
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 512M
+          
 networks:
   lab:
     name: lab

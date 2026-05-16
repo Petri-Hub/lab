@@ -9,6 +9,11 @@ services:
       - ../../../storage/restic:/repos
     networks:
       - lab
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 64M
 
 networks:
   lab:

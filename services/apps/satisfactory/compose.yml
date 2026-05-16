@@ -16,14 +16,16 @@ services:
       - PGID=1000
       - PUID=1000
       - STEAMBETA=false
+    networks:
+      - lab
     deploy:
       resources:
         limits:
+          cpus: '8.0'
           memory: 12G
         reservations:
+          cpus: '2.0'
           memory: 6G
-    networks:
-      - lab
 
 networks:
   lab:

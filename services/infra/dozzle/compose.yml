@@ -9,6 +9,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - lab
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 64M
 
 networks:
   lab:
