@@ -69,6 +69,11 @@ variable "infra_ytdlp_subdomain_url" {
   type        = string
 }
 
+variable "infra_btop_subdomain_url" {
+  description = "The BTOP subdomain"
+  type        = string
+}
+
 variable "infra_filebrowser_port" {
   description = "FileBrowser UI port"
   type = number
