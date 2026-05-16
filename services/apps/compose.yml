@@ -1,2 +1,3 @@
 include:
     - ./ytdlp/compose.yml
+    - ./satisfactory/compose.yml
