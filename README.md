@@ -195,4 +195,4 @@ make apps-up
 
 ## License
 
-[MIT](LICENSE) — free to use, modify, and distribute as you see fit.
+[MIT](LICENSE.md) — free to use, modify, and distribute as you see fit.
