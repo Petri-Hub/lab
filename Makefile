@@ -1,5 +1,9 @@
+install:
+	$(MAKE) install-pipx
+	$(MAKE) install-pre-commit
+
 setup:
-	docker network create lab
+	$(MAKE) setup-docker-networks
 
 infra-up:
 	docker compose -f services/infra/compose.yml up -d
@@ -30,3 +34,12 @@ terraform-plan:
 
 terraform-apply:
 	terraform -chdir=terraform apply
+
+install-pipx:
+	sudo apt-get install -y pipx
+
+install-pre-commit:
+	pipx install pre-commit && pre-commit install
+
+setup-docker-networks:
+	docker network create lab
