@@ -125,7 +125,7 @@ deploy:
 
 #### Use environment variables for port randomization
 
-No service uses its default port. Every exposed port is set through an environment variable, making it easy to change and harder for automated scans to find services.
+No service uses its default port. Every exposed port is set through an environment variable, making it easy to change and harder for automated scans to find services. Internal ports stay at their well-known defaults; only the externally-facing port is randomized.
 
 ```yaml
 # services/infra/btop/compose.yml
@@ -145,6 +145,17 @@ networks:
   lab:
     name: lab
     external: true
+```
+
+#### Container conventions
+
+Every container uses restart policies so services recover from crashes or host reboots without manual intervention. Container names are set explicitly to match their Compose service key, keeping references unambiguous across the stack.
+
+```yaml
+# shared pattern across all compose.yml files
+
+restart: unless-stopped
+container_name: <service-name>
 ```
 
 ## Getting started

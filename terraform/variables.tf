@@ -109,11 +109,6 @@ variable "infra_ssh_port" {
   type        = number
 }
 
-variable "infra_ngrok_url" {
-  description = "The NGROK tunnel URL"
-  type        = string
-}
-
 variable "infra_authorized_emails" {
   description = "List of authorized emails for lab access"
   type        = list(string)
