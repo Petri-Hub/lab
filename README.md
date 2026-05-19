@@ -1,8 +1,10 @@
 # 🏠
 
-> My self-hosted infrastructure and application platform — running on a single server, managed as code, and designed with security, reliability, and minimal operational overhead in mind.
+> A personal homelab running on a single laptop — infrastructure and applications managed entirely as code, secured by design, and built for reliability without the overhead of a data center.
 
 ## Architecture
+
+<img width="1611" height="644" alt="image" src="https://github.com/user-attachments/assets/d9f92502-9b10-4588-8603-305a21ccff7e" />
 
 ### Access flows
 
@@ -32,26 +34,26 @@ Every single container has CPU and memory limits. No service can spike and starv
 
 ### Infrastructure
 
-| Service | Description |
-|---|---|
-| [cloudflared](services/infra/cloudflared/) | Cloudflare Tunnel client |
-| [nginx](services/infra/nginx/) | Reverse proxy with env-substituted config |
-| [dozzle](services/infra/dozzle/) | Real-time Docker log viewer |
-| [btop](services/infra/btop/) | Browser-accessible system monitor via ttyd+tmux |
-| [filebrowser](services/infra/filebrowser/) | Web-based file manager |
-| [ofelia](services/infra/ofelia/) | Docker-native cron scheduler |
-| [rclone](services/infra/rclone/) | Rclone REST daemon (backup backend) |
-| [restic](services/infra/restic/) | Restic backup client (Satisfactory data) |
+|  | Service | Used for |
+|---|---|---|
+| ☁️ | [cloudflared](services/infra/cloudflared/) | Connects the server to Cloudflare's edge network, routing public traffic through a secure tunnel so services are accessible without exposing the server directly |
+| 🔀 | [nginx](services/infra/nginx/) | Acts as a reverse proxy, reading the incoming domain and forwarding each request to the correct internal service |
+| 📋 | [dozzle](services/infra/dozzle/) | Streams live logs from every running container into a browser dashboard for debugging and monitoring |
+| 📊 | [btop](services/infra/btop/) | Exposes a real-time system monitor through the browser so you can check CPU, memory, and processes without SSH |
+| 📁 | [filebrowser](services/infra/filebrowser/) | Provides a web-based file manager to browse, upload, and edit files across the entire server |
+| ⏰ | [ofelia](services/infra/ofelia/) | Runs scheduled jobs inside containers using Docker labels, used here to trigger backups automatically |
+| 💾 | [rclone](services/infra/rclone/) | Runs as a REST server that receives and stores backup data from Restic |
+| 🔒 | [restic](services/infra/restic/) | Backs up Satisfactory game data to the Rclone server every 20 minutes, keeping saves safe from corruption or crashes |
 
 ### Applications
 
-| Service | Description |
-|---|---|
-| [satisfactory](services/apps/satisfactory/) | Dedicated Satisfactory game server |
-| [ytdlp](services/apps/ytdlp/) | Web UI for yt-dlp video downloads |
+|  | Service | Used for |
+|---|---|---|
+| 🎮 | [satisfactory](services/apps/satisfactory/) | Runs a dedicated Satisfactory game server that friends can join at any time, with automatic backups and configurable player limits |
+| 📹 | [ytdlp](services/apps/ytdlp/) | Provides a web interface for yt-dlp to download videos from various platforms directly to the server |
 
 
-## Template
+### Template
 
 ```
 services/
@@ -63,9 +65,9 @@ services/
         └── compose.yml           # Service definition with ports, volumes, networks, resources
 ```
 
-## Policies
+### Policies
 
-### Keep configuration in a dedicated folder
+#### Keep configuration in a dedicated folder
 
 Every service that needs static config files places them in a configuration subdirectory. This keeps mounts predictable and organized, with a single place to look for a service's settings.
 
@@ -76,7 +78,7 @@ volumes:
   - ./configuration/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
 ```
 
-### Prefix environment variables with the service name
+#### Prefix environment variables with the service name
 
 Variables are prefixed with the service name to avoid collisions and make it clear what each one controls.
 
@@ -88,7 +90,7 @@ SATISFACTORY_GAME_PORT=7328
 SATISFACTORY_MESSAGING_PORT=1273
 ```
 
-### Separate infra from apps
+#### Separate infra from apps
 
 Infrastructure services handle monitoring, networking, and backups. Application services are the actual tools being hosted. This split keeps concerns clean — you know what keeps the server running versus what makes it useful.
 
@@ -107,7 +109,7 @@ services/
     └── ytdlp/
 ```
 
-### Set resource limits on every container
+#### Set resource limits on every container
 
 Every service declares how much CPU and memory it can use. This prevents any single service from spiking and starving the others, keeping the whole lab stable under load.
 
@@ -121,7 +123,7 @@ deploy:
       memory: 64M
 ```
 
-### Use environment variables for port randomization
+#### Use environment variables for port randomization
 
 No service uses its default port. Every exposed port is set through an environment variable, making it easy to change and harder for automated scans to find services.
 
@@ -132,7 +134,7 @@ ports:
   - "${BTOP_PORT}:7681"
 ```
 
-### Connect every service to the same network
+#### Connect every service to the same network
 
 All services join a shared Docker network so they can resolve each other by container name without complex networking setup.
 
@@ -144,17 +146,6 @@ networks:
     name: lab
     external: true
 ```
-
-## Backups
-
-Satisfactory game data is automatically backed up every 20 minutes using the Restic + Rclone pipeline:
-
-1. **Ofelia** (label-based cron scheduler) triggers the backup job.
-2. **Restic** reads the Satisfactory config directory (`/data`) and runs `restic backup`.
-3. **Rclone** serves as a REST server backend, storing backups locally.
-
-This ensures that even in a game server crash or data corruption scenario, the maximum data loss window is 20 minutes.
-
 
 ## Getting started
 
@@ -185,11 +176,9 @@ make infra-up
 make apps-up
 ```
 
-See the [Makefile](Makefile) for all available commands and the [terraform](terraform/) directory for infrastructure configuration. Service-specific environment variables are documented in each service's `.env.example` file under [services](services/).
+## Commands
 
-## Makefile reference
-
-| Target | Description |
+| Command | Description |
 |---|---|
 | `setup` | Create the `lab` Docker network |
 | `infra-up` | Start all infrastructure services |
@@ -204,29 +193,6 @@ See the [Makefile](Makefile) for all available commands and the [terraform](terr
 | `terraform-apply` | Apply infrastructure changes |
 
 
-## Repository structure
+## License
 
-```
-lab/
-├── docker/                  # Custom Dockerfile builds
-│   └── btop/               # Browser-accessible system monitor
-├── services/                # Docker Compose service definitions
-│   ├── infra/               # Infrastructure services
-│   │   ├── btop/
-│   │   ├── cloudflared/
-│   │   ├── dozzle/
-│   │   ├── filebrowser/
-│   │   ├── nginx/
-│   │   ├── ofelia/
-│   │   ├── rclone/
-│   │   └── restic/
-│   └── apps/                # Application services
-│       ├── satisfactory/
-│       └── ytdlp/
-├── terraform/               # Infrastructure as Code
-│   ├── cloudflare/          # Cloudflare tunnel, DNS, Access
-│   └── tailscale/           # Device tags and ACLs
-├── storage/                 # Persistent data (gitignored)
-├── Makefile
-└── .gitignore
-```
+[MIT](LICENSE) — free to use, modify, and distribute as you see fit.
