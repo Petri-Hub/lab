@@ -54,64 +54,96 @@ Every single container has CPU and memory limits. No service can spike and starv
 ## Template
 
 ```
-services/{infra|apps}/<service-name>/
-├── .env                  # Local environment values (gitignored)
-├── .env.example          # Documented variables with placeholder values
-├── compose.yml           # Service definition with ports, volumes, networks, resources
-└── configuration/        # Static config files mounted into the container
-    └── ...
+services/
+└── {infra|apps}/
+    └── <service-name>/
+        ├── configuration/        # Static config files mounted into the container
+        ├── .env                  # Local environment values (gitignored)
+        ├── .env.example          # Documented variables with placeholder values
+        └── compose.yml           # Service definition with ports, volumes, networks, resources
 ```
 
-## Network security
+## Policies
 
-### Port randomization
+### Keep configuration in a dedicated folder
 
-No service uses its default port. Every exposed port is configured via environment variables and randomized from the default. This eliminates automated scans targeting well-known service ports as an attack vector.
+Every service that needs static config files places them in a configuration subdirectory. This keeps mounts predictable and organized, with a single place to look for a service's settings.
 
-### Tailscale ACLs
+```yaml
+# services/infra/nginx/compose.yml
 
-Defined in [terraform/tailscale/main.tf](terraform/tailscale/main.tf), the ACL configuration implements a zero-trust overlay:
+volumes:
+  - ./configuration/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
+```
 
-| Tag | Devices | Access |
-|---|---|---|
-| `tag:lab` | Server | All ports; owner-managed |
-| `tag:workstation` | Monstrao, Globals (laptops) | Specific lab ports; owner-managed |
-| `tag:edge` | Phone | Specific lab ports + full access to workstations; owner-managed |
-| `autogroup:shared` | Shared users | Dozzle and Satisfactory only |
+### Prefix environment variables with the service name
 
-Rules:
-- Owners have unrestricted access to everything.
-- Workstations and edge devices can only reach specific randomized ports on the lab server.
-- Edge devices can reach workstations fully (useful for remote access patterns).
-- Shared users are limited to observability (Dozzle) and gaming (Satisfactory).
+Variables are prefixed with the service name to avoid collisions and make it clear what each one controls.
 
-### Cloudflare Access
+```bash
+# services/apps/satisfactory/.env.example
 
-Defined in [terraform/cloudflare/main.tf](terraform/cloudflare/main.tf), all public-facing services require Cloudflare Access with **Email OTP** authentication. Only explicitly authorized email addresses can reach the services. SSL is set to **Flexible** mode, offloading TLS to Cloudflare's edge.
+SATISFACTORY_MAX_PLAYERS=4
+SATISFACTORY_GAME_PORT=7328
+SATISFACTORY_MESSAGING_PORT=1273
+```
 
+### Separate infra from apps
 
-## Infrastructure as Code
+Infrastructure services handle monitoring, networking, and backups. Application services are the actual tools being hosted. This split keeps concerns clean — you know what keeps the server running versus what makes it useful.
 
-### Terraform
+```
+services/
+├── infra/       # monitoring, networking, backups, access
+│   ├── btop/
+│   ├── cloudflared/
+│   ├── dozzle/
+│   ├── nginx/
+│   ├── ofelia/
+│   ├── rclone/
+│   └── restic/
+└── apps/        # user-facing tools
+    ├── satisfactory/
+    └── ytdlp/
+```
 
-Two modules manage the cloud layer:
+### Set resource limits on every container
 
-**Cloudflare module** (`terraform/cloudflare/`)
-- Creates a Cloudflare Zero Trust Tunnel
-- Configures tunnel ingress routing hostnames → `http://nginx:80`
-- Provisions DNS CNAME records for each subdomain
-- Creates Cloudflare Access applications with email allowlist policies
-- Sets SSL to flexible mode
+Every service declares how much CPU and memory it can use. This prevents any single service from spiking and starving the others, keeping the whole lab stable under load.
 
-**Tailscale module** (`terraform/tailscale/`)
-- Discovers devices by their Tailscale hostname
-- Applies tags: `tag:lab`, `tag:workstation`, `tag:edge`
-- Manages the full ACL with fine-grained src/dst rules using randomized ports
+```yaml
+# services/infra/dozzle/compose.yml
 
-### Docker Compose
+deploy:
+  resources:
+    limits:
+      cpus: '0.5'
+      memory: 64M
+```
 
-All services are defined with explicit environment variables, volume mounts, network attachments, and resource limits. No `latest` tag surprises — every service pins its intentions through Compose files.
+### Use environment variables for port randomization
 
+No service uses its default port. Every exposed port is set through an environment variable, making it easy to change and harder for automated scans to find services.
+
+```yaml
+# services/infra/btop/compose.yml
+
+ports:
+  - "${BTOP_PORT}:7681"
+```
+
+### Connect every service to the same network
+
+All services join a shared Docker network so they can resolve each other by container name without complex networking setup.
+
+```yaml
+# shared pattern across all compose.yml files
+
+networks:
+  lab:
+    name: lab
+    external: true
+```
 
 ## Backups
 
@@ -128,10 +160,10 @@ This ensures that even in a game server crash or data corruption scenario, the m
 
 ### Prerequisites
 
-- Docker and Docker Compose
-- Terraform ≥ 1.0
-- A Cloudflare account with a zone configured
-- A Tailscale tailnet with devices enrolled
+- [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/)
+- [Terraform](https://developer.hashicorp.com/terraform/install) ≥ 1.0
+- A [Cloudflare](https://www.cloudflare.com/) account with a zone configured
+- A [Tailscale](https://tailscale.com/) tailnet with devices enrolled
 
 ### Setup
 
@@ -153,17 +185,7 @@ make infra-up
 make apps-up
 ```
 
-### Environment variables
-
-Each service directory contains a `.env.example` file. Copy it to `.env` and fill in the values:
-
-```bash
-cp services/infra/cloudflared/.env.example services/infra/cloudflared/.env
-# edit .env with your tunnel token
-```
-
-The `terraform/variables.tf` file documents every Terraform variable. Create a `terraform.tfvars` with your values.
-
+See the [Makefile](Makefile) for all available commands and the [terraform](terraform/) directory for infrastructure configuration. Service-specific environment variables are documented in each service's `.env.example` file under [services](services/).
 
 ## Makefile reference
 
