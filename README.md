@@ -4,7 +4,7 @@
 
 ## Architecture
 
-<img width="1611" height="644" alt="image" src="https://github.com/user-attachments/assets/d9f92502-9b10-4588-8603-305a21ccff7e" />
+<img width="1611" height="644" alt="Lab Architecture Diagram" src="https://github.com/user-attachments/assets/d9f92502-9b10-4588-8603-305a21ccff7e" />
 
 ### Access flows
 
