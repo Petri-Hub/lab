@@ -19,19 +19,19 @@ variable "tailscale_tailnet" {
 variable "cloudflare_api_token" {
   description = "Cloudflare API token for Terraform"
   type        = string
-  sensitive = true
+  sensitive   = true
 }
 
 variable "cloudflare_zone_id" {
   description = "Cloudflare zone ID"
-  type = string
-  sensitive = true
+  type        = string
+  sensitive   = true
 }
 
 variable "cloudflare_account_id" {
   description = "Cloudflare account ID"
-  type = string
-  sensitive = true
+  type        = string
+  sensitive   = true
 }
 
 variable "tailscale_lab_device_name" {
@@ -76,12 +76,12 @@ variable "infra_btop_subdomain_url" {
 
 variable "infra_filebrowser_port" {
   description = "FileBrowser UI port"
-  type = number
+  type        = number
 }
 
 variable "infra_ytdlp_port" {
   description = "YTDLP Web UI port"
-  type = number
+  type        = number
 }
 
 variable "infra_satisfactory_game_port" {

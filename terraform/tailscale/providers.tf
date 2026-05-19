@@ -3,7 +3,7 @@ terraform {
 
   required_providers {
     tailscale = {
-      source  = "tailscale/tailscale"
+      source = "tailscale/tailscale"
     }
   }
 }

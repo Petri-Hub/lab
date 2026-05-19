@@ -21,12 +21,12 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "lab" {
 
 resource "cloudflare_dns_record" "tunnel" {
   for_each = { for svc in var.services : svc.name => svc }
-  zone_id = var.cloudflare_zone_id
-  name    = each.value.name
-  type    = "CNAME"
-  content = "${cloudflare_zero_trust_tunnel_cloudflared.lab.id}.cfargotunnel.com"
-  proxied = true
-  ttl     = 1
+  zone_id  = var.cloudflare_zone_id
+  name     = each.value.name
+  type     = "CNAME"
+  content  = "${cloudflare_zero_trust_tunnel_cloudflared.lab.id}.cfargotunnel.com"
+  proxied  = true
+  ttl      = 1
 }
 
 resource "cloudflare_zone_setting" "ssl" {

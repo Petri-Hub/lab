@@ -45,9 +45,9 @@ resource "tailscale_device_tags" "phone" {
 resource "tailscale_acl" "main" {
   acl = jsonencode({
     tagOwners = {
-      "tag:lab"  = ["autogroup:owner"]
+      "tag:lab"         = ["autogroup:owner"]
       "tag:workstation" = ["autogroup:owner"]
-      "tag:edge" = ["autogroup:owner"]
+      "tag:edge"        = ["autogroup:owner"]
     }
 
     acls = [
@@ -71,8 +71,8 @@ resource "tailscale_acl" "main" {
       },
       {
         action = "accept"
-        src = ["tag:edge"]
-        dst = ["tag:workstation:*"]
+        src    = ["tag:edge"]
+        dst    = ["tag:workstation:*"]
       },
       {
         action = "accept"
