@@ -1,38 +1,15 @@
-# 🏠 Homelab
+# 🏠
 
-A self-hosted infrastructure and application platform — running on a single server, managed as code, and designed with security, reliability, and minimal operational overhead in mind.
-
-This repository is the single source of truth for the entire homelab environment. Every service, network rule, DNS record, access policy, and backup schedule is defined here — no manual configuration, no snowflake servers.
-
+> My self-hosted infrastructure and application platform — running on a single server, managed as code, and designed with security, reliability, and minimal operational overhead in mind.
 
 ## Architecture
 
-### Internet Access
+### Access flows
 
-```mermaid
-flowchart LR
-    Cloudflare --> Cloudflared
-    Cloudflared --> Nginx
-    Nginx --> Dozzle
-    Nginx --> Ytdlp
-```
-
-### Tailscale Access
-
-```mermaid
-flowchart LR
-    Tailscale --> Btop
-    Tailscale --> Filebrowser
-    Tailscale --> Satisfactory
-```
-
-### Network flow
-
-1. Users reach the services through Cloudflare (Dozzle, yt-dlp, btop subdomains).
-2. Cloudflare Access checks the user's email against an allowlist and issues an OTP.
-3. Authenticated traffic enters the server via the cloudflared tunnel.
-4. NGINX routes each hostname to the correct internal container.
-5. Optionally, devices on the Tailscale network can access services directly using randomized ports and ACL-defined rules.
+| Path | Description |
+|---|---|
+| **Internet** | Users access services through Cloudflare. Cloudflare checks the user's email and sends a one-time code to verify them. Once verified, traffic goes through the tunnel into the server, where NGINX sends each request to the right service. |
+| **Tailscale** | Devices connected to the Tailscale network can access services directly with randomized ports. The server only allows certain ports for laptops and phones, and shared users can only reach some services. |
 
 
 ## Philosophy
@@ -50,10 +27,6 @@ Services are split into two categories: **infrastructure** (what keeps the serve
 
 **Explicit resource governance.**  
 Every single container has CPU and memory limits. No service can spike and starve another. The lab stays predictable under load.
-
-**Backups are a first-class citizen.**  
-Satisfactory game saves are backed up every 20 minutes via Restic + Rclone, orchestrated by Ofelia. Backups are treated with the same level of automation and rigour as the services themselves.
-
 
 ## Services
 
@@ -77,6 +50,17 @@ Satisfactory game saves are backed up every 20 minutes via Restic + Rclone, orch
 | [satisfactory](services/apps/satisfactory/) | Dedicated Satisfactory game server |
 | [ytdlp](services/apps/ytdlp/) | Web UI for yt-dlp video downloads |
 
+
+## Template
+
+```
+services/{infra|apps}/<service-name>/
+├── .env                  # Local environment values (gitignored)
+├── .env.example          # Documented variables with placeholder values
+├── compose.yml           # Service definition with ports, volumes, networks, resources
+└── configuration/        # Static config files mounted into the container
+    └── ...
+```
 
 ## Network security
 
