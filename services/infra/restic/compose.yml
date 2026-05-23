@@ -6,10 +6,10 @@ services:
     entrypoint: /bin/sh
     command: '-c "tail -f /dev/null"'
     environment:
-      - RESTIC_REPOSITORY=rest:http://rclone:${RESTIC_RCLONE_SERVER_PORT}/repos/satisfactory
+      - RESTIC_REPOSITORY=rest:http://rclone:${RESTIC_RCLONE_SERVER_PORT}/satisfactory/
       - RESTIC_PASSWORD=${RESTIC_SATISFACTORY_PASSWORD}
     volumes:
-      - ../../../storage/satisfactory:/data:ro
+      - ../../../storage/satisfactory/saved:/data:ro
     networks:
       - lab
     labels:
