@@ -1,0 +1,23 @@
+services:
+  upsnap:
+    image: ghcr.io/seriousm4x/upsnap:5
+    container_name: upsnap
+    restart: unless-stopped
+    network_mode: host
+    cap_add:
+      - NET_RAW
+    cap_drop:
+      - ALL
+    environment:
+      - TZ=${TZ:-UTC}
+      - UPSNAP_HTTP_LISTEN=0.0.0.0:${UPSNAP_PORT}
+      - UPSNAP_INTERVAL=${UPSNAP_INTERVAL}
+      - UPSNAP_SCAN_RANGE=${UPSNAP_SCAN_RANGE}
+      - UPSNAP_WEBSITE_TITLE=${UPSNAP_WEBSITE_TITLE}
+    volumes:
+      - ../../../storage/upsnap:/app/pb_data
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
