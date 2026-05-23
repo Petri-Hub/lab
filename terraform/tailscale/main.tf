@@ -66,7 +66,8 @@ resource "tailscale_acl" "main" {
           "tag:lab:${var.ports.filebrowser}",
           "tag:lab:${var.ports.satisfactory.game}",
           "tag:lab:${var.ports.satisfactory.messaging}",
-          "tag:lab:${var.ports.ssh}"
+          "tag:lab:${var.ports.ssh}",
+          "tag:lab:${var.ports.upsnap}"
         ]
       },
       {

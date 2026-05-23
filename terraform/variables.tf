@@ -74,6 +74,11 @@ variable "infra_btop_subdomain_url" {
   type        = string
 }
 
+variable "infra_upsnap_subdomain_url" {
+  description = "The UpSnap subdomain"
+  type        = string
+}
+
 variable "infra_filebrowser_port" {
   description = "FileBrowser UI port"
   type        = number
@@ -101,6 +106,11 @@ variable "infra_dozzle_port" {
 
 variable "infra_btop_port" {
   description = "BTOP UI port"
+  type        = number
+}
+
+variable "infra_upsnap_port" {
+  description = "UpSnap web UI port"
   type        = number
 }
 

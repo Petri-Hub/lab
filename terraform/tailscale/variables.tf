@@ -7,6 +7,7 @@ variable "ports" {
     dozzle      = number
     filebrowser = number
     btop        = number
+    upsnap      = number
     satisfactory = object({
       game      = number
       messaging = number

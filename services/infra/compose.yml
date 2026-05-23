@@ -7,4 +7,5 @@ include:
     - ./rclone/compose.yml
     - ./restic/compose.yml
     - ./btop/compose.yml
+    - ./upsnap/compose.yml
 
