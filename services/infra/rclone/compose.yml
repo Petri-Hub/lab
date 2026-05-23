@@ -3,16 +3,10 @@ services:
     image: rclone/rclone:latest
     container_name: rclone
     restart: unless-stopped
-    privileged: true
-    entrypoint: /bin/sh
-    command:
-      - -c
-      - |
-        mkdir -p /pendrive
-        mount ${RCLONE_PENDRIVE_DEVICE} /pendrive
-        exec rclone serve restic --addr 0.0.0.0:${RCLONE_RESTIC_PORT} local:/pendrive
+    command: ['serve', 'restic', '--addr', '0.0.0.0:${RCLONE_RESTIC_PORT}', 'local:/pendrive']
     volumes:
       - ./configuration/rclone.conf:/config/rclone/rclone.conf:ro
+      - /mnt/pendrive:/pendrive
     networks:
       - lab
     deploy:
