@@ -12,8 +12,6 @@ services:
       - NGINX_BTOP_PORT=${NGINX_BTOP_PORT}
       - NGINX_UPSNAP_DOMAIN=${NGINX_UPSNAP_DOMAIN}
       - NGINX_UPSNAP_PORT=${NGINX_UPSNAP_PORT}
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     volumes:
       - ./configuration/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
     networks:
