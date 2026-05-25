@@ -8,6 +8,7 @@ variable "ports" {
     filebrowser = number
     btop        = number
     upsnap      = number
+    hermes      = number
     satisfactory = object({
       game      = number
       messaging = number

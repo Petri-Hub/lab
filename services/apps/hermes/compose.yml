@@ -1,0 +1,32 @@
+services:
+  hermes:
+    image: nousresearch/hermes-agent:latest
+    container_name: hermes
+    restart: unless-stopped
+    command: gateway run
+    ports:
+      - ${HERMES_GATEWAY_PORT}:8642
+      - ${HERMES_DASHBOARD_PORT}:9119
+    networks:
+      - lab
+    volumes:
+      - ../../../storage/hermes/data:/opt/data
+    environment:
+      - HERMES_DASHBOARD=1
+      - HERMES_TUI=1
+      - OPENROUTER_API_KEY=${HERMES_OPENROUTER_API_KEY}
+      - DISCORD_BOT_TOKEN=${HERMES_DISCORD_BOT_TOKEN}
+      - DISCORD_ALLOWED_USERS=${HERMES_DISCORD_ALLOWED_USERS}
+      - DISCORD_ALLOW_ANY_ATTACHMENT=${HERMES_DISCORD_ALLOW_ANY_ATTACHMENT}
+      - GROQ_API_KEY=${HERMES_GROQ_API_KEY}
+    shm_size: '1gb'
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+
+networks:
+  lab:
+    name: lab
+    external: true

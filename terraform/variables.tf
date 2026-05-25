@@ -119,6 +119,11 @@ variable "infra_ssh_port" {
   type        = number
 }
 
+variable "infra_hermes_dashboard_port" {
+  description = "Hermes Agent dashboard UI port"
+  type        = number
+}
+
 variable "infra_authorized_emails" {
   description = "List of authorized emails for lab access"
   type        = list(string)
