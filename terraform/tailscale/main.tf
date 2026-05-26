@@ -64,7 +64,7 @@ resource "tailscale_acl" "main" {
           "tag:lab:${var.ports.dozzle}",
           "tag:lab:${var.ports.btop}",
           "tag:lab:${var.ports.filebrowser}",
-          "tag:lab:${var.ports.hermes_dashboard}",
+          "tag:lab:${var.ports.hermes}",
           "tag:lab:${var.ports.satisfactory.game}",
           "tag:lab:${var.ports.satisfactory.messaging}",
           "tag:lab:${var.ports.ssh}",
