@@ -74,6 +74,11 @@ variable "infra_btop_subdomain_url" {
   type        = string
 }
 
+variable "infra_kamiyomu_subdomain_url" {
+  description = "The KamiYomu subdomain"
+  type        = string
+}
+
 variable "infra_upsnap_subdomain_url" {
   description = "The UpSnap subdomain"
   type        = string
@@ -86,6 +91,11 @@ variable "infra_filebrowser_port" {
 
 variable "infra_ytdlp_port" {
   description = "YTDLP Web UI port"
+  type        = number
+}
+
+variable "infra_kamiyomu_port" {
+  description = "KamiYomu Web UI port"
   type        = number
 }
 

@@ -1,0 +1,27 @@
+services:
+  kamiyomu:
+    image: marcoscostadev/kamiyomu:latest
+    container_name: kamiyomu
+    restart: unless-stopped
+    ports:
+      - ${KAMIYOMU_PORT}:8080
+    networks:
+      - lab
+    volumes:
+      - ../../../storage/kamiyomu/manga:/manga
+      - ../../../storage/kamiyomu/db:/db
+      - ../../../storage/kamiyomu/agents:/agents
+      - ../../../storage/kamiyomu/logs:/logs
+      - /etc/localtime:/etc/localtime:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+
+networks:
+  lab:
+    name: lab
+    external: true
