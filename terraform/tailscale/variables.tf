@@ -11,6 +11,7 @@ variable "ports" {
     btop        = number
     upsnap      = number
     hermes      = number
+    palworld    = number
     satisfactory = object({
       game      = number
       messaging = number

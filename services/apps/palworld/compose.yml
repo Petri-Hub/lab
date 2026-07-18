@@ -1,0 +1,44 @@
+services:
+  palworld:
+    container_name: palworld
+    image: thijsvanloef/palworld-server-docker:latest
+    restart: unless-stopped
+    ports:
+      - '${PALWORLD_GAME_PORT}:${PALWORLD_GAME_PORT}/udp'
+      - '${PALWORLD_QUERY_PORT}:${PALWORLD_QUERY_PORT}/udp'
+      - '127.0.0.1:${PALWORLD_REST_API_PORT}:${PALWORLD_REST_API_PORT}/tcp'
+    volumes:
+      - ../../../storage/palworld:/palworld
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - PORT=${PALWORLD_GAME_PORT}
+      - QUERY_PORT=${PALWORLD_QUERY_PORT}
+      - PLAYERS=${PALWORLD_MAX_PLAYERS}
+      - TZ=${PALWORLD_TZ}
+      - SERVER_NAME=${PALWORLD_SERVER_NAME}
+      - SERVER_DESCRIPTION=${PALWORLD_SERVER_DESCRIPTION}
+      - SERVER_PASSWORD=${PALWORLD_SERVER_PASSWORD}
+      - ADMIN_PASSWORD=${PALWORLD_ADMIN_PASSWORD}
+      - COMMUNITY=false
+      - UPDATE_ON_BOOT=true
+      - REST_API_ENABLED=true
+      - REST_API_PORT=${PALWORLD_REST_API_PORT}
+      - BACKUP_ENABLED=true
+      - DELETE_OLD_BACKUPS=true
+      - OLD_BACKUP_DAYS=7
+    networks:
+      - lab
+    deploy:
+      resources:
+        limits:
+          cpus: '8.0'
+          memory: 6G
+        reservations:
+          cpus: '2.0'
+          memory: 2G
+
+networks:
+  lab:
+    name: lab
+    external: true

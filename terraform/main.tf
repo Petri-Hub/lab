@@ -11,6 +11,7 @@ module "tailscale" {
     btop        = var.infra_btop_port
     upsnap      = var.infra_upsnap_port
     hermes      = var.infra_hermes_dashboard_port
+    palworld    = var.infra_palworld_game_port
     satisfactory = {
       game      = var.infra_satisfactory_game_port
       messaging = var.infra_satisfactory_messaging_port

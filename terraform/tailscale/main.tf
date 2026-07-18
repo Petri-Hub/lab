@@ -69,6 +69,7 @@ resource "tailscale_acl" "main" {
           "tag:lab:${var.ports.hermes}",
           "tag:lab:${var.ports.satisfactory.game}",
           "tag:lab:${var.ports.satisfactory.messaging}",
+          "tag:lab:${var.ports.palworld}",
           "tag:lab:${var.ports.ssh}",
           "tag:lab:${var.ports.upsnap}"
         ]
@@ -84,7 +85,8 @@ resource "tailscale_acl" "main" {
         dst = [
           "tag:lab:${var.ports.dozzle}",
           "tag:lab:${var.ports.satisfactory.game}",
-          "tag:lab:${var.ports.satisfactory.messaging}"
+          "tag:lab:${var.ports.satisfactory.messaging}",
+          "tag:lab:${var.ports.palworld}"
         ]
       }
     ]

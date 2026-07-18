@@ -4,3 +4,4 @@ include:
     - ./kavita/compose.yml
     - ./ytdlp/compose.yml
     - ./satisfactory/compose.yml
+    - ./palworld/compose.yml

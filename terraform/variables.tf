@@ -114,6 +114,11 @@ variable "infra_satisfactory_game_port" {
   type        = number
 }
 
+variable "infra_palworld_game_port" {
+  description = "Palworld game server port."
+  type        = number
+}
+
 variable "infra_satisfactory_messaging_port" {
   description = "Satisfactory messaging server port."
   type        = number
