@@ -62,6 +62,7 @@ resource "tailscale_acl" "main" {
         dst = [
           "tag:lab:${var.ports.ytdlp}",
           "tag:lab:${var.ports.kamiyomu}",
+          "tag:lab:${var.ports.kavita}",
           "tag:lab:${var.ports.dozzle}",
           "tag:lab:${var.ports.btop}",
           "tag:lab:${var.ports.filebrowser}",

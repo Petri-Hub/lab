@@ -4,6 +4,7 @@ module "tailscale" {
   ports = {
     ytdlp       = var.infra_ytdlp_port
     kamiyomu    = var.infra_kamiyomu_port
+    kavita      = var.infra_kavita_port
     ssh         = var.infra_ssh_port
     dozzle      = var.infra_dozzle_port
     filebrowser = var.infra_filebrowser_port
@@ -52,6 +53,11 @@ module "cloudflare" {
     {
       domain  = var.infra_domain_url
       name    = "${var.infra_kamiyomu_subdomain_url}.${var.infra_domain_url}"
+      service = "http://nginx:80"
+    },
+    {
+      domain  = var.infra_domain_url
+      name    = "${var.infra_kavita_subdomain_url}.${var.infra_domain_url}"
       service = "http://nginx:80"
     },
     {

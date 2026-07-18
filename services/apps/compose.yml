@@ -1,5 +1,6 @@
 include:
     - ./hermes/compose.yml
     - ./kamiyomu/compose.yml
+    - ./kavita/compose.yml
     - ./ytdlp/compose.yml
     - ./satisfactory/compose.yml

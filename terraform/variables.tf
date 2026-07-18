@@ -79,6 +79,11 @@ variable "infra_kamiyomu_subdomain_url" {
   type        = string
 }
 
+variable "infra_kavita_subdomain_url" {
+  description = "The Kavita subdomain"
+  type        = string
+}
+
 variable "infra_upsnap_subdomain_url" {
   description = "The UpSnap subdomain"
   type        = string
@@ -96,6 +101,11 @@ variable "infra_ytdlp_port" {
 
 variable "infra_kamiyomu_port" {
   description = "KamiYomu Web UI port"
+  type        = number
+}
+
+variable "infra_kavita_port" {
+  description = "Kavita Web UI port"
   type        = number
 }
 

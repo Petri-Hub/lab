@@ -42,7 +42,7 @@ resource "cloudflare_zero_trust_access_application" "services" {
   name             = each.value.name
   domain           = each.value.name
   type             = "self_hosted"
-  session_duration = "24h"
+  session_duration = "504h"
 
   policies = [
     {

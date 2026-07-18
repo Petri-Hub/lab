@@ -4,6 +4,7 @@ variable "ports" {
   type = object({
     ytdlp       = number
     kamiyomu    = number
+    kavita      = number
     ssh         = number
     dozzle      = number
     filebrowser = number

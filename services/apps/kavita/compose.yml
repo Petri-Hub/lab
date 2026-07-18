@@ -1,0 +1,26 @@
+services:
+  kavita:
+    image: jvmilazz0/kavita:latest
+    container_name: kavita
+    restart: unless-stopped
+    user: "1000:1000"
+    ports:
+      - ${KAVITA_PORT}:5000
+    environment:
+      - TZ=${KAVITA_TZ}
+    networks:
+      - lab
+    volumes:
+      - ../../../storage/kavita/config:/kavita/config
+      - ../../../storage/kamiyomu/manga:/manga:ro
+      - /etc/localtime:/etc/localtime:ro
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+
+networks:
+  lab:
+    name: lab
+    external: true
