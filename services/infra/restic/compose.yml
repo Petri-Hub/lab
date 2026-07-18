@@ -21,7 +21,30 @@ services:
         limits:
           cpus: '1.0'
           memory: 256M
-          
+
+  restic-palworld:
+    image: restic/restic:latest
+    container_name: restic-palworld
+    restart: unless-stopped
+    entrypoint: /bin/sh
+    command: '-c "tail -f /dev/null"'
+    environment:
+      - RESTIC_REPOSITORY=rest:http://rclone:${RESTIC_RCLONE_SERVER_PORT}/palworld/
+      - RESTIC_PASSWORD=${RESTIC_PALWORLD_PASSWORD}
+    volumes:
+      - ../../../storage/palworld/Pal/Saved/SaveGames:/data:ro
+    networks:
+      - lab
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-exec.backup-palworld.schedule: "@every 20m"
+      ofelia.job-exec.backup-palworld.command: "restic backup /data"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 256M
+
 networks:
   lab:
     name: lab
