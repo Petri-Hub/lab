@@ -81,6 +81,11 @@ resource "tailscale_acl" "main" {
       },
       {
         action = "accept"
+        src    = ["tag:workstation"]
+        dst    = ["tag:workstation:*"]
+      },
+      {
+        action = "accept"
         src    = ["autogroup:shared"]
         dst = [
           "tag:lab:${var.ports.dozzle}",
