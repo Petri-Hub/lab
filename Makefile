@@ -46,6 +46,9 @@ terraform-plan:
 terraform-apply:
 	terraform -chdir=terraform apply
 
+tailscale-serve:
+	./scripts/tailscale-serve.sh
+
 install-pipx:
 	sudo apt-get install -y pipx
 

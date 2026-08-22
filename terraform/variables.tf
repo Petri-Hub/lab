@@ -129,6 +129,11 @@ variable "infra_teamspeak_file_transfer_port" {
   type        = number
 }
 
+variable "infra_teamspeak_query_http_port" {
+  description = "TeamSpeak HTTP query (admin) port. Loopback-only in Docker; exposed to the owner exclusively via a Tailscale Service, never through the shared ACL."
+  type        = number
+}
+
 variable "infra_dst_master_port" {
   description = "Don't Starve Together master shard port."
   type        = number

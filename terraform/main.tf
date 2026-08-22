@@ -19,6 +19,7 @@ module "tailscale" {
     teamspeak = {
       voice         = var.infra_teamspeak_voice_port
       file_transfer = var.infra_teamspeak_file_transfer_port
+      query_http    = var.infra_teamspeak_query_http_port
     }
     dst = {
       master  = var.infra_dst_master_port

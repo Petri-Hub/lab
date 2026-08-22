@@ -19,6 +19,7 @@ variable "ports" {
     teamspeak = object({
       voice         = number
       file_transfer = number
+      query_http    = number
     })
     dst = object({
       master  = number
