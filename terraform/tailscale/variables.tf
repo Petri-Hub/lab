@@ -20,6 +20,12 @@ variable "ports" {
       voice         = number
       file_transfer = number
     })
+    dst = object({
+      master  = number
+      caves   = number
+      steam_1 = number
+      steam_2 = number
+    })
   })
 }
 

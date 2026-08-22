@@ -54,6 +54,7 @@ Every single container has CPU and memory limits. No service can spike and starv
 | 📖 | [kamiyomu](services/apps/kamiyomu/) | Runs a self-hosted, extensible manga reader that discovers, downloads, and organizes manga from various sources into a personal library |
 | 📚 | [kavita](services/apps/kavita/) | Serves a polished web-based reader over the manga KamiYomu downloads, with library management, metadata, and per-user reading progress |
 | 🎙️ | [teamspeak](services/apps/teamspeak/) | Runs a self-hosted TeamSpeak 6 voice server so friends can join a private voice channel over Tailscale |
+| 🔥 | [dst](services/apps/dst/) | Runs a Don't Starve Together dedicated server cluster (Master + Caves shards) that friends can join over Tailscale |
 
 
 ### Template

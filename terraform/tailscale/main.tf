@@ -72,6 +72,10 @@ resource "tailscale_acl" "main" {
           "tag:lab:${var.ports.palworld}",
           "tag:lab:${var.ports.teamspeak.voice}",
           "tag:lab:${var.ports.teamspeak.file_transfer}",
+          "tag:lab:${var.ports.dst.master}",
+          "tag:lab:${var.ports.dst.caves}",
+          "tag:lab:${var.ports.dst.steam_1}",
+          "tag:lab:${var.ports.dst.steam_2}",
           "tag:lab:${var.ports.ssh}",
           "tag:lab:${var.ports.upsnap}"
         ]
@@ -95,7 +99,11 @@ resource "tailscale_acl" "main" {
           "tag:lab:${var.ports.satisfactory.messaging}",
           "tag:lab:${var.ports.palworld}",
           "tag:lab:${var.ports.teamspeak.voice}",
-          "tag:lab:${var.ports.teamspeak.file_transfer}"
+          "tag:lab:${var.ports.teamspeak.file_transfer}",
+          "tag:lab:${var.ports.dst.master}",
+          "tag:lab:${var.ports.dst.caves}",
+          "tag:lab:${var.ports.dst.steam_1}",
+          "tag:lab:${var.ports.dst.steam_2}"
         ]
       }
     ]

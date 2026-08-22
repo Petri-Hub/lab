@@ -1,0 +1,30 @@
+services:
+  dst:
+    container_name: dst
+    image: jamesits/dst-server:latest
+    restart: unless-stopped
+    stop_grace_period: 6m
+    ports:
+      - '${DST_MASTER_PORT}:10999/udp'
+      - '${DST_CAVES_PORT}:11000/udp'
+      - '${DST_STEAM_PORT_1}:12346/udp'
+      - '${DST_STEAM_PORT_2}:12347/udp'
+    volumes:
+      - ../../../storage/dst:/data
+    environment:
+      - DST_CLUSTER_TOKEN=${DST_CLUSTER_TOKEN}
+    networks:
+      - lab
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+networks:
+  lab:
+    name: lab
+    external: true
