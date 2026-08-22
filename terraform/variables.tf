@@ -119,6 +119,16 @@ variable "infra_palworld_game_port" {
   type        = number
 }
 
+variable "infra_teamspeak_voice_port" {
+  description = "TeamSpeak voice server port."
+  type        = number
+}
+
+variable "infra_teamspeak_file_transfer_port" {
+  description = "TeamSpeak file transfer port."
+  type        = number
+}
+
 variable "infra_satisfactory_messaging_port" {
   description = "Satisfactory messaging server port."
   type        = number

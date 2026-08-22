@@ -16,6 +16,10 @@ variable "ports" {
       game      = number
       messaging = number
     })
+    teamspeak = object({
+      voice         = number
+      file_transfer = number
+    })
   })
 }
 

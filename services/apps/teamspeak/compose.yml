@@ -1,0 +1,32 @@
+services:
+  teamspeak:
+    container_name: teamspeak
+    image: teamspeaksystems/teamspeak6-server:latest
+    restart: unless-stopped
+    ports:
+      - '${TEAMSPEAK_VOICE_PORT}:${TEAMSPEAK_VOICE_PORT}/udp'
+      - '${TEAMSPEAK_FILE_TRANSFER_PORT}:${TEAMSPEAK_FILE_TRANSFER_PORT}/tcp'
+      - '127.0.0.1:${TEAMSPEAK_QUERY_HTTP_PORT}:${TEAMSPEAK_QUERY_HTTP_PORT}/tcp'
+    volumes:
+      - ../../../storage/teamspeak:/var/tsserver
+    environment:
+      - TSSERVER_LICENSE_ACCEPTED=${TEAMSPEAK_LICENSE_ACCEPTED}
+      - TSSERVER_DEFAULT_PORT=${TEAMSPEAK_VOICE_PORT}
+      - TSSERVER_FILE_TRANSFER_PORT=${TEAMSPEAK_FILE_TRANSFER_PORT}
+      - TSSERVER_QUERY_HTTP_PORT=${TEAMSPEAK_QUERY_HTTP_PORT}
+      - TSSERVER_QUERY_ADMIN_PASSWORD=${TEAMSPEAK_QUERY_ADMIN_PASSWORD}
+    networks:
+      - lab
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+
+networks:
+  lab:
+    name: lab
+    external: true

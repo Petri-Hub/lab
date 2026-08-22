@@ -53,6 +53,7 @@ Every single container has CPU and memory limits. No service can spike and starv
 | 📹 | [ytdlp](services/apps/ytdlp/) | Provides a web interface for yt-dlp to download videos from various platforms directly to the server |
 | 📖 | [kamiyomu](services/apps/kamiyomu/) | Runs a self-hosted, extensible manga reader that discovers, downloads, and organizes manga from various sources into a personal library |
 | 📚 | [kavita](services/apps/kavita/) | Serves a polished web-based reader over the manga KamiYomu downloads, with library management, metadata, and per-user reading progress |
+| 🎙️ | [teamspeak](services/apps/teamspeak/) | Runs a self-hosted TeamSpeak 6 voice server so friends can join a private voice channel over Tailscale |
 
 
 ### Template

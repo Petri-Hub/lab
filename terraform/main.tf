@@ -16,6 +16,10 @@ module "tailscale" {
       game      = var.infra_satisfactory_game_port
       messaging = var.infra_satisfactory_messaging_port
     }
+    teamspeak = {
+      voice         = var.infra_teamspeak_voice_port
+      file_transfer = var.infra_teamspeak_file_transfer_port
+    }
   }
 
   devices = {

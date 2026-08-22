@@ -70,6 +70,8 @@ resource "tailscale_acl" "main" {
           "tag:lab:${var.ports.satisfactory.game}",
           "tag:lab:${var.ports.satisfactory.messaging}",
           "tag:lab:${var.ports.palworld}",
+          "tag:lab:${var.ports.teamspeak.voice}",
+          "tag:lab:${var.ports.teamspeak.file_transfer}",
           "tag:lab:${var.ports.ssh}",
           "tag:lab:${var.ports.upsnap}"
         ]
@@ -91,7 +93,9 @@ resource "tailscale_acl" "main" {
           "tag:lab:${var.ports.dozzle}",
           "tag:lab:${var.ports.satisfactory.game}",
           "tag:lab:${var.ports.satisfactory.messaging}",
-          "tag:lab:${var.ports.palworld}"
+          "tag:lab:${var.ports.palworld}",
+          "tag:lab:${var.ports.teamspeak.voice}",
+          "tag:lab:${var.ports.teamspeak.file_transfer}"
         ]
       }
     ]
