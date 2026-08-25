@@ -5,15 +5,6 @@ install:
 setup:
 	$(MAKE) setup-docker-networks
 
-system-cpu-performatic:
-	echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-
-system-cpu-powersave:
-	echo powersave | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-
-check-cpu-governor:
-	cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-	
 infra-up:
 	docker compose -f services/infra/compose.yml up -d
 
@@ -24,11 +15,9 @@ infra-down:
 	docker compose -f services/infra/compose.yml down
 
 apps-up:
-	$(MAKE) system-cpu-performatic
 	docker compose -f services/apps/compose.yml up -d
 
 apps-down:
-	$(MAKE) system-cpu-powersave
 	docker compose -f services/apps/compose.yml down
 
 apps-up-build:

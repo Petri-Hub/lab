@@ -190,10 +190,6 @@ resource "tailscale_service" "teamspeak_file_transfer" {
   tags       = ["tag:lab"]
 }
 
-# Owner-only: the query/admin port stays loopback-bound in Docker. This
-# Service exists so the owner can reach it over Tailscale instead of
-# SSH-tunneling in, once advertised and granted to tag:workstation/tag:edge
-# only — never add this one to the shared/friends ACL entries.
 resource "tailscale_service" "teamspeak_admin" {
   depends_on = [tailscale_acl.main]
   name       = "svc:teamspeak-admin"

@@ -6,4 +6,4 @@ include:
     - ./satisfactory/compose.yml
     - ./palworld/compose.yml
     - ./teamspeak/compose.yml
-    - ./dst/compose.yml
+    # - ./dst/compose.yml  # not configured yet, see services/apps/dst/.env.example
