@@ -13,13 +13,6 @@
 | **Internet** | Users access services through Cloudflare. Cloudflare checks the user's email and sends a one-time code to verify them. Once verified, traffic goes through the tunnel into the server, where NGINX sends each request to the right service. |
 | **Tailscale** | Devices connected to the Tailscale network can access services directly with randomized ports. The server only allows certain ports for laptops and phones, and shared users can only reach some services. |
 
-#### Tailscale Services
-
-TCP-only services (web/admin UIs, plus the Satisfactory query and TeamSpeak file-transfer/admin ports) are additionally declared as [Tailscale Services](https://tailscale.com/docs/features/tailscale-services) in `terraform/tailscale/services.tf`, giving each one a stable `svc:<name>` MagicDNS name instead of a raw `tag:lab:<port>` combination. This is a new (beta) provider feature — as of `tailscale/tailscale` v0.29.x it only supports TCP, so the UDP game/voice ports (Satisfactory, Palworld, TeamSpeak voice, DST) stay on the existing port-based ACL entries.
-
-Terraform only registers a Service's name/ports/tags — it doesn't (yet) manage which device serves it. Run `make tailscale-serve` on the lab host once to advertise each one via `tailscale serve` (see `scripts/tailscale-serve.sh`); re-run it after adding a service or changing a port. The existing `tag:lab:<port>` ACL grants are left as-is for now, so today's access is unaffected — using a Service as an ACL destination is a deliberate follow-up once its exact grant syntax is confirmed against this tailnet.
-
-
 ## Philosophy
 
 This project is built around a few core principles:
@@ -212,7 +205,6 @@ make apps-up
 | `terraform-init-upgrade` | Re-initialize with provider upgrades |
 | `terraform-plan` | Preview infrastructure changes |
 | `terraform-apply` | Apply infrastructure changes |
-| `tailscale-serve` | Advertise this host as the Tailscale Service host for every TCP web/admin service (see below) |
 
 
 ## License
