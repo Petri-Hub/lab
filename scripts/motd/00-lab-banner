@@ -1,0 +1,143 @@
+#!/usr/bin/env bash
+# Custom login banner for the lab host. Replaces the stock Ubuntu
+# 00-header + 10-help-text + 50-landscape-sysinfo output with a
+# lab-branded dashboard: system stats, network, live Docker status,
+# and actionable notices (reboot required).
+set -uo pipefail
+
+# ---- colors -----------------------------------------------------
+C_RESET="\033[0m"
+C_BOLD="\033[1m"
+C_DIM="\033[2m"
+C_CYAN="\033[1;36m"
+C_GREEN="\033[0;32m"
+C_YELLOW="\033[0;33m"
+C_RED="\033[0;31m"
+C_GRAY="\033[0;90m"
+
+color_for_pct() {
+  # $1 = percentage (integer). Prints a color code.
+  local pct="$1"
+  if [ "$pct" -ge 90 ]; then echo -e "$C_RED"
+  elif [ "$pct" -ge 70 ]; then echo -e "$C_YELLOW"
+  else echo -e "$C_GREEN"
+  fi
+}
+
+# ---- ASCII banner -------------------------------------------------
+echo -e "${C_CYAN}"
+cat <<'ART'
+ █████                 █████
+░░███                 ░░███
+ ░███         ██████   ░███████
+ ░███        ░░░░░███  ░███░░███
+ ░███         ███████  ░███ ░███
+ ░███      █ ███░░███  ░███ ░███
+ ███████████░░████████ ████████
+░░░░░░░░░░░  ░░░░░░░░ ░░░░░░░░
+ART
+echo -e "${C_RESET}"
+
+# ---- header line ---------------------------------------------------
+HOSTNAME=$(hostname)
+OS_PRETTY=$(grep -oP '(?<=PRETTY_NAME=").*(?=")' /etc/os-release 2>/dev/null)
+NOW=$(date "+%a %d %b %Y, %H:%M %Z")
+echo -e "  ${C_BOLD}${HOSTNAME}${C_RESET}  ${C_GRAY}•${C_RESET}  ${OS_PRETTY}  ${C_GRAY}•${C_RESET}  ${NOW}"
+echo ""
+
+# ---- system stats ---------------------------------------------------
+# Instantaneous CPU% from a short /proc/stat sample, rather than
+# /proc/loadavg: rapid container churn can leave the kernel's
+# nr_uninterruptible counter stuck inflated (a known accounting quirk
+# that only clears on reboot), which would otherwise show a wildly
+# misleading load number on every login until the next restart.
+cpu_usage_pct() {
+  local _ u1 n1 s1 i1 io1 irq1 sirq1 st1 u2 n2 s2 i2 io2 irq2 sirq2 st2
+  read -r _ u1 n1 s1 i1 io1 irq1 sirq1 st1 _ < /proc/stat
+  sleep 0.3
+  read -r _ u2 n2 s2 i2 io2 irq2 sirq2 st2 _ < /proc/stat
+  local total1=$((u1+n1+s1+i1+io1+irq1+sirq1+st1))
+  local total2=$((u2+n2+s2+i2+io2+irq2+sirq2+st2))
+  local idle1=$((i1+io1))
+  local idle2=$((i2+io2))
+  local dtotal=$((total2-total1))
+  local didle=$((idle2-idle1))
+  [ "$dtotal" -le 0 ] && { echo 0; return; }
+  echo $(( (100*(dtotal-didle)) / dtotal ))
+}
+
+CPU_PCT=$(cpu_usage_pct)
+CPU_COLOR=$(color_for_pct "$CPU_PCT")
+CORES=$(nproc)
+UPTIME=$(uptime -p 2>/dev/null | sed 's/^up //')
+
+read -r MEM_TOTAL MEM_USED <<< "$(free -m | awk '/^Mem:/ {print $2, $3}')"
+MEM_PCT=$(( MEM_USED * 100 / MEM_TOTAL ))
+MEM_COLOR=$(color_for_pct "$MEM_PCT")
+
+read -r DISK_USED DISK_SIZE DISK_PCT <<< "$(df -h / | awk 'NR==2 {gsub("%","",$5); print $3, $2, $5}')"
+DISK_COLOR=$(color_for_pct "$DISK_PCT")
+
+TEMP="n/a"
+if command -v sensors >/dev/null 2>&1; then
+  TEMP=$(sensors 2>/dev/null | grep -m1 -oP '(?<=\+)[0-9]+\.[0-9]+(?=°C)')
+elif [ -r /sys/class/thermal/thermal_zone0/temp ]; then
+  TEMP=$(awk '{printf "%.1f", $1/1000}' /sys/class/thermal/thermal_zone0/temp)
+fi
+
+printf "  ${C_BOLD}System${C_RESET}   CPU ${CPU_COLOR}%s%%${C_RESET}   Cores %-4s Uptime %s\n" "$CPU_PCT" "$CORES" "$UPTIME"
+printf "  ${C_BOLD}Memory${C_RESET}   ${MEM_COLOR}%s%%${C_RESET} used (%sM / %sM)\n" "$MEM_PCT" "$MEM_USED" "$MEM_TOTAL"
+printf "  ${C_BOLD}Disk /${C_RESET}   ${DISK_COLOR}%s%%${C_RESET} used (%s / %s)\n" "$DISK_PCT" "$DISK_USED" "$DISK_SIZE"
+[ "$TEMP" != "n/a" ] && printf "  ${C_BOLD}Temp${C_RESET}     %s°C\n" "$TEMP"
+echo ""
+
+# ---- network ---------------------------------------------------------
+TS_IP=$(command -v tailscale >/dev/null 2>&1 && tailscale ip -4 2>/dev/null)
+LAN_IP=$(ip route get 1.1.1.1 2>/dev/null | awk '{for(i=1;i<=NF;i++) if ($i=="src") print $(i+1)}')
+echo -e "  ${C_BOLD}Network${C_RESET}  Tailscale ${C_GRAY}${TS_IP:-unavailable}${C_RESET}   LAN ${C_GRAY}${LAN_IP:-unavailable}${C_RESET}"
+echo ""
+
+# ---- docker status -----------------------------------------------------
+if command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then
+  mapfile -t LINES < <(docker ps -a --format '{{.Names}}|{{.Status}}' 2>/dev/null)
+  TOTAL=${#LINES[@]}
+  RUNNING=0
+  declare -a NOT_RUNNING=()
+  for line in "${LINES[@]}"; do
+    name="${line%%|*}"
+    status="${line#*|}"
+    if [[ "$status" == Up* ]]; then
+      RUNNING=$((RUNNING + 1))
+    else
+      NOT_RUNNING+=("$name|$status")
+    fi
+  done
+
+  echo -e "  ${C_BOLD}Docker${C_RESET}   ${C_GREEN}${RUNNING}${C_RESET}/${TOTAL} containers running"
+  if [ "${#NOT_RUNNING[@]}" -gt 0 ]; then
+    for entry in "${NOT_RUNNING[@]}"; do
+      name="${entry%%|*}"
+      status="${entry#*|}"
+      if [[ "$status" == Exited* ]]; then
+        printf "             ${C_RED}●${C_RESET} %-20s %s\n" "$name" "$status"
+      else
+        printf "             ${C_YELLOW}●${C_RESET} %-20s %s\n" "$name" "$status"
+      fi
+    done
+  fi
+else
+  echo -e "  ${C_BOLD}Docker${C_RESET}   ${C_GRAY}unavailable${C_RESET}"
+fi
+echo ""
+
+# ---- notices ---------------------------------------------------------
+NOTICES=()
+[ -f /var/run/reboot-required ] && NOTICES+=("reboot required")
+
+if [ "${#NOTICES[@]}" -gt 0 ]; then
+  echo -e "  ${C_BOLD}Notices${C_RESET}"
+  for n in "${NOTICES[@]}"; do
+    echo -e "             ${C_YELLOW}!${C_RESET} $n"
+  done
+  echo ""
+fi
