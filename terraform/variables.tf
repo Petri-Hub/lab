@@ -119,6 +119,41 @@ variable "infra_palworld_game_port" {
   type        = number
 }
 
+variable "infra_teamspeak_voice_port" {
+  description = "TeamSpeak voice server port."
+  type        = number
+}
+
+variable "infra_teamspeak_file_transfer_port" {
+  description = "TeamSpeak file transfer port."
+  type        = number
+}
+
+variable "infra_teamspeak_query_http_port" {
+  description = "TeamSpeak HTTP query (admin) port. Loopback-only in Docker; exposed to the owner exclusively via a Tailscale Service, never through the shared ACL."
+  type        = number
+}
+
+variable "infra_dst_master_port" {
+  description = "Don't Starve Together master shard port."
+  type        = number
+}
+
+variable "infra_dst_caves_port" {
+  description = "Don't Starve Together caves shard port."
+  type        = number
+}
+
+variable "infra_dst_steam_port_1" {
+  description = "Don't Starve Together Steam networking port (master shard)."
+  type        = number
+}
+
+variable "infra_dst_steam_port_2" {
+  description = "Don't Starve Together Steam networking port (caves shard)."
+  type        = number
+}
+
 variable "infra_satisfactory_messaging_port" {
   description = "Satisfactory messaging server port."
   type        = number

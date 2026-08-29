@@ -5,3 +5,5 @@ include:
     - ./ytdlp/compose.yml
     - ./satisfactory/compose.yml
     - ./palworld/compose.yml
+    - ./teamspeak/compose.yml
+    - ./dst/compose.yml

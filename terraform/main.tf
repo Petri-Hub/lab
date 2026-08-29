@@ -16,6 +16,17 @@ module "tailscale" {
       game      = var.infra_satisfactory_game_port
       messaging = var.infra_satisfactory_messaging_port
     }
+    teamspeak = {
+      voice         = var.infra_teamspeak_voice_port
+      file_transfer = var.infra_teamspeak_file_transfer_port
+      query_http    = var.infra_teamspeak_query_http_port
+    }
+    dst = {
+      master  = var.infra_dst_master_port
+      caves   = var.infra_dst_caves_port
+      steam_1 = var.infra_dst_steam_port_1
+      steam_2 = var.infra_dst_steam_port_2
+    }
   }
 
   devices = {
