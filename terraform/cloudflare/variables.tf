@@ -37,3 +37,8 @@ variable "authorized_emails" {
   type        = list(string)
   sensitive   = true
 }
+
+variable "wakapi_hostname" {
+  description = "Full hostname for the Wakapi service (e.g. lab-wakapi.example.com), used to scope the API-only Access bypass application"
+  type        = string
+}

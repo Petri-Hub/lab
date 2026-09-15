@@ -67,6 +67,7 @@ resource "tailscale_acl" "main" {
           "tag:lab:${var.ports.btop}",
           "tag:lab:${var.ports.filebrowser}",
           "tag:lab:${var.ports.hermes}",
+          "tag:lab:${var.ports.wakapi}",
           "tag:lab:${var.ports.satisfactory.game}",
           "tag:lab:${var.ports.satisfactory.messaging}",
           "tag:lab:${var.ports.palworld}",
@@ -163,6 +164,14 @@ resource "tailscale_service" "hermes" {
   name       = "svc:hermes"
   comment    = "Hermes agent dashboard"
   ports      = ["tcp:${var.ports.hermes}"]
+  tags       = ["tag:lab"]
+}
+
+resource "tailscale_service" "wakapi" {
+  depends_on = [tailscale_acl.main]
+  name       = "svc:wakapi"
+  comment    = "Wakapi coding-time metrics dashboard (owner-only)"
+  ports      = ["tcp:${var.ports.wakapi}"]
   tags       = ["tag:lab"]
 }
 

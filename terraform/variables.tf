@@ -89,6 +89,11 @@ variable "infra_upsnap_subdomain_url" {
   type        = string
 }
 
+variable "infra_wakapi_subdomain_url" {
+  description = "The Wakapi subdomain"
+  type        = string
+}
+
 variable "infra_filebrowser_port" {
   description = "FileBrowser UI port"
   type        = number
@@ -181,6 +186,11 @@ variable "infra_ssh_port" {
 
 variable "infra_hermes_dashboard_port" {
   description = "Hermes Agent dashboard UI port"
+  type        = number
+}
+
+variable "infra_wakapi_port" {
+  description = "Wakapi dashboard/API port"
   type        = number
 }
 

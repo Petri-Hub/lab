@@ -58,3 +58,27 @@ resource "cloudflare_zero_trust_access_application" "services" {
     }
   ]
 }
+
+# Dedicated, non-generic Access application: bypasses Cloudflare Access on Wakapi's
+# API path so CLI heartbeat clients (which can't complete an interactive Email OTP
+# login) can reach it directly. Wakapi's own per-user API key is the real auth here.
+# The dashboard itself stays behind Email OTP via the generic `services` loop above.
+# NOTE: verify the exact path-scoping syntax (`domain` with a path suffix vs a
+# `destinations` block) against the provider version pinned in providers.tf.
+resource "cloudflare_zero_trust_access_application" "wakapi_api" {
+  account_id       = var.cloudflare_account_id
+  name             = "Wakapi API (bypass)"
+  domain           = "${var.wakapi_hostname}/api"
+  type             = "self_hosted"
+  session_duration = "24h"
+
+  policies = [
+    {
+      name     = "Bypass for heartbeat ingestion"
+      decision = "bypass"
+      include = [
+        { everyone = {} }
+      ]
+    }
+  ]
+}
