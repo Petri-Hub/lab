@@ -12,6 +12,9 @@ services:
       - WAKAPI_INSECURE_COOKIES=false
       - WAKAPI_DB_TYPE=sqlite3
       - WAKAPI_DB_NAME=/data/wakapi.db
+      - WAKAPI_ALLOW_SIGNUP=false
+      - WAKAPI_DISABLE_FRONTPAGE=true
+      - WAKAPI_PUBLIC_URL=${WAKAPI_PUBLIC_URL}
     networks:
       - lab
     volumes:
