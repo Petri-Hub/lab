@@ -1,7 +1,6 @@
 include:
     - ./cloudflared/compose.yml
     - ./dozzle/compose.yml
-    - ./filebrowser/compose.yml
     - ./nginx/compose.yml
     - ./ofelia/compose.yml
     - ./rclone/compose.yml
