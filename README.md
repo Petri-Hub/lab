@@ -48,6 +48,7 @@ Every single container has CPU and memory limits. No service can spike and starv
 
 |  | Service | Used for |
 |---|---|---|
+| 🧠 | [ai-memory](services/apps/ai-memory/) | Runs a shared long-term memory server that coding agents (Claude Code, OpenCode, ...) across multiple machines connect to over MCP, so context and handoff persist between sessions and agents |
 | 🎮 | [satisfactory](services/apps/satisfactory/) | Runs a dedicated Satisfactory game server that friends can join at any time, with automatic backups and configurable player limits |
 | 📹 | [ytdlp](services/apps/ytdlp/) | Provides a web interface for yt-dlp to download videos from various platforms directly to the server |
 | 📖 | [kamiyomu](services/apps/kamiyomu/) | Runs a self-hosted, extensible manga reader that discovers, downloads, and organizes manga from various sources into a personal library |

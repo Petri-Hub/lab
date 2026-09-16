@@ -1,6 +1,5 @@
 include:
-    - ./kamiyomu/compose.yml
-    - ./kavita/compose.yml
+    - ./ai-memory/compose.yml
     - ./palworld/compose.yml
     - ./teamspeak/compose.yml
     - ./wakapi/compose.yml

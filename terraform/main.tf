@@ -12,6 +12,7 @@ module "tailscale" {
     upsnap      = var.infra_upsnap_port
     hermes      = var.infra_hermes_dashboard_port
     wakapi      = var.infra_wakapi_port
+    ai_memory   = var.infra_ai_memory_port
     palworld    = var.infra_palworld_game_port
     satisfactory = {
       game      = var.infra_satisfactory_game_port
@@ -88,6 +89,17 @@ module "cloudflare" {
       name         = "${var.infra_wakapi_subdomain_url}.${var.infra_domain_url}"
       service      = "http://nginx:80"
       bypass_paths = ["/api"]
+    },
+    {
+      domain  = var.infra_domain_url
+      name    = "${var.infra_ai_memory_subdomain_url}.${var.infra_domain_url}"
+      service = "http://nginx:80"
+      # Kept behind the standard Email OTP policy like everything else here,
+      # unlike wakapi's bypass_paths = ["/api"]. Agent CLIs generally can't
+      # complete an interactive OTP login, so see the PR description for the
+      # access-token options; this file intentionally does not open a bypass
+      # for the whole ai-memory surface (bypass_paths = ["/"] would remove
+      # Cloudflare Access entirely, leaving only AI_MEMORY_AUTH_TOKEN).
     }
   ]
 }

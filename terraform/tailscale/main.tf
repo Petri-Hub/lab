@@ -68,6 +68,7 @@ resource "tailscale_acl" "main" {
           "tag:lab:${var.ports.filebrowser}",
           "tag:lab:${var.ports.hermes}",
           "tag:lab:${var.ports.wakapi}",
+          "tag:lab:${var.ports.ai_memory}",
           "tag:lab:${var.ports.satisfactory.game}",
           "tag:lab:${var.ports.satisfactory.messaging}",
           "tag:lab:${var.ports.palworld}",
@@ -172,6 +173,14 @@ resource "tailscale_service" "wakapi" {
   name       = "svc:wakapi"
   comment    = "Wakapi coding-time metrics dashboard (owner-only)"
   ports      = ["tcp:${var.ports.wakapi}"]
+  tags       = ["tag:lab"]
+}
+
+resource "tailscale_service" "ai_memory" {
+  depends_on = [tailscale_acl.main]
+  name       = "svc:ai-memory"
+  comment    = "ai-memory shared agent memory server (owner-only)"
+  ports      = ["tcp:${var.ports.ai_memory}"]
   tags       = ["tag:lab"]
 }
 

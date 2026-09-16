@@ -1,0 +1,26 @@
+services:
+  ai-memory:
+    image: docker.io/akitaonrails/ai-memory:latest
+    container_name: ai-memory
+    restart: unless-stopped
+    ports:
+      - ${AI_MEMORY_PORT}:49374
+    environment:
+      - AI_MEMORY_BIND=0.0.0.0:49374
+      - AI_MEMORY_AUTH_TOKEN=${AI_MEMORY_AUTH_TOKEN}
+      - AI_MEMORY_LLM_PROVIDER=anthropic
+      - ANTHROPIC_API_KEY=${AI_MEMORY_ANTHROPIC_API_KEY}
+    networks:
+      - lab
+    volumes:
+      - ../../../storage/ai-memory/data:/data
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+networks:
+  lab:
+    name: lab
+    external: true
