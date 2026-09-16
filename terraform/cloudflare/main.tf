@@ -58,3 +58,41 @@ resource "cloudflare_zero_trust_access_application" "services" {
     }
   ]
 }
+
+# Any service can opt individual paths out of Email OTP by setting bypass_paths
+# on its `services` entry (e.g. a service's own API, gated by its own API key,
+# reached by CLI clients that can't complete an interactive Email OTP login).
+# The dashboard itself stays behind Email OTP via the generic `services` loop
+# above regardless. This module stays agnostic of which service is doing it.
+# NOTE: verify the exact path-scoping syntax (`domain` with a path suffix vs a
+# `destinations` block) against the provider version pinned in providers.tf.
+locals {
+  bypass_rules = merge([
+    for svc in var.services : {
+      for path in svc.bypass_paths : "${svc.name}${path}" => {
+        hostname = svc.name
+        path     = path
+      }
+    }
+  ]...)
+}
+
+resource "cloudflare_zero_trust_access_application" "bypass" {
+  for_each = local.bypass_rules
+
+  account_id       = var.cloudflare_account_id
+  name             = "${each.value.hostname} bypass (${each.value.path})"
+  domain           = "${each.value.hostname}${each.value.path}"
+  type             = "self_hosted"
+  session_duration = "24h"
+
+  policies = [
+    {
+      name     = "Bypass"
+      decision = "bypass"
+      include = [
+        { everyone = {} }
+      ]
+    }
+  ]
+}

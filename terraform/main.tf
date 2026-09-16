@@ -11,6 +11,7 @@ module "tailscale" {
     btop        = var.infra_btop_port
     upsnap      = var.infra_upsnap_port
     hermes      = var.infra_hermes_dashboard_port
+    wakapi      = var.infra_wakapi_port
     palworld    = var.infra_palworld_game_port
     satisfactory = {
       game      = var.infra_satisfactory_game_port
@@ -81,6 +82,12 @@ module "cloudflare" {
       domain  = var.infra_domain_url
       name    = "${var.infra_upsnap_subdomain_url}.${var.infra_domain_url}"
       service = "http://nginx:80"
+    },
+    {
+      domain       = var.infra_domain_url
+      name         = "${var.infra_wakapi_subdomain_url}.${var.infra_domain_url}"
+      service      = "http://nginx:80"
+      bypass_paths = ["/api"]
     }
   ]
 }

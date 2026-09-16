@@ -1,0 +1,31 @@
+services:
+  wakapi:
+    image: ghcr.io/muety/wakapi:latest
+    container_name: wakapi
+    restart: unless-stopped
+    user: "1000:1000"
+    ports:
+      - ${WAKAPI_PORT}:3000
+    environment:
+      - WAKAPI_ENV=production
+      - WAKAPI_PASSWORD_SALT=${WAKAPI_PASSWORD_SALT}
+      - WAKAPI_INSECURE_COOKIES=false
+      - WAKAPI_DB_TYPE=sqlite3
+      - WAKAPI_DB_NAME=/data/wakapi.db
+      - WAKAPI_ALLOW_SIGNUP=false
+      - WAKAPI_DISABLE_FRONTPAGE=true
+      - WAKAPI_PUBLIC_URL=${WAKAPI_PUBLIC_URL}
+    networks:
+      - lab
+    volumes:
+      - ../../../storage/wakapi/data:/data
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+networks:
+  lab:
+    name: lab
+    external: true
