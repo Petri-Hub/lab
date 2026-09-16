@@ -29,6 +29,10 @@ variable "services" {
     domain  = string
     name    = string
     service = string
+    # Path prefixes under this service's hostname that should bypass Cloudflare
+    # Access entirely (e.g. a service's own API, gated by its own API key,
+    # reached by CLI clients that can't complete an interactive Email OTP login).
+    bypass_paths = optional(list(string), [])
   }))
 }
 
@@ -36,9 +40,4 @@ variable "authorized_emails" {
   description = "List of authorized email addresses for Cloudflare Access"
   type        = list(string)
   sensitive   = true
-}
-
-variable "wakapi_hostname" {
-  description = "Full hostname for the Wakapi service (e.g. lab-wakapi.example.com), used to scope the API-only Access bypass application"
-  type        = string
 }

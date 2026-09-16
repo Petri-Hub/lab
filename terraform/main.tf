@@ -51,7 +51,6 @@ module "cloudflare" {
 
   domain            = var.infra_domain_url
   authorized_emails = var.infra_authorized_emails
-  wakapi_hostname   = "${var.infra_wakapi_subdomain_url}.${var.infra_domain_url}"
 
   services = [
     {
@@ -85,9 +84,10 @@ module "cloudflare" {
       service = "http://nginx:80"
     },
     {
-      domain  = var.infra_domain_url
-      name    = "${var.infra_wakapi_subdomain_url}.${var.infra_domain_url}"
-      service = "http://nginx:80"
+      domain       = var.infra_domain_url
+      name         = "${var.infra_wakapi_subdomain_url}.${var.infra_domain_url}"
+      service      = "http://nginx:80"
+      bypass_paths = ["/api"]
     }
   ]
 }
