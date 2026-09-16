@@ -1,6 +1,31 @@
-# 🏠
+<h1 align="center">🏠 lab</h1>
 
-> A personal homelab running on a single laptop — infrastructure and applications managed entirely as code, secured by design, and built for reliability without the overhead of a data center.
+<br>
+
+<h3 align="center">A homelab running on a single laptop.<br>Infrastructure and services managed entirely as code</h3>
+
+<p align="center">
+  <a href="https://github.com/Petri-Hub/lab/actions/workflows/terraform-validation.yml"><img alt="Terraform validation" src="https://img.shields.io/github/actions/workflow/status/Petri-Hub/lab/terraform-validation.yml?label=terraform&logo=terraform&logoColor=white" /></a> <a href="https://github.com/Petri-Hub/lab/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/Petri-Hub/lab" /></a> <img alt="Time spent" src="https://img.shields.io/endpoint?url=https%3A%2F%2Flab-wakapi.petri.zip%2Fapi%2Fcompat%2Fshields%2Fv1%2FPetri%2Fproject%3Alab%2Finterval%3Aall_time&label=time%20spent&logo=wakatime&logoColor=white&color=blue&cacheSeconds=3600" />
+</p>
+
+<br>
+
+## About
+
+> **TL;DR:** the server that sits at home and runs my game servers, backups and a few tools I use every day. Terraform manages Cloudflare and Tailscale, Docker Compose manages every service, and nothing is reachable without going through one of the two.
+
+## Hardware
+
+<table>
+  <tr><td><b>Machine</b></td><td>VAIO laptop (VJFE59F11X)</td></tr>
+  <tr><td><b>CPU</b></td><td>AMD Ryzen 7 5700U, 8 cores / 16 threads</td></tr>
+  <tr><td><b>Memory</b></td><td>16 GB</td></tr>
+  <tr><td><b>Storage</b></td><td>512 GB NVMe SSD</td></tr>
+  <tr><td><b>OS</b></td><td>Ubuntu 26.04 LTS</td></tr>
+  <tr><td><b>Backups</b></td><td>16 GB USB flash drive, where Restic keeps the snapshots</td></tr>
+</table>
+
+> Limited hardware forces some creativity. Restic deduplicates every snapshot, so backups every 20 minutes still fit on a 16 GB flash drive, and services are picked for doing one thing well on little memory: most containers here use less than 64 MB.
 
 ## Architecture
 
@@ -10,51 +35,48 @@
 
 | Path | Description |
 |---|---|
-| **Internet** | Users access services through Cloudflare. Cloudflare checks the user's email and sends a one-time code to verify them. Once verified, traffic goes through the tunnel into the server, where NGINX sends each request to the right service. |
+| **Internet** | Users access services through Cloudflare. Cloudflare checks the user's email and sends a one-time code to verify them. Once verified, traffic goes through the tunnel into the server, where NGINX sends each request to the right service. A few specific paths skip the email check, like the Wakapi API that my GitHub profile reads from. |
 | **Tailscale** | Devices connected to the Tailscale network can access services directly with randomized ports. The server only allows certain ports for laptops and phones, and shared users can only reach some services. |
 
 ## Philosophy
 
-This project is built around a few core principles:
-
 **Infrastructure as Code.**  
-Everything that can be codified, is. Terraform manages DNS, tunnels, access policies, and network ACLs. Docker Compose files define every service with explicit configuration and resource limits. There are no SSH-and-pray moments.
+Everything that can be codified, is. Terraform manages DNS, the tunnel, access policies and network ACLs, and Docker Compose defines every service. There are no SSH-and-pray moments.
 
 **Defense in depth.**  
-Default service ports are never used — every port is randomized. Tailscale provides a zero-trust overlay network with ACL-enforced access control. Cloudflare Tunnel fronts all public traffic, with Cloudflare Access requiring email-based authentication before any request reaches the server. The result is multiple independent layers of security.
+Public traffic only enters through a Cloudflare Tunnel with Cloudflare Access in front of it, private traffic goes through Tailscale with ACLs, and no service listens on its default port. Each layer holds on its own.
 
-**Segregation of concerns.**  
-Services are split into two categories: **infrastructure** (what keeps the server running and observable) and **applications** (what makes the server useful). This separation makes it clear which services are foundational and which are the actual tools being hosted.
-
-**Explicit resource governance.**  
-Every single container has CPU and memory limits. No service can spike and starve another. The lab stays predictable under load.
+**Predictable under load.**  
+Services are split between infrastructure and applications, and every container runs with CPU and memory limits, so one service can't starve the others.
 
 ## Services
 
 ### Infrastructure
 
-|  | Service | Used for |
-|---|---|---|
-| ☁️ | [cloudflared](services/infra/cloudflared/) | Connects the server to Cloudflare's edge network, routing public traffic through a secure tunnel so services are accessible without exposing the server directly |
-| 🔀 | [nginx](services/infra/nginx/) | Acts as a reverse proxy, reading the incoming domain and forwarding each request to the correct internal service |
-| 📋 | [dozzle](services/infra/dozzle/) | Streams live logs from every running container into a browser dashboard for debugging and monitoring |
-| 📊 | [btop](services/infra/btop/) | Exposes a real-time system monitor through the browser so you can check CPU, memory, and processes without SSH |
-| 📁 | [filebrowser](services/infra/filebrowser/) | Provides a web-based file manager to browse, upload, and edit files across the entire server |
-| ⏰ | [ofelia](services/infra/ofelia/) | Runs scheduled jobs inside containers using Docker labels, used here to trigger backups automatically |
-| 💾 | [rclone](services/infra/rclone/) | Runs as a REST server that receives and stores backup data from Restic |
-| 🔒 | [restic](services/infra/restic/) | Backs up Satisfactory game data to the Rclone server every 20 minutes, keeping saves safe from corruption or crashes |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Service | Used for |
+|:---:|---|---|
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/cloudflare.svg" width="20" height="20" alt="" /> | [cloudflared](services/infra/cloudflared/) | Connects the server to Cloudflare's edge network, routing public traffic through a secure tunnel so services are accessible without exposing the server directly |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/nginx.svg" width="20" height="20" alt="" /> | [nginx](services/infra/nginx/) | Acts as a reverse proxy, reading the incoming domain and forwarding each request to the correct internal service |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/dozzle.svg" width="20" height="20" alt="" /> | [dozzle](services/infra/dozzle/) | Streams live logs from every running container into a browser dashboard for debugging and monitoring |
+| <img src="https://raw.githubusercontent.com/aristocratos/btop/HEAD/Img/icon.svg" width="20" height="20" alt="" /> | [btop](services/infra/btop/) | Exposes a real-time system monitor through the browser so you can check CPU, memory, and processes without SSH |
+| <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/filebrowser.png" width="20" height="20" alt="" /> | [filebrowser](services/infra/filebrowser/) | Provides a web-based file manager to browse, upload, and edit files across the entire server |
+| <img src="https://raw.githubusercontent.com/mcuadros/ofelia/HEAD/static/avatar.png" width="20" height="20" alt="" /> | [ofelia](services/infra/ofelia/) | Runs scheduled jobs inside containers using Docker labels, used here to trigger backups automatically |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/rclone.svg" width="20" height="20" alt="" /> | [rclone](services/infra/rclone/) | Runs as a REST server that receives and stores backup data from Restic |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/png/restic.png" width="20" height="20" alt="" /> | [restic](services/infra/restic/) | Backs up the Satisfactory and Palworld saves and the Wakapi database to the Rclone server every 20 minutes |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/upsnap.svg" width="20" height="20" alt="" /> | [upsnap](services/infra/upsnap/) | Wakes my main PC with Wake-on-LAN, since it lives outside the lab, and shows which machines on the network are online |
 
 ### Applications
 
-|  | Service | Used for |
-|---|---|---|
-| 🎮 | [satisfactory](services/apps/satisfactory/) | Runs a dedicated Satisfactory game server that friends can join at any time, with automatic backups and configurable player limits |
-| 📹 | [ytdlp](services/apps/ytdlp/) | Provides a web interface for yt-dlp to download videos from various platforms directly to the server |
-| 📖 | [kamiyomu](services/apps/kamiyomu/) | Runs a self-hosted, extensible manga reader that discovers, downloads, and organizes manga from various sources into a personal library |
-| 📚 | [kavita](services/apps/kavita/) | Serves a polished web-based reader over the manga KamiYomu downloads, with library management, metadata, and per-user reading progress |
-| 🎙️ | [teamspeak](services/apps/teamspeak/) | Runs a self-hosted TeamSpeak 6 voice server so friends can join a private voice channel over Tailscale |
-| 🔥 | [dst](services/apps/dst/) | Runs a Don't Starve Together dedicated server cluster (Master + Caves shards) that friends can join over Tailscale |
-
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Service | Used for |
+|:---:|---|---|
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/png/satisfactory.png" width="20" height="20" alt="" /> | [satisfactory](services/apps/satisfactory/) | Runs a dedicated Satisfactory game server that friends can join at any time, with automatic backups and configurable player limits |
+| <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/palworld.png" width="20" height="20" alt="" /> | [palworld](services/apps/palworld/) | Runs a dedicated Palworld server for friends, with its saves backed up automatically |
+| <img src="https://shared.fastly.steamstatic.com/community_assets/images/apps/322330/a80aa6cff8eebc1cbc18c367d9ab063e1553b0ee.jpg" width="20" height="20" alt="" /> | [dst](services/apps/dst/) | Runs a Don't Starve Together dedicated server cluster (Master + Caves shards) that friends can join over Tailscale |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/teamspeak.svg" width="20" height="20" alt="" /> | [teamspeak](services/apps/teamspeak/) | Runs a self-hosted TeamSpeak 6 voice server so friends can join a private voice channel over Tailscale |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/wakapi.svg" width="20" height="20" alt="" /> | [wakapi](services/apps/wakapi/) | Collects coding activity from the editors and terminals on my machines, a self-hosted alternative to WakaTime that also feeds my GitHub profile |
+| <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/yt-dlp.svg" width="20" height="20" alt="" /> | [ytdlp](services/apps/ytdlp/) | Provides a web interface for yt-dlp to download videos from various platforms directly to the server |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/kamiyomu.svg" width="20" height="20" alt="" /> | [kamiyomu](services/apps/kamiyomu/) | Runs a self-hosted, extensible manga reader that discovers, downloads, and organizes manga from various sources into a personal library |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/kavita.svg" width="20" height="20" alt="" /> | [kavita](services/apps/kavita/) | Serves a polished web-based reader over the manga KamiYomu downloads, with library management, metadata, and per-user reading progress |
 
 ### Template
 
@@ -72,7 +94,7 @@ services/
 
 #### Keep configuration in a dedicated folder
 
-Every service that needs static config files places them in a configuration subdirectory. This keeps mounts predictable and organized, with a single place to look for a service's settings.
+Static config files live in a `configuration/` subdirectory, so there is a single place to look for a service's settings.
 
 ```yaml
 # services/infra/nginx/compose.yml
@@ -83,7 +105,7 @@ volumes:
 
 #### Prefix environment variables with the service name
 
-Variables are prefixed with the service name to avoid collisions and make it clear what each one controls.
+Prefixes avoid collisions and make it clear what each variable controls.
 
 ```bash
 # services/apps/satisfactory/.env.example
@@ -95,7 +117,7 @@ SATISFACTORY_MESSAGING_PORT=1273
 
 #### Separate infra from apps
 
-Infrastructure services handle monitoring, networking, and backups. Application services are the actual tools being hosted. This split keeps concerns clean — you know what keeps the server running versus what makes it useful.
+Infrastructure keeps the server running and observable; applications are what it is actually hosting.
 
 ```
 services/
@@ -103,18 +125,24 @@ services/
 │   ├── btop/
 │   ├── cloudflared/
 │   ├── dozzle/
+│   ├── filebrowser/
 │   ├── nginx/
 │   ├── ofelia/
 │   ├── rclone/
-│   └── restic/
-└── apps/        # user-facing tools
+│   ├── restic/
+│   └── upsnap/
+└── apps/        # game servers and tools
+    ├── dst/
+    ├── kamiyomu/
+    ├── kavita/
+    ├── palworld/
     ├── satisfactory/
+    ├── teamspeak/
+    ├── wakapi/
     └── ytdlp/
 ```
 
 #### Set resource limits on every container
-
-Every service declares how much CPU and memory it can use. This prevents any single service from spiking and starving the others, keeping the whole lab stable under load.
 
 ```yaml
 # services/infra/dozzle/compose.yml
@@ -128,7 +156,7 @@ deploy:
 
 #### Use environment variables for port randomization
 
-No service uses its default port. Every exposed port is set through an environment variable, making it easy to change and harder for automated scans to find services. Internal ports stay at their well-known defaults; only the externally-facing port is randomized.
+Only the port exposed on the host is randomized; internal ports stay at their well-known defaults.
 
 ```yaml
 # services/infra/btop/compose.yml
@@ -139,7 +167,7 @@ ports:
 
 #### Connect every service to the same network
 
-All services join a shared Docker network so they can resolve each other by container name without complex networking setup.
+Services resolve each other by container name on a shared Docker network. The exception is UpSnap, which needs the host network to send Wake-on-LAN packets.
 
 ```yaml
 # shared pattern across all compose.yml files
@@ -152,7 +180,7 @@ networks:
 
 #### Container conventions
 
-Every container uses restart policies so services recover from crashes or host reboots without manual intervention. Container names are set explicitly to match their Compose service key, keeping references unambiguous across the stack.
+Containers restart on their own after a crash or a reboot, and their names match the Compose service key.
 
 ```yaml
 # shared pattern across all compose.yml files
@@ -160,6 +188,20 @@ Every container uses restart policies so services recover from crashes or host r
 restart: unless-stopped
 container_name: <service-name>
 ```
+
+## Technologies
+
+<table align="center">
+  <tr>
+    <td align="center" width="96"><img src="https://cdn.simpleicons.org/ubuntu" width="48" height="48" alt="Ubuntu" /><br>Ubuntu</td>
+    <td align="center" width="96"><img src="https://cdn.simpleicons.org/docker" width="48" height="48" alt="Docker" /><br>Docker</td>
+    <td align="center" width="96"><img src="https://cdn.simpleicons.org/terraform" width="48" height="48" alt="Terraform" /><br>Terraform</td>
+    <td align="center" width="96"><img src="https://cdn.simpleicons.org/cloudflare" width="48" height="48" alt="Cloudflare" /><br>Cloudflare</td>
+    <td align="center" width="96"><img src="https://cdn.simpleicons.org/tailscale/9198A1" width="48" height="48" alt="Tailscale" /><br>Tailscale</td>
+    <td align="center" width="96"><img src="https://cdn.simpleicons.org/nginx" width="48" height="48" alt="NGINX" /><br>NGINX</td>
+    <td align="center" width="96"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/githubactions/githubactions-original.svg" width="48" height="48" alt="GitHub Actions" /><br>GitHub Actions</td>
+  </tr>
+</table>
 
 ## Getting started
 
@@ -173,20 +215,23 @@ container_name: <service-name>
 ### Setup
 
 ```bash
-# 1. Create the shared Docker network
+# 1. Install the local tooling
+make install
+
+# 2. Create the shared Docker network
 make setup
 
-# 2. Bootstrap Terraform
+# 3. Bootstrap Terraform
 make terraform-init
 
-# 3. Review and apply infrastructure changes
+# 4. Review and apply infrastructure changes
 make terraform-plan
 make terraform-apply
 
-# 4. Start infrastructure services
+# 5. Start infrastructure services
 make infra-up
 
-# 5. Start application services
+# 6. Start application services
 make apps-up
 ```
 
@@ -194,6 +239,7 @@ make apps-up
 
 | Command | Description |
 |---|---|
+| `install` | Install pipx and the pre-commit hooks |
 | `setup` | Create the `lab` Docker network |
 | `infra-up` | Start all infrastructure services |
 | `infra-up-build` | Start infra services with rebuild |
@@ -205,8 +251,3 @@ make apps-up
 | `terraform-init-upgrade` | Re-initialize with provider upgrades |
 | `terraform-plan` | Preview infrastructure changes |
 | `terraform-apply` | Apply infrastructure changes |
-
-
-## License
-
-[MIT](LICENSE.md) — free to use, modify, and distribute as you see fit.
