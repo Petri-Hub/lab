@@ -68,6 +68,30 @@ services:
           cpus: '1.0'
           memory: 256M
 
+  restic-hermes:
+    image: restic/restic:latest
+    container_name: restic-hermes
+    restart: unless-stopped
+    entrypoint: /bin/sh
+    command: '-c "tail -f /dev/null"'
+    environment:
+      - RESTIC_REPOSITORY=rest:http://rclone:${RESTIC_RCLONE_SERVER_PORT}/hermes/
+      - RESTIC_PASSWORD=${RESTIC_HERMES_PASSWORD}
+    volumes:
+      - ../../../storage/hermes/data:/data:ro
+      - ./configuration/hermes-include.txt:/etc/restic/hermes-include.txt:ro
+    networks:
+      - lab
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-exec.backup-hermes.schedule: "@every 6h"
+      ofelia.job-exec.backup-hermes.command: "restic backup --files-from /etc/restic/hermes-include.txt"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 256M
+
 networks:
   lab:
     name: lab
