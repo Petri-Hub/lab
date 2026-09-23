@@ -1,0 +1,7 @@
+/data/SOUL.md
+/data/config.yaml
+/data/skills
+/data/cron
+/data/memories
+/data/assets
+/data/profiles
