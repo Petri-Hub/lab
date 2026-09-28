@@ -6,7 +6,7 @@ This is a personal homelab — there's only one version (`main`). If something n
 
 ## Reporting a Vulnerability
 
-If you find a security issue, please tell me privately instead of posting it publicly. **Don't open a GitHub issue.** Send an email to [fernando.petri01@gmail.com](mailto:fernando.petri01@gmail.com) instead, with:
+If you find a security issue, please tell me privately instead of posting it publicly. Use GitHub's [private vulnerability reporting](https://github.com/Petri-Hub/lab/security/advisories/new) or send an email to [fernando.petri01@gmail.com](mailto:fernando.petri01@gmail.com), with:
 
 - What you found
 - How to reproduce it
@@ -19,7 +19,6 @@ If you find a security issue, please tell me privately instead of posting it pub
 3. I'll merge the fix into `main`
 4. I'll let you know when it's live
 
-
 ## Suggestions
 
-If you have ideas on how to improve this policy, feel free to open a pull request or start a discussion.
+If you have ideas on how to improve this policy, feel free to open a pull request.

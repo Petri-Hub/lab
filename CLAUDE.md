@@ -141,6 +141,65 @@ deploy:
 # no deploy block — container runs without constraints
 ```
 
+### Keep 3.2 GiB of RAM for the host
+
+The memory limits of every container that can run at the same time add up to at most the host's RAM minus 3.2 GiB. On this laptop that is 14.5 GiB − 3.2 GiB = **11.3 GiB of limits**, about 78% of the machine. A limit is a ceiling, not a reservation, so the sum is not what the lab uses on a normal day. It is what the lab uses on a bad one, and the host has to survive that day too.
+
+The reserve covers what the host needs outside Docker, measured on 28 Sep 2026, plus a margin:
+
+| Needed by | Measured | Where it comes from |
+|---|---|---|
+| Kernel memory that cannot be reclaimed | ~0.9 GiB | `SUnreclaim` + `KernelStack` + `PageTables` in `/proc/meminfo` |
+| Host daemons | ~0.4 GiB | journald, dockerd, containerd, tailscaled, fwupd |
+| SSH and admin sessions | ~0.4 GiB | an agent session on the host alone takes 0.4 GiB |
+| Minimum file cache | ~1 GiB | kept so disk reads, game saves and backups don't thrash |
+| Margin | ~0.5 GiB | for kernel and daemon growth between checks |
+| **Total** | **3.2 GiB** | |
+
+Less, like a 90% budget that leaves 1.45 GiB, is below what the host already uses. Much more, like 4 GiB, costs a game server's worth of memory to protect against a case the swap already covers. When the machine's RAM changes, recompute the budget from the new `MemTotal`.
+
+Rules for counting:
+
+- **Swap does not count.** The 4 GiB swap file is the margin for a mistake, not memory to plan with. A container that lives in swap is slow, not healthy.
+- **Count only what can run at the same time.** Services that take turns, such as game servers behind Compose `profiles` where only one is up, count once, at the largest limit among them.
+- **Size a limit from the container's real peak**, read from `memory.peak` in its cgroup, not from a round number. The limit is the peak × 1.5, rounded up to the next step of 32M, 64M, 96M, 128M, 192M, 256M, 384M, 512M, 768M, 1G, then whole or half gigabytes. A limit is left alone while the peak sits between 35% and 70% of it, and never goes below 32M or below the service's own reservation. The peak includes file cache, so it errs on the safe side.
+- **Measure over a long enough window.** A peak only counts once the container has been up through its busiest routine: a backup run, a game session, a restart. Note the date the peak was read in the commit.
+- **A limit that is hit is too small**, even when nothing crashes. Check `max` in the container's `memory.events`: a count above zero means the kernel has had to push it back, dropping its file cache first and moving its memory to swap after that.
+
+Check the budget before adding a service or raising a limit:
+
+```bash
+# Sum of memory limits of running containers, against the 11.3 GiB budget
+docker inspect $(docker ps -q) --format '{{.HostConfig.Memory}}' \
+  | awk '{s+=$1} END {printf "%.2f GiB of 11.3 GiB\n", s/2^30}'
+
+# Real peak and limit hits for one container
+d=/sys/fs/cgroup/system.slice/docker-$(docker inspect <name> -f '{{.Id}}').scope
+cat $d/memory.peak; grep -w max $d/memory.events
+```
+
+**Good:**
+
+```
+Small services     1.8 GiB   limits sized from memory.peak
+Hermes             3.5 GiB
+Palworld           5.5 GiB
+─────────────────────────
+Total             10.8 GiB   within 11.3 GiB
+```
+
+**Bad:**
+
+```
+kamiyomu           2.0 GiB   peaks at 0.3 GiB
+Hermes             2.0 GiB   hits its limit, lives in swap
+Palworld           6.0 GiB
+Valheim            6.0 GiB   runs at the same time as Palworld
+Everything else    3.5 GiB
+─────────────────────────
+Total             19.5 GiB   above the host's 14.5 GiB
+```
+
 ### Use environment variables for port randomization
 
 No service uses its default port. Every exposed port is set through an environment variable, making it easy to change and harder for automated scans to find services. Internal ports stay at their well-known defaults; only the externally-facing port is randomized. Default ports are the first thing scanners check. Mapping a randomized host port to a well-known internal port preserves standard container behavior while hiding services from port-scanning bots on the public internet.

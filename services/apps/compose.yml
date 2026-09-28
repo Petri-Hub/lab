@@ -1,5 +1,6 @@
 include:
     - ./ai-memory/compose.yml
+    - ./hermes/compose.yml
     - ./palworld/compose.yml
     - ./teamspeak/compose.yml
     - ./wakapi/compose.yml
