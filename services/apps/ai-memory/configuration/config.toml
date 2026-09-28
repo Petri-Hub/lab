@@ -1,12 +1,3 @@
-# ai-memory server configuration, mounted read-only at /data/config.toml.
-# The primary provider and model come from .env (AI_MEMORY_LLM_PROVIDER and
-# AI_MEMORY_LLM_MODEL). This file holds what has no environment variable.
-
-# Fallback chain, tried in order after a transient failure of the primary
-# (429, 5xx, timeout). Gemini's free tier counts its quota per model, so each
-# model below is a fresh quota, which is what makes an all-Gemini chain useful.
-# api_key_env names the variable holding the key; the key never lives here.
-
 [[llm_fallbacks]]
 provider    = "gemini"
 model       = "gemini-3.5-flash-lite"
@@ -17,9 +8,6 @@ provider    = "gemini"
 model       = "gemini-3.1-flash-lite"
 api_key_env = "GEMINI_API_KEY"
 
-# The free tier drops large requests with 503. The defaults (100000 in, 32000
-# out) failed, and 4000 out cut the JSON response short. These values work on
-# the desktop instance.
 [consolidation]
 max_input_tokens  = 30000
 max_output_tokens = 12000

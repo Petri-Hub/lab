@@ -94,12 +94,6 @@ module "cloudflare" {
       domain  = var.infra_domain_url
       name    = "${var.infra_ai_memory_subdomain_url}.${var.infra_domain_url}"
       service = "http://nginx:80"
-      # Kept behind the standard Email OTP policy like everything else here,
-      # unlike wakapi's bypass_paths = ["/api"]. Agent CLIs generally can't
-      # complete an interactive OTP login, so see the PR description for the
-      # access-token options; this file intentionally does not open a bypass
-      # for the whole ai-memory surface (bypass_paths = ["/"] would remove
-      # Cloudflare Access entirely, leaving only AI_MEMORY_AUTH_TOKEN).
     }
   ]
 }
