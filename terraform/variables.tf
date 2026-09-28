@@ -94,6 +94,11 @@ variable "infra_wakapi_subdomain_url" {
   type        = string
 }
 
+variable "infra_ai_memory_subdomain_url" {
+  description = "The ai-memory subdomain"
+  type        = string
+}
+
 variable "infra_filebrowser_port" {
   description = "FileBrowser UI port"
   type        = number
@@ -191,6 +196,11 @@ variable "infra_hermes_dashboard_port" {
 
 variable "infra_wakapi_port" {
   description = "Wakapi dashboard/API port"
+  type        = number
+}
+
+variable "infra_ai_memory_port" {
+  description = "ai-memory MCP/API port"
   type        = number
 }
 

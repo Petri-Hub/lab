@@ -1,0 +1,28 @@
+services:
+  ai-memory:
+    image: docker.io/akitaonrails/ai-memory:latest
+    container_name: ai-memory
+    restart: unless-stopped
+    ports:
+      - ${AI_MEMORY_PORT}:49374
+    environment:
+      - AI_MEMORY_AUTH_TOKEN=${AI_MEMORY_AUTH_TOKEN}
+      - AI_MEMORY_ALLOWED_HOSTS=${AI_MEMORY_ALLOWED_HOSTS}
+      - AI_MEMORY_LLM_PROVIDER=${AI_MEMORY_LLM_PROVIDER}
+      - AI_MEMORY_LLM_MODEL=${AI_MEMORY_LLM_MODEL}
+      - GEMINI_API_KEY=${AI_MEMORY_GEMINI_API_KEY}
+    networks:
+      - lab
+    volumes:
+      - ../../../storage/ai-memory/data:/data
+      - ./configuration/config.toml:/data/config.toml:ro
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 768M
+
+networks:
+  lab:
+    name: lab
+    external: true

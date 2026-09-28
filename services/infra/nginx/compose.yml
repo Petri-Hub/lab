@@ -18,6 +18,8 @@ services:
       - NGINX_UPSNAP_PORT=${NGINX_UPSNAP_PORT}
       - NGINX_WAKAPI_DOMAIN=${NGINX_WAKAPI_DOMAIN}
       - NGINX_WAKAPI_PORT=${NGINX_WAKAPI_PORT}
+      - NGINX_AI_MEMORY_DOMAIN=${NGINX_AI_MEMORY_DOMAIN}
+      - NGINX_AI_MEMORY_PORT=${NGINX_AI_MEMORY_PORT}
     volumes:
       - ./configuration/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
     networks:
