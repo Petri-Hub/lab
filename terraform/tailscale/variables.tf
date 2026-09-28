@@ -12,6 +12,7 @@ variable "ports" {
     upsnap      = number
     hermes      = number
     wakapi      = number
+    ai_memory   = number
     palworld    = number
     satisfactory = object({
       game      = number
