@@ -25,6 +25,35 @@ services:
           cpus: '0.5'
           memory: 384M
 
+  wakapi-pepper:
+    build:
+      context: ../../../docker/wakatime-cli
+      args:
+        WAKATIME_VERSION: 2.26.13
+    image: lab/wakatime-cli:2.26.13
+    container_name: wakapi-pepper
+    restart: unless-stopped
+    user: "10000:10000"
+    environment:
+      - WAKATIME_HOME=/state
+      - WAKATIME_API_KEY=${WAKAPI_PEPPER_API_KEY}
+      - HERMES_HOME=/hermes
+    volumes:
+      - ../../../storage/hermes/data:/hermes:ro
+      - ../../../storage/wakapi/pepper-state:/state
+      - ./configuration/pepper.wakatime.cfg:/state/.wakatime.cfg:ro
+    networks:
+      - lab
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-exec.wakapi-pepper.schedule: "@every 5m"
+      ofelia.job-exec.wakapi-pepper.command: "wakatime-cli --sync-ai-activity --plugin hermes-agent/wakapi-pepper"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 96M
+
 networks:
   lab:
     name: lab
