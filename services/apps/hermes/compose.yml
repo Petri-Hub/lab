@@ -15,6 +15,9 @@ services:
     environment:
       - HERMES_DASHBOARD=1
       - HERMES_TUI=1
+      # The image limits write_file and patch to /opt/data, but Pepper's shell runs in a
+      # Modal sandbox whose home is /root, so her files there were denied.
+      - HERMES_WRITE_SAFE_ROOT=/opt/data:/root
       - HERMES_DASHBOARD_BASIC_AUTH_USERNAME=${HERMES_DASHBOARD_BASIC_AUTH_USERNAME}
       - HERMES_DASHBOARD_BASIC_AUTH_PASSWORD_HASH=${HERMES_DASHBOARD_BASIC_AUTH_PASSWORD_HASH}
       - HERMES_DASHBOARD_BASIC_AUTH_SECRET=${HERMES_DASHBOARD_BASIC_AUTH_SECRET}
