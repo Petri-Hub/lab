@@ -12,6 +12,9 @@ services:
     volumes:
       - ../../../storage/hermes/data:/opt/data
       - ../../../storage/hermes/secrets/github-app.pem:/opt/data/github-app.pem:ro
+      # Re-applies the patches kept in /opt/data/patches to Hermes' own source on every boot:
+      # the image is :latest, so a recreated container starts without them.
+      - ./configuration/03-apply-patches:/etc/cont-init.d/03-apply-patches:ro
     environment:
       - HERMES_DASHBOARD=1
       - HERMES_TUI=1

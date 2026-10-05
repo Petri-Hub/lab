@@ -1,0 +1,36 @@
+#!/command/with-contenv sh
+# shellcheck shell=sh
+# Re-applies Pepper's patches to Hermes' own source on every container boot.
+#
+# The image is nousresearch/hermes-agent:latest, so a recreated container or an
+# update starts from pristine source and drops anything edited in place. The
+# patches live on the data volume, in $HERMES_HOME/patches/*.patch, as unified
+# diffs relative to /opt/hermes, and this script puts them back.
+#
+# Runs as root after 02-reconcile-profiles and before s6-rc starts the gateway
+# (cont-init.d scripts run in lexicographic order). Each patch is:
+#   - applied, when it fits the source as it is;
+#   - skipped, when it is already in place;
+#   - reported and skipped, when it fits neither, which means a newer Hermes
+#     changed those lines. Old code is never forced over new code.
+# The script always exits 0, so a patch that no longer fits cannot stop Hermes.
+
+cd /opt/hermes || exit 0
+
+for patch in "${HERMES_HOME:-/opt/data}"/patches/*.patch; do
+  [ -f "$patch" ] || continue
+  name=$(basename "$patch")
+  if git apply --check "$patch" 2>/dev/null; then
+    if git apply "$patch"; then
+      echo "[patches] $name: applied"
+    else
+      echo "[patches] $name: FAILED while applying, left as it was"
+    fi
+  elif git apply --reverse --check "$patch" 2>/dev/null; then
+    echo "[patches] $name: already in place"
+  else
+    echo "[patches] $name: DOES NOT FIT this Hermes, skipped; rebuild the patch"
+  fi
+done
+
+exit 0
