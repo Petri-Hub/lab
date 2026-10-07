@@ -204,6 +204,34 @@ container_name: <service-name>
   </tr>
 </table>
 
+## Roadmap
+
+What's already in place:
+
+- ✅ Every service in Docker Compose, split between infrastructure and applications, each with its own CPU and memory limits
+- ✅ Tailscale ACLs and device tags, managed with Terraform
+- ✅ A Cloudflare Tunnel with Cloudflare Access in front of it, replacing ngrok, so nothing is reachable without an emailed code
+- ✅ Backups with Ofelia, Restic and Rclone, first on a pendrive and now in a private Cloudflare R2 bucket
+- ✅ Dozzle for container logs, replacing Portainer
+- ✅ btop in the browser, replacing Glances
+- ✅ UpSnap, to wake my main PC with Wake-on-LAN
+- ✅ Game servers for friends: Satisfactory, Palworld and Don't Starve Together, with their saves backed up
+- ✅ A TeamSpeak 6 voice server, reachable over Tailscale
+- ✅ Tailscale Services for the TCP-only surfaces
+- ✅ A Terraform validation pipeline on every pull request, and a pre-commit hook
+- ✅ A manga library: KamiYomu to download, Kavita to read
+- ✅ The Hermes agent in a container of its own, running Pepper
+- ✅ Wakapi, to track my coding time across machines, with a separate user for Pepper
+- ✅ ai-memory, a long-term memory that every coding agent on my machines shares, consolidated at the end of each session
+- ✅ Container limits sized from each service's measured peak, keeping 3.2 GiB of RAM for the host
+- ✅ Backups of the Wakapi database, Hermes, the ai-memory wiki and the Terraform state
+- ✅ A private R2 bucket managed by Terraform, with its public URL pinned off
+
+What's next:
+
+- ⬜ Gatus, in a container of its own, checking every service and showing what is up
+- ⬜ Dropping Dozzle
+
 ## Getting started
 
 ### Prerequisites
