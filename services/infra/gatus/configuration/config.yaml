@@ -10,10 +10,7 @@ ui:
   dashboard-subheading: "What infrastructure and applications are running in the home lab, checked every minute."
   logo: "https://raw.githubusercontent.com/Petri-Hub/lab/main/services/infra/gatus/logo.png"
   link: "https://github.com/Petri-Hub/lab"
-  buttons:
-    - name: "Repository"
-      link: "https://github.com/Petri-Hub/lab"
-  default-sort-by: group
+  default-sort-by: name
 
 endpoints:
   - name: Cloudflared
