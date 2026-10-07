@@ -41,3 +41,9 @@ variable "authorized_emails" {
   type        = list(string)
   sensitive   = true
 }
+
+variable "backups_bucket_name" {
+  description = "R2 bucket that holds the Restic repositories"
+  type        = string
+  default     = "lab-backups"
+}
