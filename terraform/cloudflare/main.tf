@@ -1,8 +1,3 @@
-data "cloudflare_account_api_token_permission_groups_list" "r2_bucket_item_write" {
-  account_id = var.cloudflare_account_id
-  name       = "Workers R2 Storage Bucket Item Write"
-}
-
 resource "cloudflare_zero_trust_tunnel_cloudflared" "lab" {
   account_id    = var.cloudflare_account_id
   name          = var.domain
@@ -116,33 +111,6 @@ resource "cloudflare_r2_managed_domain" "backups" {
   account_id  = var.cloudflare_account_id
   bucket_name = cloudflare_r2_bucket.backups.name
   enabled     = false
-}
-
-resource "cloudflare_account_token" "backups" {
-  account_id = var.cloudflare_account_id
-  name       = "${var.backups_bucket_name}-rclone"
-
-  policies = [
-    {
-      effect = "allow"
-      permission_groups = [
-        { id = data.cloudflare_account_api_token_permission_groups_list.r2_bucket_item_write.result[0].id }
-      ]
-      resources = jsonencode({
-        "com.cloudflare.edge.r2.bucket.${var.cloudflare_account_id}_default_${cloudflare_r2_bucket.backups.name}" = "*"
-      })
-    }
-  ]
-}
-
-output "backups_access_key_id" {
-  value     = cloudflare_account_token.backups.id
-  sensitive = true
-}
-
-output "backups_secret_access_key" {
-  value     = sha256(cloudflare_account_token.backups.value)
-  sensitive = true
 }
 
 output "backups_endpoint" {
