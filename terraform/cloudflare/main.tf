@@ -1,3 +1,8 @@
+data "cloudflare_account_api_token_permission_groups_list" "r2_bucket_item_write" {
+  account_id = var.cloudflare_account_id
+  name       = "Workers%20R2%20Storage%20Bucket%20Item%20Write"
+}
+
 resource "cloudflare_zero_trust_tunnel_cloudflared" "lab" {
   account_id    = var.cloudflare_account_id
   name          = var.domain
@@ -111,11 +116,6 @@ resource "cloudflare_r2_managed_domain" "backups" {
   account_id  = var.cloudflare_account_id
   bucket_name = cloudflare_r2_bucket.backups.name
   enabled     = false
-}
-
-data "cloudflare_account_api_token_permission_groups_list" "r2_bucket_item_write" {
-  account_id = var.cloudflare_account_id
-  name       = "Workers%20R2%20Storage%20Bucket%20Item%20Write"
 }
 
 resource "cloudflare_account_token" "backups" {
