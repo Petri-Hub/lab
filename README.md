@@ -225,10 +225,6 @@ What's already in place:
 - ✅ Restic backups to a private R2 bucket
 - ✅ Gatus, a public status page checking every service, replacing Dozzle
 
-What's next:
-
-- Nothing pending right now
-
 ## Getting started
 
 ### Prerequisites
