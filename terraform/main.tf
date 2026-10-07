@@ -58,6 +58,7 @@ module "cloudflare" {
       domain  = var.infra_domain_url
       name    = "${var.infra_gatus_subdomain_url}.${var.infra_domain_url}"
       service = "http://nginx:80"
+      public  = true
     },
     {
       domain  = var.infra_domain_url

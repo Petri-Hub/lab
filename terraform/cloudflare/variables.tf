@@ -33,6 +33,7 @@ variable "services" {
     # Access entirely (e.g. a service's own API, gated by its own API key,
     # reached by CLI clients that can't complete an interactive Email OTP login).
     bypass_paths = optional(list(string), [])
+    public       = optional(bool, false)
   }))
 }
 
