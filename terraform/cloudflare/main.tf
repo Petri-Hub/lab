@@ -1,6 +1,6 @@
 data "cloudflare_account_api_token_permission_groups_list" "r2_bucket_item_write" {
   account_id = var.cloudflare_account_id
-  name       = "Workers%20R2%20Storage%20Bucket%20Item%20Write"
+  name       = "Workers R2 Storage Bucket Item Write"
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared" "lab" {
