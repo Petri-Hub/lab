@@ -36,7 +36,7 @@ resource "cloudflare_zone_setting" "ssl" {
 }
 
 resource "cloudflare_zero_trust_access_application" "services" {
-  for_each = { for svc in var.services : svc.name => svc }
+  for_each = { for svc in var.services : svc.name => svc if !svc.public }
 
   account_id       = var.cloudflare_account_id
   name             = each.value.name

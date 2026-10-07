@@ -35,7 +35,7 @@
 
 | Path | Description |
 |---|---|
-| **Internet** | Users access services through Cloudflare. Cloudflare checks the user's email and sends a one-time code to verify them. Once verified, traffic goes through the tunnel into the server, where NGINX sends each request to the right service. A few specific paths skip the email check, like the Wakapi API that my GitHub profile reads from. |
+| **Internet** | Users access services through Cloudflare. Cloudflare checks the user's email and sends a one-time code to verify them. Once verified, traffic goes through the tunnel into the server, where NGINX sends each request to the right service. A few specific paths skip the email check, like the Wakapi API that my GitHub profile reads from, and the Gatus status page is public. |
 | **Tailscale** | Devices connected to the Tailscale network can access services directly with randomized ports. The server only allows certain ports for laptops and phones, and shared users can only reach some services. |
 
 ## Philosophy
@@ -57,7 +57,7 @@ Services are split between infrastructure and applications, and every container 
 |:---:|---|---|
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/cloudflare.svg" width="20" height="20" alt="" /> | [cloudflared](services/infra/cloudflared/) | Connects the server to Cloudflare's edge network, routing public traffic through a secure tunnel so services are accessible without exposing the server directly |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/nginx.svg" width="20" height="20" alt="" /> | [nginx](services/infra/nginx/) | Acts as a reverse proxy, reading the incoming domain and forwarding each request to the correct internal service |
-| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/gatus.svg" width="20" height="20" alt="" /> | [gatus](services/infra/gatus/) | Checks every running service every minute and shows which ones are up on a status page |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/gatus.svg" width="20" height="20" alt="" /> | [gatus](services/infra/gatus/) | Checks every running service every minute and shows which ones are up on a public status page |
 | <img src="https://raw.githubusercontent.com/aristocratos/btop/HEAD/Img/icon.svg" width="20" height="20" alt="" /> | [btop](services/infra/btop/) | Exposes a real-time system monitor through the browser so you can check CPU, memory, and processes without SSH |
 | <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/filebrowser.png" width="20" height="20" alt="" /> | [filebrowser](services/infra/filebrowser/) | Provides a web-based file manager to browse, upload, and edit files across the entire server |
 | <img src="https://raw.githubusercontent.com/mcuadros/ofelia/HEAD/static/avatar.png" width="20" height="20" alt="" /> | [ofelia](services/infra/ofelia/) | Runs scheduled jobs inside containers using Docker labels, used here to trigger backups automatically |

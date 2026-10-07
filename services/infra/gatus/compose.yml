@@ -6,13 +6,14 @@ services:
     ports:
       - '${GATUS_PORT}:8080'
     environment:
+      - GATUS_CONFIG_PATH=/config
       - GATUS_WAKAPI_DOMAIN=${GATUS_WAKAPI_DOMAIN}
       - GATUS_RCLONE_PORT=${GATUS_RCLONE_PORT}
       - GATUS_UPSNAP_PORT=${GATUS_UPSNAP_PORT}
       - GATUS_PALWORLD_PORT=${GATUS_PALWORLD_PORT}
       - GATUS_TEAMSPEAK_PORT=${GATUS_TEAMSPEAK_PORT}
     volumes:
-      - ./configuration/config.yaml:/config/config.yaml:ro
+      - ./configuration:/config:ro
       - ../../../storage/gatus:/data
     networks:
       - lab
