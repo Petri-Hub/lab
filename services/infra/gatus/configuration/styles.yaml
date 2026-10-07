@@ -36,3 +36,9 @@ ui:
     .container.max-w-7xl { max-width: 980px; }
 
     .endpoint-group-header { border-left: 4px solid #f6821f; }
+
+    #global > .relative { display: flex; flex-direction: column; min-height: 100vh; }
+    #global > .relative > main { flex: 1 0 auto; }
+
+    .bg-card.rounded-lg.border:has(#search-input) { display: none; }
+    .mb-6:has(#search-input) > .justify-between { margin-bottom: 0; }
