@@ -12,8 +12,6 @@ services:
       - RCLONE_CONFIG_R2_ENDPOINT=${RCLONE_R2_ENDPOINT}
       - RCLONE_CONFIG_R2_REGION=auto
       - RCLONE_CONFIG_R2_NO_CHECK_BUCKET=true
-    volumes:
-      - ./configuration/rclone.conf:/config/rclone/rclone.conf:ro
     networks:
       - lab
     deploy:

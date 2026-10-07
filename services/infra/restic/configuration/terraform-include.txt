@@ -1,0 +1,2 @@
+/data/terraform.tfstate
+/data/variables.auto.tfvars
