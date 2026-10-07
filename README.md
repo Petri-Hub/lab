@@ -22,10 +22,10 @@
   <tr><td><b>Memory</b></td><td>16 GB</td></tr>
   <tr><td><b>Storage</b></td><td>512 GB NVMe SSD</td></tr>
   <tr><td><b>OS</b></td><td>Ubuntu 26.04 LTS</td></tr>
-  <tr><td><b>Backups</b></td><td>16 GB USB flash drive, where Restic keeps the snapshots</td></tr>
+  <tr><td><b>Backups</b></td><td>Cloudflare R2 bucket, where Restic keeps the snapshots</td></tr>
 </table>
 
-> Limited hardware forces some creativity. Restic deduplicates every snapshot, so backups every 20 minutes still fit on a 16 GB flash drive, and services are picked for doing one thing well on little memory: most containers here use less than 64 MB.
+> Limited hardware forces some creativity. Restic deduplicates every snapshot, so backups every 20 minutes stay inside R2's free tier, and services are picked for doing one thing well on little memory: most containers here use less than 64 MB.
 
 ## Architecture
 
@@ -62,7 +62,7 @@ Services are split between infrastructure and applications, and every container 
 | <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/filebrowser.png" width="20" height="20" alt="" /> | [filebrowser](services/infra/filebrowser/) | Provides a web-based file manager to browse, upload, and edit files across the entire server |
 | <img src="https://raw.githubusercontent.com/mcuadros/ofelia/HEAD/static/avatar.png" width="20" height="20" alt="" /> | [ofelia](services/infra/ofelia/) | Runs scheduled jobs inside containers using Docker labels, used here to trigger backups automatically |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/rclone.svg" width="20" height="20" alt="" /> | [rclone](services/infra/rclone/) | Runs as a REST server that receives and stores backup data from Restic |
-| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/png/restic.png" width="20" height="20" alt="" /> | [restic](services/infra/restic/) | Backs up the Satisfactory and Palworld saves and the Wakapi database to the Rclone server every 20 minutes |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/png/restic.png" width="20" height="20" alt="" /> | [restic](services/infra/restic/) | Backs up the Satisfactory and Palworld saves, the Wakapi database, the ai-memory wiki and database and the Terraform state to the Rclone server on a schedule |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/upsnap.svg" width="20" height="20" alt="" /> | [upsnap](services/infra/upsnap/) | Wakes my main PC with Wake-on-LAN, since it lives outside the lab, and shows which machines on the network are online |
 
 ### Applications

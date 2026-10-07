@@ -98,3 +98,18 @@ module "cloudflare" {
     }
   ]
 }
+
+output "r2_access_key_id" {
+  value     = module.cloudflare.backups_access_key_id
+  sensitive = true
+}
+
+output "r2_secret_access_key" {
+  value     = module.cloudflare.backups_secret_access_key
+  sensitive = true
+}
+
+output "r2_endpoint" {
+  value     = module.cloudflare.backups_endpoint
+  sensitive = true
+}
