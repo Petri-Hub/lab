@@ -63,7 +63,7 @@ resource "tailscale_acl" "main" {
           "tag:lab:${var.ports.ytdlp}",
           "tag:lab:${var.ports.kamiyomu}",
           "tag:lab:${var.ports.kavita}",
-          "tag:lab:${var.ports.dozzle}",
+          "tag:lab:${var.ports.gatus}",
           "tag:lab:${var.ports.btop}",
           "tag:lab:${var.ports.filebrowser}",
           "tag:lab:${var.ports.hermes}",
@@ -96,7 +96,7 @@ resource "tailscale_acl" "main" {
         action = "accept"
         src    = ["autogroup:shared"]
         dst = [
-          "tag:lab:${var.ports.dozzle}",
+          "tag:lab:${var.ports.gatus}",
           "tag:lab:${var.ports.satisfactory.game}",
           "tag:lab:${var.ports.satisfactory.messaging}",
           "tag:lab:${var.ports.palworld}",
@@ -112,11 +112,11 @@ resource "tailscale_acl" "main" {
   })
 }
 
-resource "tailscale_service" "dozzle" {
+resource "tailscale_service" "gatus" {
   depends_on = [tailscale_acl.main]
-  name       = "svc:dozzle"
-  comment    = "Dozzle log viewer"
-  ports      = ["tcp:${var.ports.dozzle}"]
+  name       = "svc:gatus"
+  comment    = "Gatus status page"
+  ports      = ["tcp:${var.ports.gatus}"]
   tags       = ["tag:lab"]
 }
 

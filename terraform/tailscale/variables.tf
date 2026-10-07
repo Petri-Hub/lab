@@ -6,7 +6,7 @@ variable "ports" {
     kamiyomu    = number
     kavita      = number
     ssh         = number
-    dozzle      = number
+    gatus       = number
     filebrowser = number
     btop        = number
     upsnap      = number
