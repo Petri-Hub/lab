@@ -223,7 +223,7 @@ What's already in place:
 - ✅ Wakapi for my coding time across machines, with a user for Pepper
 - ✅ ai-memory, a long-term memory shared by every coding agent I use
 - ✅ Container limits sized from measured peaks
-- ✅ Restic backups of the game saves, Wakapi, Hermes, ai-memory and the Terraform state, in a private R2 bucket
+- ✅ Restic backups to a private R2 bucket
 
 What's next:
 
