@@ -22,10 +22,10 @@
   <tr><td><b>Memory</b></td><td>16 GB</td></tr>
   <tr><td><b>Storage</b></td><td>512 GB NVMe SSD</td></tr>
   <tr><td><b>OS</b></td><td>Ubuntu 26.04 LTS</td></tr>
-  <tr><td><b>Backups</b></td><td>16 GB USB flash drive, where Restic keeps the snapshots</td></tr>
+  <tr><td><b>Backups</b></td><td>Cloudflare R2 bucket, where Restic keeps the snapshots</td></tr>
 </table>
 
-> Limited hardware forces some creativity. Restic deduplicates every snapshot, so backups every 20 minutes still fit on a 16 GB flash drive, and services are picked for doing one thing well on little memory: most containers here use less than 64 MB.
+> Limited hardware forces some creativity. Restic deduplicates every snapshot, so backups every 20 minutes stay inside R2's free tier, and services are picked for doing one thing well on little memory: most containers here use less than 64 MB.
 
 ## Architecture
 

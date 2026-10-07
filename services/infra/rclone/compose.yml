@@ -3,10 +3,17 @@ services:
     image: rclone/rclone:latest
     container_name: rclone
     restart: unless-stopped
-    command: ['serve', 'restic', '--addr', '0.0.0.0:${RCLONE_RESTIC_PORT}', 'local:/pendrive']
+    command: ['serve', 'restic', '--addr', '0.0.0.0:${RCLONE_RESTIC_PORT}', 'r2:${RCLONE_R2_BUCKET}']
+    environment:
+      - RCLONE_CONFIG_R2_TYPE=s3
+      - RCLONE_CONFIG_R2_PROVIDER=Cloudflare
+      - RCLONE_CONFIG_R2_ACCESS_KEY_ID=${RCLONE_R2_ACCESS_KEY_ID}
+      - RCLONE_CONFIG_R2_SECRET_ACCESS_KEY=${RCLONE_R2_SECRET_ACCESS_KEY}
+      - RCLONE_CONFIG_R2_ENDPOINT=${RCLONE_R2_ENDPOINT}
+      - RCLONE_CONFIG_R2_REGION=auto
+      - RCLONE_CONFIG_R2_NO_CHECK_BUCKET=true
     volumes:
       - ./configuration/rclone.conf:/config/rclone/rclone.conf:ro
-      - /mnt/pendrive:/pendrive
     networks:
       - lab
     deploy:
