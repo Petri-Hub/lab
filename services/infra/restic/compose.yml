@@ -92,6 +92,30 @@ services:
           cpus: '1.0'
           memory: 128M
 
+  restic-ai-memory:
+    image: restic/restic:latest
+    container_name: restic-ai-memory
+    restart: unless-stopped
+    entrypoint: /bin/sh
+    command: '-c "tail -f /dev/null"'
+    environment:
+      - RESTIC_REPOSITORY=rest:http://rclone:${RESTIC_RCLONE_SERVER_PORT}/ai-memory/
+      - RESTIC_PASSWORD=${RESTIC_AI_MEMORY_PASSWORD}
+    volumes:
+      - ../../../storage/ai-memory/data:/data:ro
+      - ./configuration/ai-memory-include.txt:/etc/restic/ai-memory-include.txt:ro
+    networks:
+      - lab
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-exec.backup-ai-memory.schedule: "@every 1h"
+      ofelia.job-exec.backup-ai-memory.command: "restic backup --files-from /etc/restic/ai-memory-include.txt"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 256M
+
 networks:
   lab:
     name: lab
