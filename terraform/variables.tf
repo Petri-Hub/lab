@@ -59,8 +59,8 @@ variable "infra_domain_url" {
   type        = string
 }
 
-variable "infra_dozzle_subdomain_url" {
-  description = "The Dozzle subdomain"
+variable "infra_gatus_subdomain_url" {
+  description = "The Gatus subdomain"
   type        = string
 }
 
@@ -169,8 +169,8 @@ variable "infra_satisfactory_messaging_port" {
   type        = number
 }
 
-variable "infra_dozzle_port" {
-  description = "Dozzle UI port"
+variable "infra_gatus_port" {
+  description = "Gatus UI port"
   type        = number
 }
 

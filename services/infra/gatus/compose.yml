@@ -1,0 +1,28 @@
+services:
+  gatus:
+    image: ghcr.io/twin/gatus:stable
+    container_name: gatus
+    restart: unless-stopped
+    ports:
+      - '${GATUS_PORT}:8080'
+    environment:
+      - GATUS_WAKAPI_DOMAIN=${GATUS_WAKAPI_DOMAIN}
+      - GATUS_RCLONE_PORT=${GATUS_RCLONE_PORT}
+      - GATUS_UPSNAP_PORT=${GATUS_UPSNAP_PORT}
+      - GATUS_PALWORLD_PORT=${GATUS_PALWORLD_PORT}
+      - GATUS_TEAMSPEAK_PORT=${GATUS_TEAMSPEAK_PORT}
+    volumes:
+      - ./configuration/config.yaml:/config/config.yaml:ro
+      - ../../../storage/gatus:/data
+    networks:
+      - lab
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 64M
+
+networks:
+  lab:
+    name: lab
+    external: true

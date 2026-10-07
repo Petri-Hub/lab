@@ -1,0 +1,78 @@
+storage:
+  type: sqlite
+  path: /data/data.db
+
+ui:
+  title: Lab
+  header: Lab
+
+endpoints:
+  - name: Cloudflared
+    group: Infrastructure
+    url: "https://${GATUS_WAKAPI_DOMAIN}/api/health"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: NGINX
+    group: Infrastructure
+    url: "tcp://nginx:80"
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: BTOP
+    group: Infrastructure
+    url: "http://btop:7681"
+    interval: 1m
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: Rclone
+    group: Infrastructure
+    url: "tcp://rclone:${GATUS_RCLONE_PORT}"
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: UpSnap
+    group: Infrastructure
+    url: "http://172.19.0.1:${GATUS_UPSNAP_PORT}/api/health"
+    interval: 1m
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: AI Memory
+    group: Applications
+    url: "http://ai-memory:49374/web/login"
+    interval: 1m
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: Wakapi
+    group: Applications
+    url: "http://wakapi:3000/api/health"
+    interval: 1m
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: Hermes
+    group: Applications
+    url: "http://hermes:9119/login"
+    interval: 1m
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: Palworld
+    group: Applications
+    url: "tcp://palworld:${GATUS_PALWORLD_PORT}"
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: TeamSpeak
+    group: Applications
+    url: "tcp://teamspeak:${GATUS_TEAMSPEAK_PORT}"
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"

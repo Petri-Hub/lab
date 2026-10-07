@@ -316,7 +316,7 @@ Each category (`services/infra/`, `services/apps/`) has a `compose.yml` that inc
 # services/infra/compose.yml
 include:
   - ./cloudflared/compose.yml
-  - ./dozzle/compose.yml
+  - ./gatus/compose.yml
   - ./filebrowser/compose.yml
   - ./nginx/compose.yml
   - ./ofelia/compose.yml
