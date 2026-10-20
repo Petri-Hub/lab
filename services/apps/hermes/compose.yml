@@ -35,6 +35,8 @@ services:
       - GITHUB_APP_ID=${HERMES_PEPPER_GITHUB_APP_ID}
       - GITHUB_APP_INSTALLATION_ID=${HERMES_PEPPER_GITHUB_APP_INSTALLATION_ID}
       - GITHUB_APP_PRIVATE_KEY_PATH=/opt/data/github-app.pem
+      - FAM_USERNAME=${HERMES_PEPPER_FAM_USERNAME}
+      - FAM_PASSWORD=${HERMES_PEPPER_FAM_PASSWORD}
     shm_size: '1gb'
     # The Telegram API hostname is dual-stack and its IPv6 path is dead on this host,
     # so outbound calls race and intermittently fail. The gateway pins IPv4 on its own;
