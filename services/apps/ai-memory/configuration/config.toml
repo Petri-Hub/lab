@@ -11,3 +11,9 @@ api_key_env = "GEMINI_API_KEY"
 [consolidation]
 max_input_tokens  = 30000
 max_output_tokens = 12000
+
+# The web UI is reached through the Cloudflare tunnel, so session cookies are
+# marked Secure. Without this, AI Memory 2.6 refuses to start when human auth
+# is enabled on a non-loopback plain HTTP bind.
+[auth]
+secure_cookie = true
