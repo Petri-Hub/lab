@@ -18,6 +18,7 @@ services:
     environment:
       - HERMES_DASHBOARD=1
       - HERMES_TUI=1
+      # Agent credentials belong to each profile's .env, not the container environment.
       # The image limits write_file and patch to /opt/data. Pepper's file tools write into a
       # Modal sandbox, not into this container, so that guard checked the wrong filesystem
       # and only denied her own scratch folders (/root, /tmp). Empty turns it off.
@@ -25,18 +26,6 @@ services:
       - HERMES_DASHBOARD_BASIC_AUTH_USERNAME=${HERMES_DASHBOARD_BASIC_AUTH_USERNAME}
       - HERMES_DASHBOARD_BASIC_AUTH_PASSWORD_HASH=${HERMES_DASHBOARD_BASIC_AUTH_PASSWORD_HASH}
       - HERMES_DASHBOARD_BASIC_AUTH_SECRET=${HERMES_DASHBOARD_BASIC_AUTH_SECRET}
-      - DISCORD_BOT_TOKEN=${HERMES_DISCORD_BOT_TOKEN}
-      - DISCORD_ALLOWED_USERS=${HERMES_DISCORD_ALLOWED_USERS}
-      - DISCORD_ALLOW_ANY_ATTACHMENT=${HERMES_DISCORD_ALLOW_ANY_ATTACHMENT}
-      - OPENAI_API_KEY=${HERMES_OPENAI_API_KEY}
-      - VOICE_TOOLS_OPENAI_KEY=${HERMES_OPENAI_API_KEY}
-      - TELEGRAM_BOT_TOKEN=${HERMES_TELEGRAM_BOT_TOKEN}
-      - TELEGRAM_ALLOWED_USERS=${HERMES_TELEGRAM_ALLOWED_USERS}
-      - GITHUB_APP_ID=${HERMES_PEPPER_GITHUB_APP_ID}
-      - GITHUB_APP_INSTALLATION_ID=${HERMES_PEPPER_GITHUB_APP_INSTALLATION_ID}
-      - GITHUB_APP_PRIVATE_KEY_PATH=/opt/data/github-app.pem
-      - FAM_USERNAME=${HERMES_PEPPER_FAM_USERNAME}
-      - FAM_PASSWORD=${HERMES_PEPPER_FAM_PASSWORD}
     shm_size: '1gb'
     # The Telegram API hostname is dual-stack and its IPv6 path is dead on this host,
     # so outbound calls race and intermittently fail. The gateway pins IPv4 on its own;
