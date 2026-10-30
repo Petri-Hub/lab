@@ -12,7 +12,7 @@ services:
       resources:
         limits:
           cpus: '0.25'
-          memory: 32M
+          memory: 128M
 
 networks:
   lab:
