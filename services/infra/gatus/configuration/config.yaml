@@ -101,17 +101,6 @@ endpoints:
     conditions:
       - "[STATUS] == 200"
 
-  - name: Palworld
-    group: Applications
-    url: "tcp://palworld:${GATUS_PALWORLD_PORT}"
-    interval: 1m
-    ui:
-      hide-hostname: true
-      hide-port: true
-      hide-url: true
-    conditions:
-      - "[CONNECTED] == true"
-
   - name: TeamSpeak
     group: Applications
     url: "tcp://teamspeak:${GATUS_TEAMSPEAK_PORT}"
