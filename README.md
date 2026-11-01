@@ -44,10 +44,10 @@
 Everything that can be codified, is. Terraform manages DNS, the tunnel, access policies and network ACLs, and Docker Compose defines every service. There are no SSH-and-pray moments.
 
 **Defense in depth.**  
-Public traffic only enters through a Cloudflare Tunnel with Cloudflare Access in front of it, private traffic goes through Tailscale with ACLs, and no service listens on its default port. Each layer holds on its own.
+Public traffic only enters through a Cloudflare Tunnel with Cloudflare Access in front of it, private traffic goes through Tailscale with ACLs, and host-exposed services use non-default ports. Each layer holds on its own.
 
 **Predictable under load.**  
-Services are split between infrastructure and applications, and every container runs with CPU and memory limits, so one service can't starve the others.
+Containers are grouped as infrastructure, applications and sandboxes, and each has CPU and memory limits so one workload cannot starve the others.
 
 ## Services
 
@@ -62,7 +62,7 @@ Services are split between infrastructure and applications, and every container 
 | <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/filebrowser.png" width="20" height="20" alt="" /> | [filebrowser](services/infra/filebrowser/) | Provides a web-based file manager to browse, upload, and edit files across the entire server |
 | <img src="https://raw.githubusercontent.com/mcuadros/ofelia/HEAD/static/avatar.png" width="20" height="20" alt="" /> | [ofelia](services/infra/ofelia/) | Runs scheduled jobs inside containers using Docker labels, used here to trigger backups automatically |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/rclone.svg" width="20" height="20" alt="" /> | [rclone](services/infra/rclone/) | Runs as a REST server that receives and stores backup data from Restic |
-| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/png/restic.png" width="20" height="20" alt="" /> | [restic](services/infra/restic/) | Backs up the Satisfactory and Palworld saves, the Wakapi database, the ai-memory wiki and database and the Terraform state to the Rclone server on a schedule |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/png/restic.png" width="20" height="20" alt="" /> | [restic](services/infra/restic/) | Backs up the Satisfactory saves, the Wakapi and ai-memory data, Hermes' data, Lemon's sandbox and the Terraform state to the Rclone server on a schedule |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/upsnap.svg" width="20" height="20" alt="" /> | [upsnap](services/infra/upsnap/) | Wakes my main PC with Wake-on-LAN, since it lives outside the lab, and shows which machines on the network are online |
 
 ### Applications
@@ -79,6 +79,12 @@ Services are split between infrastructure and applications, and every container 
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/kamiyomu.svg" width="20" height="20" alt="" /> | [kamiyomu](services/apps/kamiyomu/) | Runs a self-hosted, extensible manga reader that discovers, downloads, and organizes manga from various sources into a personal library |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/kavita.svg" width="20" height="20" alt="" /> | [kavita](services/apps/kavita/) | Serves a polished web-based reader over the manga KamiYomu downloads, with library management, metadata, and per-user reading progress |
 
+### Sandboxes
+
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Sandbox | Used for |
+|:---:|---|---|
+| <img src="https://cdn.simpleicons.org/docker" width="20" height="20" alt="" /> | [lemon-sandbox](sandboxes/lemon-sandbox/) | Gives Lemon a persistent SSH workspace for multiple Roblox repositories, with each project's tools installed through Rokit |
+
 ### Template
 
 ```
@@ -89,6 +95,13 @@ services/
         ├── .env                  # Local environment values (gitignored)
         ├── .env.example          # Documented variables with placeholder values
         └── compose.yml           # Service definition with ports, volumes, networks, resources
+sandboxes/
+├── compose.yml                   # Includes each sandbox
+└── <sandbox-name>/
+    ├── .env                      # Local environment values (gitignored)
+    ├── .env.example              # Documented variables with placeholder values
+    ├── compose.yml               # Sandbox image, storage, network and limits
+    └── README.md                 # Setup and runtime mounts
 ```
 
 ### Policies
@@ -116,9 +129,9 @@ SATISFACTORY_GAME_PORT=7328
 SATISFACTORY_MESSAGING_PORT=1273
 ```
 
-#### Separate infra from apps
+#### Separate infra, apps and sandboxes
 
-Infrastructure keeps the server running and observable; applications are what it is actually hosting.
+Infrastructure keeps the server running and observable; applications are hosted tools and games. Sandboxes are persistent development environments used by agents.
 
 ```
 services/
@@ -141,6 +154,9 @@ services/
     ├── teamspeak/
     ├── wakapi/
     └── ytdlp/
+sandboxes/        # agent development environments
+├── compose.yml
+└── lemon-sandbox/
 ```
 
 #### Set resource limits on every container
@@ -168,7 +184,7 @@ ports:
 
 #### Connect every service to the same network
 
-Services resolve each other by container name on a shared Docker network. The exception is UpSnap, which needs the host network to send Wake-on-LAN packets.
+Services and sandboxes resolve each other by container name on a shared Docker network. The exception is UpSnap, which needs the host network to send Wake-on-LAN packets.
 
 ```yaml
 # shared pattern across all compose.yml files
@@ -255,6 +271,9 @@ make infra-up
 
 # 6. Start application services
 make apps-up
+
+# 7. Start prepared agent sandboxes
+make sandboxes-up
 ```
 
 ## Commands
@@ -269,6 +288,8 @@ make apps-up
 | `apps-up` | Start all application services |
 | `apps-up-build` | Start app services with rebuild |
 | `apps-down` | Stop all application services |
+| `sandboxes-up` | Start all prepared agent sandboxes |
+| `sandboxes-down` | Stop all agent sandboxes |
 | `terraform-init` | Initialize Terraform |
 | `terraform-init-upgrade` | Re-initialize with provider upgrades |
 | `terraform-plan` | Preview infrastructure changes |

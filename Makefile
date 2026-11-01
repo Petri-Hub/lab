@@ -23,6 +23,15 @@ apps-down:
 apps-up-build:
 	docker compose -f services/apps/compose.yml up -d 0-
 
+sandboxes-up:
+	docker compose -f sandboxes/compose.yml up -d
+
+sandboxes-up-build:
+	docker compose -f sandboxes/compose.yml up -d --build
+
+sandboxes-down:
+	docker compose -f sandboxes/compose.yml down
+
 terraform-init:
 	terraform -chdir=terraform init
 
