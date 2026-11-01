@@ -5,6 +5,9 @@ services:
     restart: unless-stopped
     environment:
       - TZ=${LEMON_SANDBOX_TZ}
+      - JEST_ROBLOX_OPEN_CLOUD_API_KEY=${LEMON_OPEN_CLOUD_API_KEY}
+      - JEST_ROBLOX_UNIVERSE_ID=${LEMON_OPEN_CLOUD_UNIVERSE_ID}
+      - JEST_ROBLOX_PLACE_ID=${LEMON_OPEN_CLOUD_PLACE_ID}
     networks:
       - lab
     volumes:

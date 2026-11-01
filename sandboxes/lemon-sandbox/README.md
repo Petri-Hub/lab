@@ -21,3 +21,5 @@ Hermes will reach `lemon-sandbox:22` on the Docker network. The service publishe
 The `.env` file selects the image tag and the timezone the container runs in, so the commits Lemon writes and the files Rojo builds carry the lab's local time. `latest` follows the publishing workflow; a commit tag holds a specific version. The image must be published and readable by the lab before `make sandboxes-up` can pull it.
 
 The `storage/lemon-sandbox` directory is also what the `restic-lemon-sandbox` job in `services/infra/restic/` snapshots every six hours, so uncommitted work survives losing the host. The toolchain output each project regenerates from its own manifest stays out of the snapshot.
+
+A checkout does not hold the Open Cloud key its tests need. The key is created in Roblox, kept in 1Password, and set in this service's ignored `.env`; compose passes it to the container as `JEST_ROBLOX_*`, the names the project's Makefile exports. No repository carries a copy, and replacing the container keeps the credentials.
