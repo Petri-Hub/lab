@@ -12,6 +12,10 @@ services:
     volumes:
       - ../../../storage/hermes/data:/opt/data
       - ../../../storage/hermes/secrets/github-app.pem:/opt/data/github-app.pem:ro
+      # Lemon's App key lands inside his own profile home rather than at the top,
+      # because Hermes only syncs credential files that live under a profile's home
+      # into that profile's sandbox.
+      - ../../../storage/hermes/secrets/lemon-github-app.pem:/opt/data/profiles/lemon/github-app.pem:ro
       # Re-applies the patches kept in /opt/data/patches to Hermes' own source on every boot:
       # the image is :latest, so a recreated container starts without them.
       - ./configuration/03-apply-patches:/etc/cont-init.d/03-apply-patches:ro
