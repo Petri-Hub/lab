@@ -117,6 +117,30 @@ services:
           cpus: '0.5'
           memory: 64M
 
+  restic-lemon-sandbox:
+    image: restic/restic:latest
+    container_name: restic-lemon-sandbox
+    restart: unless-stopped
+    entrypoint: /bin/sh
+    command: '-c "tail -f /dev/null"'
+    environment:
+      - RESTIC_REPOSITORY=rest:http://rclone:${RESTIC_RCLONE_SERVER_PORT}/lemon-sandbox/
+      - RESTIC_PASSWORD=${RESTIC_LEMON_SANDBOX_PASSWORD}
+    volumes:
+      - ../../../storage/lemon-sandbox:/data:ro
+      - ./configuration/lemon-sandbox-exclude.txt:/etc/restic/lemon-sandbox-exclude.txt:ro
+    networks:
+      - lab
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-exec.backup-lemon-sandbox.schedule: "@every 6h"
+      ofelia.job-exec.backup-lemon-sandbox.command: "restic backup /data --exclude-file /etc/restic/lemon-sandbox-exclude.txt"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 128M
+
 networks:
   lab:
     name: lab

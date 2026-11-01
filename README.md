@@ -64,7 +64,7 @@ Containers are grouped as infrastructure, applications and sandboxes, and each h
 | <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/filebrowser.png" width="20" height="20" alt="" /> | [filebrowser](services/infra/filebrowser/) | Provides a web-based file manager to browse, upload, and edit files across the entire server |
 | <img src="https://raw.githubusercontent.com/mcuadros/ofelia/HEAD/static/avatar.png" width="20" height="20" alt="" /> | [ofelia](services/infra/ofelia/) | Runs scheduled jobs inside containers using Docker labels, used here to trigger backups automatically |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/rclone.svg" width="20" height="20" alt="" /> | [rclone](services/infra/rclone/) | Runs as a REST server that receives and stores backup data from Restic |
-| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/png/restic.png" width="20" height="20" alt="" /> | [restic](services/infra/restic/) | Backs up the Satisfactory and Palworld saves, the Wakapi database, the ai-memory wiki and database and the Terraform state to the Rclone server on a schedule |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/png/restic.png" width="20" height="20" alt="" /> | [restic](services/infra/restic/) | Backs up the Satisfactory saves, the Wakapi and ai-memory data, Hermes' data, Lemon's sandbox and the Terraform state to the Rclone server on a schedule |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/upsnap.svg" width="20" height="20" alt="" /> | [upsnap](services/infra/upsnap/) | Wakes my main PC with Wake-on-LAN, since it lives outside the lab, and shows which machines on the network are online |
 
 ### Applications

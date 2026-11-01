@@ -19,3 +19,5 @@ The workspace directory must be writable by UID 1000, the `lemon` user in the im
 Hermes will reach `lemon-sandbox:22` on the Docker network. The service publishes no host port. Starting it does not yet change Lemon's Hermes toolset or connect his terminal; those are separate steps.
 
 The `.env` file selects the image tag and the timezone the container runs in, so the commits Lemon writes and the files Rojo builds carry the lab's local time. `latest` follows the publishing workflow; a commit tag holds a specific version. The image must be published and readable by the lab before `make sandboxes-up` can pull it.
+
+The `storage/lemon-sandbox` directory is also what the `restic-lemon-sandbox` job in `services/infra/restic/` snapshots every six hours, so uncommitted work survives losing the host. The toolchain output each project regenerates from its own manifest stays out of the snapshot.

@@ -1,0 +1,8 @@
+# Regenerable from each project's own manifest: Rokit installs the tools, Wally
+# fills the Packages directories, and the build and test scripts rewrite the rest.
+**/node_modules
+**/Packages
+**/DevPackages
+**/ServerPackages
+**/dist
+**/.jest-roblox
