@@ -1,0 +1,36 @@
+services:
+  lemon-sandbox:
+    image: ${LEMON_SANDBOX_IMAGE:-ghcr.io/petri-hub/lemon-sandbox:latest}
+    container_name: lemon-sandbox
+    restart: unless-stopped
+    environment:
+      - TZ=${LEMON_SANDBOX_TZ}
+    networks:
+      - lab
+    volumes:
+      - type: bind
+        source: ../../storage/lemon-sandbox/workspace
+        target: /home/lemon/workspace
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ../../storage/lemon-sandbox/ssh-host-keys
+        target: /var/lib/lemon/ssh
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ../../storage/lemon-sandbox/authorized_keys
+        target: /home/lemon/.ssh/authorized_keys
+        read_only: true
+        bind:
+          create_host_path: false
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+
+networks:
+  lab:
+    name: lab
+    external: true

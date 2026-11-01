@@ -1,6 +1,6 @@
 # Lab — Agent Guide
 
-A personal homelab running on a single laptop — infrastructure and applications managed entirely as code, secured by design, and built for reliability without the overhead of a data center. Every service is defined in Docker Compose with explicit configuration, resource limits, and randomized ports. Terraform manages Cloudflare (tunnels, DNS, Access policies) and Tailscale (ACLs, device tags). All services share a common Docker network and follow consistent conventions for naming, environment variables, directory layout, and security.
+A personal homelab running on a single laptop — infrastructure, applications and agent sandboxes managed as code. Docker Compose defines each container with explicit configuration and resource limits; host-exposed services use randomized ports. Terraform manages Cloudflare (tunnels, DNS, Access policies) and Tailscale (ACLs, device tags). Containers follow shared conventions for naming, environment variables, directory layout, and security.
 
 ## Folder structure
 
@@ -23,6 +23,13 @@ A personal homelab running on a single laptop — infrastructure and application
 │           ├── .env
 │           ├── .env.example
 │           └── compose.yml
+├── sandboxes/                     # Persistent agent development environments
+│   ├── compose.yml               # Aggregates sandboxes via `include:`
+│   └── <sandbox-name>/
+│       ├── .env                  # Local environment values (gitignored)
+│       ├── .env.example          # Documented variables with placeholder values
+│       ├── compose.yml           # Sandbox definition
+│       └── README.md             # Setup and runtime mounts
 ├── terraform/                        # Infrastructure-as-Code for external providers
 │   ├── main.tf                       # Root module wiring
 │   ├── providers.tf                  # Provider configuration and versions
@@ -35,7 +42,7 @@ A personal homelab running on a single laptop — infrastructure and application
     └── <service-name>/
 ```
 
-Services are split into two categories: **infrastructure** (what keeps the server running and observable) and **applications** (what makes the server useful). Each lives under `services/infra/` or `services/apps/`, is aggregated by the parent `compose.yml` via the `include:` directive, and follows the same internal layout.
+Workloads are grouped as **infrastructure** (what keeps the server running and observable), **applications** (hosted tools and games), and **sandboxes** (persistent agent development environments). The two service categories live under `services/`; sandboxes live at the top level. Each category has a parent `compose.yml` using `include:`.
 
 ## General rules
 
@@ -85,9 +92,9 @@ GAME_PORT=7328
 MESSAGING_PORT=1273
 ```
 
-### Separate infra from apps
+### Separate infra, apps, and sandboxes
 
-Infrastructure services handle monitoring, networking, and backups. Application services are the actual tools being hosted. This split keeps concerns clean — you know what keeps the server running versus what makes it useful. Mixing foundational services (proxies, loggers, schedulers) with user-facing tools (game servers, downloaders) obscures the boundary between platform and product. The split clarifies ownership, makes it safe to restart all apps without touching infra, and documents intent by directory alone.
+Infrastructure services handle monitoring, networking, and backups. Applications are hosted tools and games. Sandboxes hold agent development workspaces and stay outside `services/` so they can be started separately. The directory shows which kind of workload a container owns.
 
 **Good:**
 
@@ -104,6 +111,8 @@ services/
 └── apps/        # user-facing tools
     ├── satisfactory/
     └── ytdlp/
+sandboxes/        # agent development workspaces
+└── lemon-sandbox/
 ```
 
 **Bad:**
@@ -308,7 +317,7 @@ Terraform manages Cloudflare tunnels, DNS records, Access policies, and Tailscal
 
 ### Use aggregates in parent Compose files
 
-Each category (`services/infra/`, `services/apps/`) has a `compose.yml` that includes all its child services. This enables starting/stopping entire categories with a single command while keeping each service in its own self-contained file. Aggregating via `include:` preserves single-responsibility per file. You can iterate on a service in isolation (`docker compose -f services/infra/btop/compose.yml up -d`) or operate on the whole category (`docker compose -f services/infra/compose.yml up -d`). No giant monolith Compose file.
+Each category (`services/infra/`, `services/apps/`, `sandboxes/`) has a `compose.yml` that includes all its child workloads. This enables starting or stopping a category with one command while keeping each container in its own file. You can run one service in isolation (`docker compose -f services/infra/btop/compose.yml up -d`) or its category (`docker compose -f services/infra/compose.yml up -d`).
 
 **Good:**
 

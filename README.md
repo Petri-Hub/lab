@@ -31,6 +31,8 @@
 
 <img width="1611" height="644" alt="Lab Architecture Diagram" src="https://github.com/user-attachments/assets/d9f92502-9b10-4588-8603-305a21ccff7e" />
 
+Lemon's development sandbox joins the shared Docker network. Hermes reaches its SSH server by container name; the sandbox has no host port.
+
 ### Access flows
 
 | Path | Description |
@@ -44,10 +46,10 @@
 Everything that can be codified, is. Terraform manages DNS, the tunnel, access policies and network ACLs, and Docker Compose defines every service. There are no SSH-and-pray moments.
 
 **Defense in depth.**  
-Public traffic only enters through a Cloudflare Tunnel with Cloudflare Access in front of it, private traffic goes through Tailscale with ACLs, and no service listens on its default port. Each layer holds on its own.
+Public traffic only enters through a Cloudflare Tunnel with Cloudflare Access in front of it, private traffic goes through Tailscale with ACLs, and host-exposed services use non-default ports. Each layer holds on its own.
 
 **Predictable under load.**  
-Services are split between infrastructure and applications, and every container runs with CPU and memory limits, so one service can't starve the others.
+Containers are grouped as infrastructure, applications and sandboxes, and each has CPU and memory limits so one workload cannot starve the others.
 
 ## Services
 
@@ -79,6 +81,12 @@ Services are split between infrastructure and applications, and every container 
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/kamiyomu.svg" width="20" height="20" alt="" /> | [kamiyomu](services/apps/kamiyomu/) | Runs a self-hosted, extensible manga reader that discovers, downloads, and organizes manga from various sources into a personal library |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/kavita.svg" width="20" height="20" alt="" /> | [kavita](services/apps/kavita/) | Serves a polished web-based reader over the manga KamiYomu downloads, with library management, metadata, and per-user reading progress |
 
+### Sandboxes
+
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Sandbox | Used for |
+|:---:|---|---|
+| <img src="https://cdn.simpleicons.org/docker" width="20" height="20" alt="" /> | [lemon-sandbox](sandboxes/lemon-sandbox/) | Gives Lemon a persistent SSH workspace for multiple Roblox repositories, with each project's tools installed through Rokit |
+
 ### Template
 
 ```
@@ -89,6 +97,13 @@ services/
         ├── .env                  # Local environment values (gitignored)
         ├── .env.example          # Documented variables with placeholder values
         └── compose.yml           # Service definition with ports, volumes, networks, resources
+sandboxes/
+├── compose.yml                   # Includes each sandbox
+└── <sandbox-name>/
+    ├── .env                      # Local environment values (gitignored)
+    ├── .env.example              # Documented variables with placeholder values
+    ├── compose.yml               # Sandbox image, storage, network and limits
+    └── README.md                 # Setup and runtime mounts
 ```
 
 ### Policies
@@ -116,9 +131,9 @@ SATISFACTORY_GAME_PORT=7328
 SATISFACTORY_MESSAGING_PORT=1273
 ```
 
-#### Separate infra from apps
+#### Separate infra, apps and sandboxes
 
-Infrastructure keeps the server running and observable; applications are what it is actually hosting.
+Infrastructure keeps the server running and observable; applications are hosted tools and games. Sandboxes are persistent development environments used by agents.
 
 ```
 services/
@@ -141,6 +156,9 @@ services/
     ├── teamspeak/
     ├── wakapi/
     └── ytdlp/
+sandboxes/        # agent development environments
+├── compose.yml
+└── lemon-sandbox/
 ```
 
 #### Set resource limits on every container
@@ -168,7 +186,7 @@ ports:
 
 #### Connect every service to the same network
 
-Services resolve each other by container name on a shared Docker network. The exception is UpSnap, which needs the host network to send Wake-on-LAN packets.
+Services and sandboxes resolve each other by container name on a shared Docker network. The exception is UpSnap, which needs the host network to send Wake-on-LAN packets.
 
 ```yaml
 # shared pattern across all compose.yml files
@@ -255,7 +273,12 @@ make infra-up
 
 # 6. Start application services
 make apps-up
+
+# 7. Start prepared agent sandboxes
+make sandboxes-up
 ```
+
+Lemon needs workspace and SSH files under `storage/lemon-sandbox/` before step 7. See [his sandbox setup](sandboxes/lemon-sandbox/README.md) for the exact paths and key placement.
 
 ## Commands
 
@@ -269,6 +292,8 @@ make apps-up
 | `apps-up` | Start all application services |
 | `apps-up-build` | Start app services with rebuild |
 | `apps-down` | Stop all application services |
+| `sandboxes-up` | Start all prepared agent sandboxes |
+| `sandboxes-down` | Stop all agent sandboxes |
 | `terraform-init` | Initialize Terraform |
 | `terraform-init-upgrade` | Re-initialize with provider upgrades |
 | `terraform-plan` | Preview infrastructure changes |
