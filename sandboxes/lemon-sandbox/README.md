@@ -23,3 +23,26 @@ The `.env` file selects the image tag and the timezone the container runs in, so
 The `storage/lemon-sandbox` directory is also what the `restic-lemon-sandbox` job in `services/infra/restic/` snapshots every six hours, so uncommitted work survives losing the host. The toolchain output each project regenerates from its own manifest stays out of the snapshot.
 
 A checkout does not hold the Open Cloud key its tests need. The key is created in Roblox, kept in 1Password, and set in this service's ignored `.env`; compose passes it to the container as `JEST_ROBLOX_*`, the names the project's Makefile exports. No repository carries a copy, and replacing the container keeps the credentials.
+
+## Enable zrok
+
+The image includes `zrok2`. Its enabled environment lives in the `lemon_zrok_state` Docker volume, mounted at `/home/lemon/.zrok2`. This keeps the account token out of the image, Compose files and workspace backups. The volume survives container replacement; if it is deleted, enable the environment again.
+
+From the lab repository root, pull the updated image and recreate `lemon-sandbox`:
+
+```bash
+docker compose -f sandboxes/compose.yml pull lemon-sandbox
+docker compose -f sandboxes/compose.yml up -d --force-recreate lemon-sandbox
+```
+
+Then open a shell as Lemon and enter the account token from 1Password without placing it in shell history:
+
+```bash
+docker exec -it -u lemon lemon-sandbox bash
+read -rsp 'zrok account token: ' ZROK_TOKEN; echo
+zrok2 enable "$ZROK_TOKEN"
+unset ZROK_TOKEN
+zrok2 status
+```
+
+`zrok2 status` should show `Account Token` and `EnvZId` as `<<SET>>`. The zrok environment is enabled once per volume; starting Rojo and opening a share are later, per-session actions.
