@@ -31,8 +31,6 @@
 
 <img width="1611" height="644" alt="Lab Architecture Diagram" src="https://github.com/user-attachments/assets/d9f92502-9b10-4588-8603-305a21ccff7e" />
 
-Lemon's development sandbox joins the shared Docker network. Hermes reaches its SSH server by container name; the sandbox has no host port.
-
 ### Access flows
 
 | Path | Description |
@@ -277,8 +275,6 @@ make apps-up
 # 7. Start prepared agent sandboxes
 make sandboxes-up
 ```
-
-Lemon needs workspace and SSH files under `storage/lemon-sandbox/` before step 7. See [his sandbox setup](sandboxes/lemon-sandbox/README.md) for the exact paths and key placement.
 
 ## Commands
 
