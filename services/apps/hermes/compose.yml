@@ -23,6 +23,11 @@ services:
       - HERMES_DASHBOARD=1
       - HERMES_TUI=1
       # Agent credentials belong to each profile's .env, not the container environment.
+      # Langfuse reads capture settings from the shared gateway process. Only Lemon
+      # enables the plugin today; any future enabled profile shares this raw capture policy.
+      - HERMES_LANGFUSE_CAPTURE=full
+      - HERMES_LANGFUSE_MAX_CHARS=100000
+      - HERMES_LANGFUSE_MAX_DEPTH=10
       # The image limits write_file and patch to /opt/data. Pepper's file tools write into a
       # Modal sandbox, not into this container, so that guard checked the wrong filesystem
       # and only denied her own scratch folders (/root, /tmp). Empty turns it off.
