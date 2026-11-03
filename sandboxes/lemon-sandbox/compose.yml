@@ -27,15 +27,11 @@ services:
         read_only: true
         bind:
           create_host_path: false
-      - lemon_zrok_state:/home/lemon/.zrok2
     deploy:
       resources:
         limits:
           cpus: '2.0'
           memory: 2G
-
-volumes:
-  lemon_zrok_state:
 
 networks:
   lab:
