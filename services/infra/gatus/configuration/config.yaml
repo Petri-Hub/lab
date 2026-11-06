@@ -111,3 +111,14 @@ endpoints:
       hide-url: true
     conditions:
       - "[CONNECTED] == true"
+
+  - name: Lemon Sandbox
+    group: Sandboxes
+    url: "tcp://lemon-sandbox:22"
+    interval: 1m
+    ui:
+      hide-hostname: true
+      hide-port: true
+      hide-url: true
+    conditions:
+      - "[CONNECTED] == true"
