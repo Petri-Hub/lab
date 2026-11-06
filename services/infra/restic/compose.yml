@@ -139,7 +139,7 @@ services:
       resources:
         limits:
           cpus: '1.0'
-          memory: 128M
+          memory: 192M
 
 networks:
   lab:
