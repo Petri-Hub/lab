@@ -24,6 +24,10 @@ The `storage/lemon-sandbox` directory is also what the `restic-lemon-sandbox` jo
 
 A checkout does not hold the Open Cloud key its tests need. The key is created in Roblox, kept in 1Password, and set in this service's ignored `.env`; compose passes it to the container as `JEST_ROBLOX_*`, the names the project's Makefile exports. No repository carries a copy, and replacing the container keeps the credentials.
 
+For Roblox Assets MCP, set `LEMON_ROBLOX_ASSETS_API_KEY` in the same ignored `.env` from the key stored in 1Password. It is optional for starting the sandbox, but required by the MCP. Compose passes it as `ROBLOX_API_KEY`, and the sandbox exposes it to SSH sessions through PAM. The key must grant the access required for Creator Store and Asset Delivery. The installed MCP release does not upload assets. Credentials are available to commands in this sandbox, so use a suitably scoped key.
+
+Hermes must trust the sandbox's persistent SSH host key before starting the MCP over SSH. From a trusted lab host, obtain `storage/lemon-sandbox/ssh-host-keys/ssh_host_ed25519_key.pub`, verify its fingerprint, and add its public key to Lemon's Hermes `known_hosts` file with `lemon-sandbox` as the hostname. Preserve existing entries. The private host key must stay on the lab host. See Pepper's Lemon configuration for the SSH command and the `known_hosts` path. A changed host key requires verifying the replacement before updating that entry.
+
 ## Studio previews
 
 Rojo Share uses Cloudflare Quick Tunnels to connect collaborators' Studio sessions to a project. The sandbox image provides `cloudflared`; each project pins Rojo and Rojo Share through Rokit.
