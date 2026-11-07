@@ -6,14 +6,15 @@ Each reporter mounts its agent's Hermes data read-only and keeps its own WakaTim
 
 ## Applying the reporter fix
 
-The existing Mint and Lemon reporter logs were created by root. Before applying this change, give those two files back to the reporter user, then recreate the three reporter containers so Ofelia reads the new labels. Recreating Lemon's reporter also refreshes its stale profile bind mount. These steps interrupt reporting, but do not restart Hermes or Wakapi.
+If reporter logs were created by root, give those files back to the reporter user, then recreate the reporter containers so Ofelia reads the labels. Recreating Lemon's reporter also refreshes its profile bind mount. These steps interrupt reporting, but do not restart Hermes or Wakapi.
 
 From the lab checkout on the host:
 
 ```sh
 docker exec -u root wakapi-mint chown 10000:10000 /state/wakatime.log
 docker exec -u root wakapi-lemon chown 10000:10000 /state/wakatime.log
-docker compose -f services/apps/wakapi/compose.yml up -d --no-deps --force-recreate wakapi-pepper wakapi-mint wakapi-lemon
+docker compose -p apps -f services/apps/compose.yml up -d --no-deps --force-recreate wakapi-pepper wakapi-mint
+docker compose -p wakapi -f services/apps/wakapi/compose.yml up -d --no-deps --force-recreate wakapi-lemon
 ```
 
-Afterward, check that Lemon's `/hermes` mount contains the current profile, that Ofelia picked up the user labels, and that new reporter logs have no lock or parsing errors. Verify that recent activity reaches each Wakapi account; a successful Ofelia job alone does not prove a sync succeeded. Check whether file-level activity reaches Wakapi before expecting language totals in Pepper's README. Older activity depends on what Hermes retained and what the sync can parse.
+The project names above match the current lab deployment; check the containers' `com.docker.compose.project` labels if those change. Afterward, check that Lemon's `/hermes` mount contains the current profile and that Ofelia picked up the user labels. Verify that recent activity reaches each Wakapi account; a successful Ofelia job alone does not prove a sync succeeded. WakaTime's SQLite parser has a five-second budget per run and can log timeouts while its saved cursor works through older messages. Check that the cursor advances and that file-level activity reaches Wakapi before expecting language totals in Pepper's README. Older activity depends on what Hermes retained and what the sync can parse.
