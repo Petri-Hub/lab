@@ -48,6 +48,7 @@ services:
       ofelia.enabled: "true"
       ofelia.job-exec.wakapi-pepper.schedule: "@every 5m"
       ofelia.job-exec.wakapi-pepper.command: "wakatime-cli --sync-ai-activity --plugin hermes-agent/wakapi-pepper"
+      ofelia.job-exec.wakapi-pepper.user: "10000:10000"
     deploy:
       resources:
         limits:
@@ -77,6 +78,7 @@ services:
       ofelia.enabled: "true"
       ofelia.job-exec.wakapi-mint.schedule: "@every 5m"
       ofelia.job-exec.wakapi-mint.command: "wakatime-cli --sync-ai-activity --plugin hermes-agent/wakapi-mint"
+      ofelia.job-exec.wakapi-mint.user: "10000:10000"
     deploy:
       resources:
         limits:
@@ -106,6 +108,7 @@ services:
       ofelia.enabled: "true"
       ofelia.job-exec.wakapi-lemon.schedule: "@every 5m"
       ofelia.job-exec.wakapi-lemon.command: "wakatime-cli --sync-ai-activity --plugin hermes-agent/wakapi-lemon"
+      ofelia.job-exec.wakapi-lemon.user: "10000:10000"
     deploy:
       resources:
         limits:
