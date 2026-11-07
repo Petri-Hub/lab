@@ -24,6 +24,8 @@ The `storage/lemon-sandbox` directory is also what the `restic-lemon-sandbox` jo
 
 A checkout does not hold the Open Cloud key its tests need. The key is created in Roblox, kept in 1Password, and set in this service's ignored `.env`; compose passes it to the container as `JEST_ROBLOX_*`, the names the project's Makefile exports. No repository carries a copy, and replacing the container keeps the credentials.
 
+For Modal rendering, store `LEMON_MODAL_TOKEN_ID` and `LEMON_MODAL_TOKEN_SECRET` in 1Password and supply them through the ignored sandbox `.env`. Compose passes them as `MODAL_TOKEN_ID` and `MODAL_TOKEN_SECRET`; the sandbox requires both and makes them available to its SSH sessions. The remote rendering image contains no credentials.
+
 For Roblox Assets MCP, set `LEMON_ROBLOX_ASSETS_API_KEY` in the same ignored `.env` from the key stored in 1Password. It is required for starting the sandbox. Compose passes it as `ROBLOX_API_KEY`, and the sandbox exposes it to SSH sessions through PAM. The key must grant access to Creator Store and Asset Delivery, plus asset read and write for lifecycle management. The MCP can upload owned assets but does not publish Creator Store listings. Credentials are available to commands in this sandbox, so use a suitably scoped key.
 
 Set `LEMON_ROBLOX_ASSETS_OWNER_ID` to the approved Roblox user or group ID and `LEMON_ROBLOX_ASSETS_OWNER_TYPE` to `user` or `group`. These required settings are passed to SSH sessions as `ROBLOX_OWNER_ID` and `ROBLOX_OWNER_TYPE`; the MCP uses them as the owner for every upload.
