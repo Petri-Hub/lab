@@ -26,6 +26,8 @@ A checkout does not hold the Open Cloud key its tests need. The key is created i
 
 For Roblox Assets MCP, set `LEMON_ROBLOX_ASSETS_API_KEY` in the same ignored `.env` from the key stored in 1Password. It is required for starting the sandbox. Compose passes it as `ROBLOX_API_KEY`, and the sandbox exposes it to SSH sessions through PAM. The key must grant access to Creator Store and Asset Delivery, plus asset read and write for lifecycle management. The MCP can upload owned assets but does not publish Creator Store listings. Credentials are available to commands in this sandbox, so use a suitably scoped key.
 
+Set `LEMON_ROBLOX_ASSETS_OWNER_ID` to the approved Roblox user or group ID and `LEMON_ROBLOX_ASSETS_OWNER_TYPE` to `user` or `group`. These required settings are passed to SSH sessions as `ROBLOX_OWNER_ID` and `ROBLOX_OWNER_TYPE`; the MCP uses them as the owner for every upload.
+
 Hermes must trust the sandbox's persistent SSH host key before starting the MCP over SSH. From a trusted lab host, obtain `storage/lemon-sandbox/ssh-host-keys/ssh_host_ed25519_key.pub`, verify its fingerprint, and add its public key to Lemon's Hermes `known_hosts` file with `lemon-sandbox` as the hostname. Preserve existing entries. The private host key must stay on the lab host. See Pepper's Lemon configuration for the SSH command and the `known_hosts` path. A changed host key requires verifying the replacement before updating that entry.
 
 ## Studio previews
