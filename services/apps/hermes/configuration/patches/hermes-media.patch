@@ -1,0 +1,76 @@
+--- a/tools/environments/modal.py
++++ b/tools/environments/modal.py
+@@ -143,6 +143,9 @@
+                  persistent_filesystem: bool = True, task_id: str = "default"):
+         super().__init__(cwd=cwd, timeout=timeout)
+         self._persistent, self._task_id = persistent_filesystem, task_id
++        # Sandboxes run as root, so /root is home. Setting it opts Modal in to MEDIA: delivery
++        # (gateway/media_fetch.py): without it a /root/... artifact is never fetched.
++        self._remote_home = "/root"
+         self._sandbox = self._app = None
+         self._worker = _AsyncWorker()
+         self._sync_manager: FileSyncManager | None = None  # initialized after sandbox creation
+--- a/gateway/platforms/base.py
++++ b/gateway/platforms/base.py
+@@ -778,6 +778,7 @@
+ # agent/file_safety.py read+write denies so exfil never trails the read guard. google_token.json's mtime bumps every turn (defeats the
+ # recency window); pairing/, mcp-tokens/ (live OAuth tokens) and webapp/ (the Webapp's credential) are whole trees.
+ _ROOT_CREDENTIAL_PATHS = (
++    "github-app.pem", "google_client_secret.json", os.path.join("sandbox", "credentials"),
+     ".env", "auth.json", "auth.lock", "credentials", "config.yaml", ".anthropic_oauth.json",
+     "google_token.json", "google_oauth_pending.json", os.path.join("auth", "google_oauth.json"),
+     "webhook_subscriptions.json", *SECRET_CACHE_STORES, "pairing", "mcp-tokens", "webapp",
+@@ -1107,7 +1108,7 @@
+     safe_path = validate_media_delivery_path(raw, session_key=session_key)
+     if not safe_path:
+         from gateway.media_fetch import fetch_remote_media
+-        safe_path = fetch_remote_media(raw)
++        safe_path = fetch_remote_media(raw, session_key=session_key)
+     if not safe_path:
+         # Say WHY: a path that does not exist on the host is the common case (a model hallucinated or
+         # a sandbox path failed to translate) and is not a security rejection.
+--- a/gateway/media_fetch.py
++++ b/gateway/media_fetch.py
+@@ -62,7 +62,7 @@
+                for rel in _DENIED_HOME_RELATIVE for i in range(len(parts) - len(rel.parts) + 1))
+ 
+ 
+-def _active_remote_env():
++def _active_remote_env(session_key=None):
+     """The live remote BaseEnvironment for the current session, or None (local backend / no env yet).
+     Keyed by the session id the turn registered its sandbox under (falls back to the session key)."""
+     from agent.prompt_builder import _REMOTE_TERMINAL_BACKENDS, _plugin_backend_is_remote
+@@ -72,16 +72,30 @@
+     backend = _tenv("TERMINAL_ENV", "local").strip().lower()
+     if backend not in _REMOTE_TERMINAL_BACKENDS and not _plugin_backend_is_remote(backend):
+         return None
+-    return get_active_env(get_session_env("HERMES_SESSION_ID") or get_session_env("HERMES_SESSION_KEY") or "default")
++    sid = get_session_env("HERMES_SESSION_ID") or get_session_env("HERMES_SESSION_KEY") or "default"
++    env = get_active_env(sid)
++    if env is not None:
++        return env
++    # Delivery runs after the turn's scope has closed, so the key the terminal tool registered
++    # ("session:<key>" on non-docker backends) is not derived again here. Match it by its tail, and
++    # only when exactly one live environment ends with the full session key.
++    skey = session_key or get_session_env("HERMES_SESSION_KEY")
++    if skey:
++        from tools.terminal_tool import _active_environments, _env_lock
++        with _env_lock:
++            matches = [e for k, e in _active_environments.items() if k == skey or k.endswith(":" + skey)]
++        if len(matches) == 1:
++            return matches[0]
++    return None
+ 
+ 
+-def fetch_remote_media(path: str) -> Optional[str]:
++def fetch_remote_media(path: str, session_key: Optional[str] = None) -> Optional[str]:
+     """Host path of a validated copy of sandbox file ``path``, or None (never raises). Only fires
+     when a remote backend is active; the caller has already failed local validation."""
+     from gateway.media_policy import media_delivery_strict
+     if media_delivery_strict():
+         return None
+-    env = _active_remote_env()
++    env = _active_remote_env(session_key)
+     if env is None:
+         return None
+     from gateway.platforms.base import (
