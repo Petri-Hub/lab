@@ -35,6 +35,7 @@ class TurnCredentialsTest(unittest.TestCase):
             "https://rtc.live.cloudflare.com/v1/turn/keys/test-id/credentials/generate-ice-servers",
         )
         self.assertEqual(request.get_header("Authorization"), "Bearer test-token")
+        self.assertEqual(request.get_header("User-agent"), "lab-moonlight-turn/1.0")
         self.assertEqual(json.loads(request.data), {"ttl": 86400})
         self.assertEqual(json.loads(output.getvalue()), servers)
 

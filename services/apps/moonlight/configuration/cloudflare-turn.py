@@ -17,7 +17,11 @@ def main():
     request = urllib.request.Request(
         f"https://rtc.live.cloudflare.com/v1/turn/keys/{key_id}/credentials/generate-ice-servers",
         data=json.dumps({"ttl": TURN_CREDENTIAL_TTL_SECONDS}).encode(),
-        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+            "User-Agent": "lab-moonlight-turn/1.0",
+        },
         method="POST",
     )
     with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
