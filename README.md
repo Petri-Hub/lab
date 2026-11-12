@@ -69,6 +69,7 @@ Containers are grouped as infrastructure, applications and sandboxes, and each h
 
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Service | Used for |
 |:---:|---|---|
+| 🎮 | [moonlight](services/apps/moonlight/) | Evaluates browser streaming from a separate Sunshine PC over the LAN |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/png/satisfactory.png" width="20" height="20" alt="" /> | [satisfactory](services/apps/satisfactory/) | Runs a dedicated Satisfactory game server that friends can join at any time, with automatic backups and configurable player limits |
 | <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/palworld.png" width="20" height="20" alt="" /> | [palworld](services/apps/palworld/) | Runs a dedicated Palworld server for friends, with its saves backed up automatically |
 | <img src="https://shared.fastly.steamstatic.com/community_assets/images/apps/322330/a80aa6cff8eebc1cbc18c367d9ab063e1553b0ee.jpg" width="20" height="20" alt="" /> | [dst](services/apps/dst/) | Runs a Don't Starve Together dedicated server cluster (Master + Caves shards) that friends can join over Tailscale |
