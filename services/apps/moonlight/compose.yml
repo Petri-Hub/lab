@@ -1,0 +1,26 @@
+services:
+  moonlight:
+    build:
+      context: ../../../docker/moonlight
+    image: lab/moonlight:3.0.1
+    container_name: moonlight
+    restart: unless-stopped
+    environment:
+      - WEBRTC_ICE_SERVER_SCRIPT=/etc/moonlight-web/cloudflare-turn.py
+      - MOONLIGHT_TURN_KEY_ID=${MOONLIGHT_TURN_KEY_ID:?Set the TURN key ID}
+      - MOONLIGHT_TURN_API_TOKEN=${MOONLIGHT_TURN_API_TOKEN:?Set the TURN API token}
+    volumes:
+      - ../../../storage/moonlight:/moonlight-web/server
+      - ./configuration/cloudflare-turn.py:/etc/moonlight-web/cloudflare-turn.py:ro
+    networks:
+      - lab
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 256M
+
+networks:
+  lab:
+    name: lab
+    external: true
