@@ -4,9 +4,11 @@
 import json
 import os
 import sys
-import urllib.error
 import urllib.parse
 import urllib.request
+
+TURN_CREDENTIAL_TTL_SECONDS = 24 * 60 * 60
+REQUEST_TIMEOUT_SECONDS = 10
 
 
 def main():
@@ -14,11 +16,11 @@ def main():
     token = os.environ["MOONLIGHT_TURN_API_TOKEN"]
     request = urllib.request.Request(
         f"https://rtc.live.cloudflare.com/v1/turn/keys/{key_id}/credentials/generate-ice-servers",
-        data=json.dumps({"ttl": 86400}).encode(),
+        data=json.dumps({"ttl": TURN_CREDENTIAL_TTL_SECONDS}).encode(),
         headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
         method="POST",
     )
-    with urllib.request.urlopen(request, timeout=10) as response:
+    with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
         servers = json.load(response)["iceServers"]
     if not isinstance(servers, list) or not servers:
         raise ValueError("No ICE servers returned")
@@ -28,6 +30,6 @@ def main():
 if __name__ == "__main__":
     try:
         main()
-    except (KeyError, ValueError, OSError, urllib.error.URLError):
+    except (KeyError, ValueError, OSError):
         print("Could not obtain Cloudflare TURN credentials", file=sys.stderr)
         sys.exit(1)
