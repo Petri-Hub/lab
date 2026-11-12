@@ -74,7 +74,7 @@ variable "infra_btop_subdomain_url" {
   type        = string
 }
 
-variable "infra_moonlight_web_subdomain_url" {
+variable "infra_moonlight_subdomain_url" {
   description = "The Moonlight Web subdomain"
   type        = string
 }

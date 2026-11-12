@@ -137,11 +137,11 @@ server {
 
 server {
     listen 80;
-    server_name ${NGINX_MOONLIGHT_WEB_DOMAIN};
+    server_name ${NGINX_MOONLIGHT_DOMAIN};
 
     location / {
-        set $upstream_moonlight_web http://moonlight-web:8080;
-        proxy_pass $upstream_moonlight_web;
+        set $upstream_moonlight http://moonlight:8080;
+        proxy_pass $upstream_moonlight;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";

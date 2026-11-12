@@ -10,8 +10,8 @@ import urllib.request
 
 
 def main():
-    key_id = urllib.parse.quote(os.environ["MOONLIGHT_WEB_TURN_KEY_ID"], safe="")
-    token = os.environ["MOONLIGHT_WEB_TURN_API_TOKEN"]
+    key_id = urllib.parse.quote(os.environ["MOONLIGHT_TURN_KEY_ID"], safe="")
+    token = os.environ["MOONLIGHT_TURN_API_TOKEN"]
     request = urllib.request.Request(
         f"https://rtc.live.cloudflare.com/v1/turn/keys/{key_id}/credentials/generate-ice-servers",
         data=json.dumps({"ttl": 86400}).encode(),

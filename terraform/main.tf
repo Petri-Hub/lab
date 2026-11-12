@@ -82,7 +82,7 @@ module "cloudflare" {
     },
     {
       domain  = var.infra_domain_url
-      name    = "${var.infra_moonlight_web_subdomain_url}.${var.infra_domain_url}"
+      name    = "${var.infra_moonlight_subdomain_url}.${var.infra_domain_url}"
       service = "http://nginx:80"
     },
     {
