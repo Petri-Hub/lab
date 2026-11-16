@@ -21,6 +21,7 @@ services:
       - NGINX_AI_MEMORY_DOMAIN=${NGINX_AI_MEMORY_DOMAIN}
       - NGINX_AI_MEMORY_PORT=${NGINX_AI_MEMORY_PORT}
       - NGINX_MOONLIGHT_DOMAIN=${NGINX_MOONLIGHT_DOMAIN}
+      - NGINX_MINT_DOMAIN=${NGINX_MINT_DOMAIN}
     volumes:
       - ./configuration/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
     networks:

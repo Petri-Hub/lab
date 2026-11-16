@@ -104,6 +104,12 @@ variable "infra_ai_memory_subdomain_url" {
   type        = string
 }
 
+variable "infra_mint_subdomain_url" {
+  description = "The subdomain of Mint's API"
+  type        = string
+  default     = "mint"
+}
+
 variable "infra_filebrowser_port" {
   description = "FileBrowser UI port"
   type        = number

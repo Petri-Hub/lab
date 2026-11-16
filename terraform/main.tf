@@ -102,6 +102,12 @@ module "cloudflare" {
       service      = "http://nginx:80"
       bypass_paths = ["/mcp", "/hook", "/handoff"]
     }
+    {
+      domain       = var.infra_domain_url
+      name         = "${var.infra_mint_subdomain_url}.${var.infra_domain_url}"
+      service      = "http://nginx:80"
+      bypass_paths = ["/v1"]
+    }
   ]
 }
 
