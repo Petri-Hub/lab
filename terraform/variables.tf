@@ -209,6 +209,11 @@ variable "infra_wakapi_port" {
   type        = number
 }
 
+variable "infra_homeassistant_port" {
+  description = "Home Assistant web UI port"
+  type        = number
+}
+
 variable "infra_esphome_port" {
   description = "ESPHome native API port on the voice assistant phone. Home Assistant on the lab connects to it over Tailscale."
   type        = number
