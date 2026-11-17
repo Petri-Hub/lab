@@ -32,6 +32,12 @@ services:
       # Modal sandbox, not into this container, so that guard checked the wrong filesystem
       # and only denied her own scratch folders (/root, /tmp). Empty turns it off.
       - HERMES_WRITE_SAFE_ROOT=
+      # The multiplexed gateway owns one API server listener for every profile. Each
+      # profile answers under /p/<profile>/ and only with the API_SERVER_KEY from its
+      # own .env. Home Assistant reaches it as http://hermes:8642/p/mint/v1 on the lab
+      # network, so nothing is published to the internet.
+      - API_SERVER_ENABLED=true
+      - API_SERVER_HOST=0.0.0.0
       - HERMES_DASHBOARD_BASIC_AUTH_USERNAME=${HERMES_DASHBOARD_BASIC_AUTH_USERNAME}
       - HERMES_DASHBOARD_BASIC_AUTH_PASSWORD_HASH=${HERMES_DASHBOARD_BASIC_AUTH_PASSWORD_HASH}
       - HERMES_DASHBOARD_BASIC_AUTH_SECRET=${HERMES_DASHBOARD_BASIC_AUTH_SECRET}
