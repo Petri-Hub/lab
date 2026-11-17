@@ -1,0 +1,24 @@
+services:
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: homeassistant
+    restart: unless-stopped
+    ports:
+      - ${HOMEASSISTANT_PORT}:8123
+    environment:
+      - TZ=${HOMEASSISTANT_TZ}
+    networks:
+      - lab
+    volumes:
+      - ../../../storage/homeassistant/config:/config
+      - ./configuration/configuration.yaml:/config/configuration.yaml:ro
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 768M
+
+networks:
+  lab:
+    name: lab
+    external: true

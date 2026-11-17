@@ -1,0 +1,10 @@
+# Seed configuration, mounted read-only. Devices, users, the Assist pipeline
+# and integrations live in /config/.storage and are set up in the UI.
+default_config:
+
+# Keep the history database small on the lab host.
+recorder:
+  purge_keep_days: 7
+
+logger:
+  default: warning
