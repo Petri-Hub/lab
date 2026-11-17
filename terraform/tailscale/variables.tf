@@ -11,6 +11,7 @@ variable "ports" {
     btop        = number
     upsnap      = number
     hermes      = number
+    esphome     = number
     wakapi      = number
     ai_memory   = number
     palworld    = number
@@ -36,9 +37,10 @@ variable "devices" {
   description = "A map of device names and their full domains."
 
   type = object({
-    lab      = string
-    monstrao = string
-    phone    = string
-    globals  = string
+    lab              = string
+    monstrao_linux   = string
+    monstrao_windows = string
+    iphone           = string
+    redmi            = string
   })
 }

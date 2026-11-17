@@ -36,7 +36,7 @@
 | Path | Description |
 |---|---|
 | **Internet** | Users access services through Cloudflare. Cloudflare checks the user's email and sends a one-time code to verify them. Once verified, traffic goes through the tunnel into the server, where NGINX sends each request to the right service. A few specific paths skip the email check, like the Wakapi API that my GitHub profile reads from, and the Gatus status page is public. |
-| **Tailscale** | Devices connected to the Tailscale network can access services directly with randomized ports. The server only allows certain ports for laptops and phones, and shared users can only reach some services. |
+| **Tailscale** | Devices connected to the Tailscale network can access services directly with randomized ports. The server only allows certain ports for laptops and phones, the voice assistant phone is reachable only by the server and only on its ESPHome port, and shared users can only reach some services. |
 
 ## Philosophy
 

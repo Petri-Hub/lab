@@ -39,18 +39,23 @@ variable "tailscale_lab_device_name" {
   type        = string
 }
 
-variable "tailscale_monstrao_device_name" {
-  description = "The full domain address of Monstrao in Tailscale network."
+variable "tailscale_monstrao_linux_device_name" {
+  description = "The full domain address of Monstrao's Linux install in Tailscale network."
   type        = string
 }
 
-variable "tailscale_globals_device_name" {
-  description = "The full domain address of Globals laptop in Tailscale network."
+variable "tailscale_monstrao_windows_device_name" {
+  description = "The full domain address of Monstrao's Windows install in Tailscale network."
   type        = string
 }
 
-variable "tailscale_phone_device_name" {
-  description = "The full domain address of phone in Tailscale network."
+variable "tailscale_iphone_device_name" {
+  description = "The full domain address of the iPhone in Tailscale network."
+  type        = string
+}
+
+variable "tailscale_redmi_device_name" {
+  description = "The full domain address of the Redmi voice assistant in Tailscale network."
   type        = string
 }
 
@@ -201,6 +206,11 @@ variable "infra_hermes_dashboard_port" {
 
 variable "infra_wakapi_port" {
   description = "Wakapi dashboard/API port"
+  type        = number
+}
+
+variable "infra_esphome_port" {
+  description = "ESPHome native API port on the voice assistant phone. Home Assistant on the lab connects to it over Tailscale."
   type        = number
 }
 
