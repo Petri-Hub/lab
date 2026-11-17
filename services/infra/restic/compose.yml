@@ -141,6 +141,30 @@ services:
           cpus: '1.0'
           memory: 192M
 
+  restic-homeassistant:
+    image: restic/restic:latest
+    container_name: restic-homeassistant
+    restart: unless-stopped
+    entrypoint: /bin/sh
+    command: '-c "tail -f /dev/null"'
+    environment:
+      - RESTIC_REPOSITORY=rest:http://rclone:${RESTIC_RCLONE_SERVER_PORT}/homeassistant/
+      - RESTIC_PASSWORD=${RESTIC_HOMEASSISTANT_PASSWORD}
+    volumes:
+      - ../../../storage/homeassistant/config:/data:ro
+      - ./configuration/homeassistant-exclude.txt:/etc/restic/homeassistant-exclude.txt:ro
+    networks:
+      - lab
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-exec.backup-homeassistant.schedule: "@every 6h"
+      ofelia.job-exec.backup-homeassistant.command: "restic backup /data --exclude-file /etc/restic/homeassistant-exclude.txt"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 128M
+
 networks:
   lab:
     name: lab

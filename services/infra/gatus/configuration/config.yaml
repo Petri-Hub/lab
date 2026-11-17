@@ -90,6 +90,17 @@ endpoints:
     conditions:
       - "[STATUS] == 200"
 
+  - name: Home Assistant
+    group: Applications
+    url: "http://homeassistant:8123/manifest.json"
+    interval: 1m
+    ui:
+      hide-hostname: true
+      hide-port: true
+      hide-url: true
+    conditions:
+      - "[STATUS] == 200"
+
   - name: Hermes
     group: Applications
     url: "http://hermes:9119/login"

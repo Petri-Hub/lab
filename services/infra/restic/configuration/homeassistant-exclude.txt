@@ -1,0 +1,8 @@
+/data/home-assistant_v2.db
+/data/home-assistant_v2.db-shm
+/data/home-assistant_v2.db-wal
+/data/home-assistant.log*
+/data/tts
+/data/deps
+/data/backups
+**/__pycache__

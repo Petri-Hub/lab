@@ -1,6 +1,7 @@
 include:
     - ./ai-memory/compose.yml
     - ./hermes/compose.yml
+    - ./homeassistant/compose.yml
     - ./moonlight/compose.yml
     - ./teamspeak/compose.yml
     - ./wakapi/compose.yml

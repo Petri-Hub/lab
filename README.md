@@ -62,7 +62,7 @@ Containers are grouped as infrastructure, applications and sandboxes, and each h
 | <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/filebrowser.png" width="20" height="20" alt="" /> | [filebrowser](services/infra/filebrowser/) | Provides a web-based file manager to browse, upload, and edit files across the entire server |
 | <img src="https://raw.githubusercontent.com/mcuadros/ofelia/HEAD/static/avatar.png" width="20" height="20" alt="" /> | [ofelia](services/infra/ofelia/) | Runs scheduled jobs inside containers using Docker labels, used here to trigger backups automatically |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/rclone.svg" width="20" height="20" alt="" /> | [rclone](services/infra/rclone/) | Runs as a REST server that receives and stores backup data from Restic |
-| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/png/restic.png" width="20" height="20" alt="" /> | [restic](services/infra/restic/) | Backs up the Satisfactory saves, the Wakapi and ai-memory data, Hermes' data, Lemon's sandbox and the Terraform state to the Rclone server on a schedule |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/png/restic.png" width="20" height="20" alt="" /> | [restic](services/infra/restic/) | Backs up the Satisfactory saves, the Wakapi, ai-memory and Home Assistant data, Hermes' data, Lemon's sandbox and the Terraform state to the Rclone server on a schedule |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/upsnap.svg" width="20" height="20" alt="" /> | [upsnap](services/infra/upsnap/) | Wakes my main PC with Wake-on-LAN, since it lives outside the lab, and shows which machines on the network are online |
 
 ### Applications
@@ -74,6 +74,7 @@ Containers are grouped as infrastructure, applications and sandboxes, and each h
 | <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/palworld.png" width="20" height="20" alt="" /> | [palworld](services/apps/palworld/) | Runs a dedicated Palworld server for friends, with its saves backed up automatically |
 | <img src="https://shared.fastly.steamstatic.com/community_assets/images/apps/322330/a80aa6cff8eebc1cbc18c367d9ab063e1553b0ee.jpg" width="20" height="20" alt="" /> | [dst](services/apps/dst/) | Runs a Don't Starve Together dedicated server cluster (Master + Caves shards) that friends can join over Tailscale |
 | <img src="https://cdn.jsdelivr.net/gh/akitaonrails/ai-memory/docs/logo.png" width="20" height="20" alt="" /> | [ai-memory](services/apps/ai-memory/) | Runs a shared long-term memory server that coding agents (Claude Code, OpenCode, ...) across multiple machines connect to over MCP, so context and handoffs persist between sessions and agents |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/home-assistant.svg" width="20" height="20" alt="" /> | [homeassistant](services/apps/homeassistant/) | Runs Home Assistant as the hub for Mint's voice at home. A phone running Ava is the microphone and speaker, Assist turns speech into text and back with OpenAI, and the Hermes Voice integration hands each request to Mint over the `lab` network |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/teamspeak.svg" width="20" height="20" alt="" /> | [teamspeak](services/apps/teamspeak/) | Runs a self-hosted TeamSpeak 6 voice server so friends can join a private voice channel over Tailscale |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/wakapi.svg" width="20" height="20" alt="" /> | [wakapi](services/apps/wakapi/) | Collects coding activity from the editors and terminals on my machines, a self-hosted alternative to WakaTime that also feeds my GitHub profile. Separate `wakapi-pepper`, `wakapi-mint` and `wakapi-lemon` jobs report each agent's Hermes activity to its own Wakapi user every 5 minutes |
 | <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/yt-dlp.svg" width="20" height="20" alt="" /> | [ytdlp](services/apps/ytdlp/) | Provides a web interface for yt-dlp to download videos from various platforms directly to the server |
@@ -148,6 +149,7 @@ services/
 │   └── upsnap/
 └── apps/        # game servers and tools
     ├── dst/
+    ├── homeassistant/
     ├── kamiyomu/
     ├── kavita/
     ├── palworld/
@@ -241,6 +243,7 @@ What's already in place:
 - ✅ Container limits sized from measured peaks
 - ✅ Restic backups to a private R2 bucket
 - ✅ Gatus, a public status page checking every service, replacing Dozzle
+- ✅ Home Assistant, the hub for Mint's voice at home, with a Redmi as its satellite over Tailscale
 
 ## Getting started
 
