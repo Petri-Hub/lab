@@ -39,18 +39,13 @@ variable "tailscale_lab_device_name" {
   type        = string
 }
 
-variable "tailscale_monstrao_device_name" {
-  description = "The full domain address of Monstrao in Tailscale network."
+variable "tailscale_monstrao_linux_device_name" {
+  description = "The full domain address of Monstrao's Linux install in Tailscale network."
   type        = string
 }
 
-variable "tailscale_globals_device_name" {
-  description = "The full domain address of Globals laptop in Tailscale network."
-  type        = string
-}
-
-variable "tailscale_phone_device_name" {
-  description = "The full domain address of phone in Tailscale network."
+variable "tailscale_iphone_device_name" {
+  description = "The full domain address of the iPhone in Tailscale network."
   type        = string
 }
 

@@ -3,18 +3,13 @@ data "tailscale_device" "lab" {
   wait_for = "60s"
 }
 
-data "tailscale_device" "monstrao" {
-  name     = var.devices.monstrao
+data "tailscale_device" "monstrao_linux" {
+  name     = var.devices.monstrao_linux
   wait_for = "60s"
 }
 
-data "tailscale_device" "phone" {
-  name     = var.devices.phone
-  wait_for = "60s"
-}
-
-data "tailscale_device" "globals" {
-  name     = var.devices.globals
+data "tailscale_device" "iphone" {
+  name     = var.devices.iphone
   wait_for = "60s"
 }
 
@@ -24,22 +19,34 @@ resource "tailscale_device_tags" "lab" {
   tags       = ["tag:lab"]
 }
 
-resource "tailscale_device_tags" "monstrao" {
+resource "tailscale_device_tags" "monstrao_linux" {
   depends_on = [tailscale_acl.main]
-  device_id  = data.tailscale_device.monstrao.node_id
+  device_id  = data.tailscale_device.monstrao_linux.node_id
   tags       = ["tag:workstation"]
 }
 
-resource "tailscale_device_tags" "globals" {
+resource "tailscale_device_tags" "iphone" {
   depends_on = [tailscale_acl.main]
-  device_id  = data.tailscale_device.globals.node_id
-  tags       = ["tag:workstation"]
-}
-
-resource "tailscale_device_tags" "phone" {
-  depends_on = [tailscale_acl.main]
-  device_id  = data.tailscale_device.phone.node_id
+  device_id  = data.tailscale_device.iphone.node_id
   tags       = ["tag:edge"]
+}
+
+moved {
+  from = tailscale_device_tags.monstrao
+  to   = tailscale_device_tags.monstrao_linux
+}
+
+moved {
+  from = tailscale_device_tags.phone
+  to   = tailscale_device_tags.iphone
+}
+
+removed {
+  from = tailscale_device_tags.globals
+
+  lifecycle {
+    destroy = false
+  }
 }
 
 resource "tailscale_acl" "main" {

@@ -32,10 +32,9 @@ module "tailscale" {
   }
 
   devices = {
-    lab      = var.tailscale_lab_device_name
-    monstrao = var.tailscale_monstrao_device_name
-    phone    = var.tailscale_phone_device_name
-    globals  = var.tailscale_globals_device_name
+    lab            = var.tailscale_lab_device_name
+    monstrao_linux = var.tailscale_monstrao_linux_device_name
+    iphone         = var.tailscale_iphone_device_name
   }
 
   providers = {
