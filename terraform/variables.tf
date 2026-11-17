@@ -49,6 +49,11 @@ variable "tailscale_iphone_device_name" {
   type        = string
 }
 
+variable "tailscale_redmi_device_name" {
+  description = "The full domain address of the Redmi voice assistant in Tailscale network."
+  type        = string
+}
+
 variable "infra_domain_url" {
   description = "The home lab domain URL"
   type        = string
@@ -196,6 +201,11 @@ variable "infra_hermes_dashboard_port" {
 
 variable "infra_wakapi_port" {
   description = "Wakapi dashboard/API port"
+  type        = number
+}
+
+variable "infra_esphome_port" {
+  description = "ESPHome native API port on the voice assistant phone. Home Assistant on the lab connects to it over Tailscale."
   type        = number
 }
 

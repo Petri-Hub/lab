@@ -8,6 +8,11 @@ data "tailscale_device" "monstrao_linux" {
   wait_for = "60s"
 }
 
+data "tailscale_device" "redmi" {
+  name     = var.devices.redmi
+  wait_for = "60s"
+}
+
 data "tailscale_device" "iphone" {
   name     = var.devices.iphone
   wait_for = "60s"
@@ -23,6 +28,12 @@ resource "tailscale_device_tags" "monstrao_linux" {
   depends_on = [tailscale_acl.main]
   device_id  = data.tailscale_device.monstrao_linux.node_id
   tags       = ["tag:workstation"]
+}
+
+resource "tailscale_device_tags" "redmi" {
+  depends_on = [tailscale_acl.main]
+  device_id  = data.tailscale_device.redmi.node_id
+  tags       = ["tag:assistant"]
 }
 
 resource "tailscale_device_tags" "iphone" {
@@ -55,6 +66,7 @@ resource "tailscale_acl" "main" {
       "tag:lab"         = ["autogroup:owner"]
       "tag:workstation" = ["autogroup:owner"]
       "tag:edge"        = ["autogroup:owner"]
+      "tag:assistant"   = ["autogroup:owner"]
     }
 
     acls = [
@@ -88,6 +100,11 @@ resource "tailscale_acl" "main" {
           "tag:lab:${var.ports.ssh}",
           "tag:lab:${var.ports.upsnap}"
         ]
+      },
+      {
+        action = "accept"
+        src    = ["tag:lab"]
+        dst    = ["tag:assistant:${var.ports.esphome}"]
       },
       {
         action = "accept"

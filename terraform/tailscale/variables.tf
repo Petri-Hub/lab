@@ -11,6 +11,7 @@ variable "ports" {
     btop        = number
     upsnap      = number
     hermes      = number
+    esphome     = number
     wakapi      = number
     ai_memory   = number
     palworld    = number
@@ -39,5 +40,6 @@ variable "devices" {
     lab            = string
     monstrao_linux = string
     iphone         = string
+    redmi          = string
   })
 }

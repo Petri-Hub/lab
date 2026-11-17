@@ -11,6 +11,7 @@ module "tailscale" {
     btop        = var.infra_btop_port
     upsnap      = var.infra_upsnap_port
     hermes      = var.infra_hermes_dashboard_port
+    esphome     = var.infra_esphome_port
     wakapi      = var.infra_wakapi_port
     ai_memory   = var.infra_ai_memory_port
     palworld    = var.infra_palworld_game_port
@@ -35,6 +36,7 @@ module "tailscale" {
     lab            = var.tailscale_lab_device_name
     monstrao_linux = var.tailscale_monstrao_linux_device_name
     iphone         = var.tailscale_iphone_device_name
+    redmi          = var.tailscale_redmi_device_name
   }
 
   providers = {
