@@ -53,24 +53,6 @@ resource "tailscale_device_tags" "iphone" {
   tags       = ["tag:edge"]
 }
 
-moved {
-  from = tailscale_device_tags.monstrao
-  to   = tailscale_device_tags.monstrao_linux
-}
-
-moved {
-  from = tailscale_device_tags.phone
-  to   = tailscale_device_tags.iphone
-}
-
-removed {
-  from = tailscale_device_tags.globals
-
-  lifecycle {
-    destroy = false
-  }
-}
-
 resource "tailscale_acl" "main" {
   acl = jsonencode({
     tagOwners = {
