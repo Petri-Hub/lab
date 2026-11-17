@@ -8,6 +8,11 @@ data "tailscale_device" "monstrao_linux" {
   wait_for = "60s"
 }
 
+data "tailscale_device" "monstrao_windows" {
+  name     = var.devices.monstrao_windows
+  wait_for = "60s"
+}
+
 data "tailscale_device" "redmi" {
   name     = var.devices.redmi
   wait_for = "60s"
@@ -27,6 +32,12 @@ resource "tailscale_device_tags" "lab" {
 resource "tailscale_device_tags" "monstrao_linux" {
   depends_on = [tailscale_acl.main]
   device_id  = data.tailscale_device.monstrao_linux.node_id
+  tags       = ["tag:workstation"]
+}
+
+resource "tailscale_device_tags" "monstrao_windows" {
+  depends_on = [tailscale_acl.main]
+  device_id  = data.tailscale_device.monstrao_windows.node_id
   tags       = ["tag:workstation"]
 }
 

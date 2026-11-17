@@ -44,6 +44,11 @@ variable "tailscale_monstrao_linux_device_name" {
   type        = string
 }
 
+variable "tailscale_monstrao_windows_device_name" {
+  description = "The full domain address of Monstrao's Windows install in Tailscale network."
+  type        = string
+}
+
 variable "tailscale_iphone_device_name" {
   description = "The full domain address of the iPhone in Tailscale network."
   type        = string

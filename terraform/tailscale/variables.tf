@@ -37,9 +37,10 @@ variable "devices" {
   description = "A map of device names and their full domains."
 
   type = object({
-    lab            = string
-    monstrao_linux = string
-    iphone         = string
-    redmi          = string
+    lab              = string
+    monstrao_linux   = string
+    monstrao_windows = string
+    iphone           = string
+    redmi            = string
   })
 }
