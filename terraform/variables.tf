@@ -214,6 +214,11 @@ variable "infra_homeassistant_port" {
   type        = number
 }
 
+variable "infra_assistant_admin_port" {
+  description = "Remote admin port of the app on the voice assistant phone. Only workstations reach it, over Tailscale."
+  type        = number
+}
+
 variable "infra_esphome_port" {
   description = "ESPHome native API port on the voice assistant phone. Home Assistant on the lab connects to it over Tailscale."
   type        = number
