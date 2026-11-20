@@ -107,6 +107,11 @@ resource "tailscale_acl" "main" {
       },
       {
         action = "accept"
+        src    = ["tag:assistant"]
+        dst    = ["tag:lab:${var.ports.homeassistant}"]
+      },
+      {
+        action = "accept"
         src    = ["tag:edge"]
         dst    = ["tag:workstation:*"]
       },
