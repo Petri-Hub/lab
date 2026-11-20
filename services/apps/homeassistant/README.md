@@ -24,12 +24,7 @@ Then in the web UI:
 
 1. Create the owner account.
 2. Create a user for Mint, with a long-lived token on that user's profile. The token goes in Mint's `.env` as `HASS_TOKEN`, never in this repository.
-3. Install HACS, then Hermes Voice through HACS. HACS goes in as files in the config folder, so the backup carries it. The official one-liner (`wget -O - https://get.hacs.xyz | bash -`) hangs on this host: the image's BusyBox `wget` cannot force IPv4, and the IPv6 path is dead here. Do the same steps with `curl -4`:
-   ```sh
-   docker exec homeassistant sh -c "mkdir -p /config/custom_components/hacs && cd /config/custom_components && curl -4 -sSL -m 90 -o hacs.zip https://github.com/hacs/integration/releases/latest/download/hacs.zip && unzip -oq hacs.zip -d hacs && rm -f hacs.zip"
-   docker restart homeassistant
-   ```
-   Then add the HACS integration in the UI and sign in with GitHub. For Hermes Voice, add `https://github.com/majorminorlabs/hermes-voice` as a custom repository of type Integration, download it and restart Home Assistant once more.
+3. Install Hermes Voice from the Marketplace. Starting with Home Assistant 2026.11, HACS ships inside Home Assistant as the **Marketplace** (Settings > Marketplace), with the same catalog and repositories, so there is nothing to install. The old HACS custom integration cannot be installed on 2026.11 or newer: Home Assistant removes it on startup. Add `https://github.com/majorminorlabs/hermes-voice` as a custom repository of type Integration, download it, and restart Home Assistant. It lands in `/config/custom_components`, which the backup carries.
 4. Add the OpenAI integration with its own API key, and build an Assist pipeline: OpenAI speech-to-text, Hermes Voice as the conversation agent, OpenAI text-to-speech. Point Hermes Voice at `http://hermes:8642/p/mint/v1` with Mint's `API_SERVER_KEY`.
 5. Add the Redmi through the ESPHome integration, using its Tailscale address and the port in `infra_esphome_port`.
 
