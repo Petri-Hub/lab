@@ -102,6 +102,11 @@ resource "tailscale_acl" "main" {
       },
       {
         action = "accept"
+        src    = ["tag:workstation"]
+        dst    = ["tag:assistant:${var.ports.assistant_admin}"]
+      },
+      {
+        action = "accept"
         src    = ["tag:edge"]
         dst    = ["tag:workstation:*"]
       },
