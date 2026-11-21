@@ -38,6 +38,7 @@ module "tailscale" {
     lab              = var.tailscale_lab_device_name
     monstrao_linux   = var.tailscale_monstrao_linux_device_name
     monstrao_windows = var.tailscale_monstrao_windows_device_name
+    barbara          = var.tailscale_barbara_device_name
     iphone           = var.tailscale_iphone_device_name
     redmi            = var.tailscale_redmi_device_name
   }
