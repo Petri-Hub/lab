@@ -49,6 +49,11 @@ variable "tailscale_monstrao_windows_device_name" {
   type        = string
 }
 
+variable "tailscale_barbara_device_name" {
+  description = "The full domain address of the Barbara workstation in Tailscale network."
+  type        = string
+}
+
 variable "tailscale_iphone_device_name" {
   description = "The full domain address of the iPhone in Tailscale network."
   type        = string

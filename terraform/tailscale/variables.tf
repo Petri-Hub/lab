@@ -42,6 +42,7 @@ variable "devices" {
     lab              = string
     monstrao_linux   = string
     monstrao_windows = string
+    barbara          = string
     iphone           = string
     redmi            = string
   })
