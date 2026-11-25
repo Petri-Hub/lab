@@ -38,7 +38,7 @@ services:
       resources:
         limits:
           cpus: "0.5"
-          memory: 192M
+          memory: 384M
 
   node-exporter:
     image: prom/node-exporter:v1.13.1
@@ -47,6 +47,8 @@ services:
     command:
       - "--path.rootfs=/host"
       - "--web.listen-address=127.0.0.1:9100"
+      - "--no-collector.powersupplyclass"
+      - "--no-collector.hwmon"
     network_mode: host
     pid: host
     volumes:
