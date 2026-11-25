@@ -68,6 +68,42 @@ endpoints:
     conditions:
       - "[STATUS] == 200"
 
+  - name: Prometheus
+    group: Infrastructure
+    url: "http://172.19.0.1:${GATUS_PROMETHEUS_PORT}/-/healthy"
+    interval: 1m
+    ui:
+      hide-hostname: true
+      hide-port: true
+      hide-url: true
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: cAdvisor
+    group: Infrastructure
+    url: "http://cadvisor:8080/healthz"
+    interval: 1m
+    ui:
+      hide-hostname: true
+      hide-port: true
+      hide-url: true
+    conditions:
+      - "[STATUS] == 200"
+
+  # node_exporter binds only to host loopback, which containers cannot reach, so
+  # this asks Prometheus whether its latest scrape of node_exporter succeeded.
+  - name: Node Exporter
+    group: Infrastructure
+    url: "http://172.19.0.1:${GATUS_PROMETHEUS_PORT}/api/v1/query?query=up%7Bjob%3D%22node-exporter%22%7D"
+    interval: 1m
+    ui:
+      hide-hostname: true
+      hide-port: true
+      hide-url: true
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].data.result[0].value[1] == 1"
+
   - name: AI Memory
     group: Applications
     url: "http://ai-memory:49374/web/login"
