@@ -290,8 +290,6 @@ make sandboxes-up
 | `infra-up` | Start all infrastructure services |
 | `infra-up-build` | Start infra services with rebuild |
 | `infra-down` | Stop all infrastructure services |
-| `observability-up` | Start the 90-day Prometheus observability stack |
-| `observability-down` | Stop the observability stack without deleting its collected data |
 | `apps-up` | Start all application services |
 | `apps-up-build` | Start app services with rebuild |
 | `apps-down` | Stop all application services |

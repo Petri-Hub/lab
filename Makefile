@@ -14,12 +14,6 @@ infra-up-build:
 infra-down:
 	docker compose -f services/infra/compose.yml down
 
-observability-up:
-	docker compose -f services/infra/observability/compose.yml up -d
-
-observability-down:
-	docker compose -f services/infra/observability/compose.yml down
-
 apps-up:
 	docker compose -f services/apps/compose.yml up -d
 

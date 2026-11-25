@@ -25,10 +25,10 @@ published at `127.0.0.1:48080` and node_exporter binds to `127.0.0.1:9100`.
    `PROMETHEUS_PORT`.
 2. Set `infra_prometheus_port` to the same value in the local Terraform
    variables, then apply the Terraform change so Tailscale advertises the UI.
-3. Start the stack:
+3. Start the infrastructure stack:
 
    ```bash
-   make observability-up
+   make infra-up
    ```
 
 4. Confirm that Prometheus shows both exporter targets as `UP` at
@@ -37,10 +37,11 @@ published at `127.0.0.1:48080` and node_exporter binds to `127.0.0.1:9100`.
 Keep the stack running through normal activity, backup schedules, game
 sessions, and representative Zomboid testing. Prometheus automatically removes
 the oldest samples after 90 days or when its persistent blocks reach 16 GB,
-whichever comes first. Stop it when the window is complete:
+whichever comes first. To stop only the observability stack when the window is
+complete:
 
 ```bash
-make observability-down
+docker compose -f services/infra/observability/compose.yml down
 ```
 
 The data stays in `storage/prometheus` until that directory is explicitly
