@@ -9,6 +9,7 @@ module "tailscale" {
     gatus           = var.infra_gatus_port
     filebrowser     = var.infra_filebrowser_port
     btop            = var.infra_btop_port
+    prometheus      = var.infra_prometheus_port
     upsnap          = var.infra_upsnap_port
     hermes          = var.infra_hermes_dashboard_port
     esphome         = var.infra_esphome_port

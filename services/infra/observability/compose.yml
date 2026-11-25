@@ -1,0 +1,63 @@
+services:
+  prometheus:
+    image: prom/prometheus:v3.16.0
+    container_name: prometheus
+    restart: unless-stopped
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.listen-address=:${PROMETHEUS_PORT}"
+    volumes:
+      - ./configuration/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ../../../storage/prometheus:/prometheus
+    network_mode: host
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 320M
+
+  cadvisor:
+    image: ghcr.io/google/cadvisor:v0.61.1
+    container_name: cadvisor
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev/kmsg
+    ports:
+      - "127.0.0.1:48080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /dev/disk:/dev/disk:ro
+    networks:
+      - lab
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 192M
+
+  node-exporter:
+    image: prom/node-exporter:v1.13.1
+    container_name: node-exporter
+    restart: unless-stopped
+    command:
+      - "--path.rootfs=/host"
+      - "--web.listen-address=127.0.0.1:9100"
+    network_mode: host
+    pid: host
+    volumes:
+      - /:/host:ro,rslave
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+
+networks:
+  lab:
+    name: lab
+    external: true

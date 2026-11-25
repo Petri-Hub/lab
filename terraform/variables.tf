@@ -194,6 +194,11 @@ variable "infra_btop_port" {
   type        = number
 }
 
+variable "infra_prometheus_port" {
+  description = "Prometheus UI port"
+  type        = number
+}
+
 variable "infra_upsnap_port" {
   description = "UpSnap web UI port"
   type        = number
