@@ -62,7 +62,25 @@ sum by (name) (rate(container_cpu_usage_seconds_total{name!=""}[5m]))
 
 # Host memory available to the kernel.
 node_memory_MemAvailable_bytes
+
+# Processes stuck in uninterruptible sleep (D state). A value in the thousands
+# means the ACPI battery problem described below is back.
+node_procs_blocked
 ```
+
+## Battery collectors are disabled
+
+The laptop's ACPI firmware can wedge on battery reads: every access to
+`/sys/class/power_supply` then blocks forever, and each ACPI battery event
+leaves another `kacpi_notify` kernel worker stuck in D state. On
+2026-11-12 this produced about 15,700 stuck workers and a load average above
+15,000 until the host was rebooted.
+
+node_exporter's `powersupplyclass` and `hwmon` collectors read those sysfs
+entries (`hwmon` through the `BAT0` and `ADP1` hwmon devices), so a wedged
+battery hangs every scrape. Both collectors are disabled. The failure remains
+visible without touching the battery through `node_procs_blocked` and
+`node_load1`, which come from `/proc`.
 
 For the authoritative cgroup peak and limit-hit count used by the lab's sizing
 rule, continue to inspect `memory.peak` and `memory.events` as documented in
