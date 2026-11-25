@@ -9,6 +9,7 @@ variable "ports" {
     gatus           = number
     filebrowser     = number
     btop            = number
+    prometheus      = number
     upsnap          = number
     hermes          = number
     esphome         = number

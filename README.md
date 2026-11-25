@@ -59,6 +59,7 @@ Containers are grouped as infrastructure, applications and sandboxes, and each h
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/nginx.svg" width="20" height="20" alt="" /> | [nginx](services/infra/nginx/) | Acts as a reverse proxy, reading the incoming domain and forwarding each request to the correct internal service |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/gatus.svg" width="20" height="20" alt="" /> | [gatus](services/infra/gatus/) | Checks every running service every minute and shows which ones are up on a public status page |
 | <img src="https://raw.githubusercontent.com/aristocratos/btop/HEAD/Img/icon.svg" width="20" height="20" alt="" /> | [btop](services/infra/btop/) | Exposes a real-time system monitor through the browser so you can check CPU, memory, and processes without SSH |
+| <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/prometheus.svg" width="20" height="20" alt="" /> | [observability](services/infra/observability/) | Collects up to 90 days of host and Docker resource metrics with Prometheus, node_exporter, and cAdvisor so container limits can be sized from real usage |
 | <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/filebrowser.png" width="20" height="20" alt="" /> | [filebrowser](services/infra/filebrowser/) | Provides a web-based file manager to browse, upload, and edit files across the entire server |
 | <img src="https://raw.githubusercontent.com/mcuadros/ofelia/HEAD/static/avatar.png" width="20" height="20" alt="" /> | [ofelia](services/infra/ofelia/) | Runs scheduled jobs inside containers using Docker labels, used here to trigger backups automatically |
 | <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/rclone.svg" width="20" height="20" alt="" /> | [rclone](services/infra/rclone/) | Runs as a REST server that receives and stores backup data from Restic |
@@ -289,6 +290,8 @@ make sandboxes-up
 | `infra-up` | Start all infrastructure services |
 | `infra-up-build` | Start infra services with rebuild |
 | `infra-down` | Stop all infrastructure services |
+| `observability-up` | Start the 90-day Prometheus observability stack |
+| `observability-down` | Stop the observability stack without deleting its collected data |
 | `apps-up` | Start all application services |
 | `apps-up-build` | Start app services with rebuild |
 | `apps-down` | Stop all application services |

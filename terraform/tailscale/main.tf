@@ -167,6 +167,14 @@ resource "tailscale_service" "btop" {
   tags       = ["tag:lab"]
 }
 
+resource "tailscale_service" "prometheus" {
+  depends_on = [tailscale_acl.main]
+  name       = "svc:prometheus"
+  comment    = "Prometheus resource observability UI (owner-only)"
+  ports      = ["tcp:${var.ports.prometheus}"]
+  tags       = ["tag:lab"]
+}
+
 resource "tailscale_service" "filebrowser" {
   depends_on = [tailscale_acl.main]
   name       = "svc:filebrowser"
